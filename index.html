@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herbalife Master Dashboard</title>
+    <title>HBL-Connect</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -40,7 +40,7 @@
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; color: #555; }
-        .form-group input, .form-group textarea { padding: 10px; border: 1px solid #E0E0E0; border-radius: 8px; font-family: inherit; width: 100%; box-sizing: border-box; background: #fafafa;}
+        .form-group input, .form-group textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; width: 100%; box-sizing: border-box; background: #fafafa;}
         .form-group input:focus, .form-group textarea:focus { border-color: var(--theme-color); outline:none; background:white;}
         
         .coach-note { font-size: 0.82rem; color: #777; margin-top: 6px; font-style: italic; border-left: 2px solid var(--theme-color); padding-left: 8px; line-height: 1.4; }
@@ -101,20 +101,24 @@
         th { background: #f8fafc; color: #7f8c8d; text-transform: uppercase; font-size: 0.75rem;}
         .cat-row { background: var(--sidebar-dark); color: white; font-weight: bold; cursor: pointer; }
         
-        .stock-input { width: 50px; padding: 6px; text-align: center; font-weight: bold; border: 2px solid transparent; border-radius: 6px; outline: none;}
-        .st-0 { background: #f2f2f2; color: #888; }
-        .st-1 { background: #fee2e2; color: var(--danger); border-color: var(--danger);}
-        .st-2 { background: #fef3c7; color: var(--warning); border-color: var(--warning);}
-        .st-3 { background: #e8f5e9; color: var(--success); }
+        /* Nieuwe Stock Knoppen */
+        .btn-qty { background: #e0e6ed; border: none; width: 28px; height: 28px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: #333; transition: 0.2s;}
+        .btn-qty:hover { background: #cbd5e1; }
         
-        /* Knop uitlijning hersteld */
+        .st-0 { color: #888; }
+        .st-1 { color: var(--danger); }
+        .st-2 { color: var(--warning); }
+        .st-3 { color: var(--success); }
+        
         .actie-cel { display: flex; gap: 5px; align-items: center; }
         
         .history-list { list-style: none; padding: 0; margin: 0; }
         .history-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;}
         .btn-undo { background: #e0e0e0; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; color: #333;}
         .btn-undo:hover { background: var(--danger); color: white; }
-        .profit-green { color: var(--success); font-weight: bold; }
+        
+        /* Euroteken naast elkaar houden */
+        .profit-green { color: var(--success); font-weight: bold; white-space: nowrap; }
 
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
@@ -213,6 +217,10 @@
                         <h2>5. Analyse Voedingstekorten</h2>
                         <div class="symp-grid" id="symp-list"></div>
                         
+                        <div id="vitamin-warning" style="display:none; margin-top:20px; padding:15px; background:#ffeaea; border-left:4px solid var(--danger); color:var(--danger); font-weight:bold; border-radius:5px;">
+                            Let op: Bij 5 of meer symptomen is er tevens een algemeen tekort aan vitaminen!
+                        </div>
+
                         <div id="allergy-box" style="display:none; margin-top:15px; padding:15px; background:#fff3cd; border-left:4px solid #f1c40f;">
                             <label style="color:#856404; font-weight:bold;">Allergieën / Intoleranties:</label>
                             <input type="text" id="eval-allergie-detail" style="width:100%; padding:8px; margin-top:5px; border:1px solid #ffeeba;">
@@ -222,6 +230,11 @@
                             <div class="analysis-box"><strong style="color:var(--theme-color)">Geselecteerde Symptomen:</strong><div id="symp-details" style="margin-top:10px;">...</div></div>
                             <div class="analysis-box" style="border-left:5px solid var(--theme-color);"><strong>Vermoedelijke Tekorten:</strong><div id="tally-results" style="margin-top:10px;">...</div></div>
                         </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>6. Extra Opmerkingen</h2>
+                        <textarea id="eval-extra-notes" rows="4" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); font-family:inherit; box-sizing:border-box;" placeholder="Extra notities, vragen van de klant, bijzonderheden..."></textarea>
                     </div>
 
                     <button class="btn-success" style="width:100%; padding:20px; font-size:1.2rem; margin-bottom:50px;" onclick="saveEvaluatie()">💾 Opslaan & Klantendossier Aanmaken</button>
@@ -310,8 +323,8 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h3>Vrij Notitieveld (Wordt gedeeld met voorraad tool)</h3>
-                            <textarea id="fiche-notes" rows="6" oninput="autoSaveFiche('notes')" style="background:#fffbcc; border-color:#e1c322;"></textarea>
+                            <h3>Vrij Notitieveld & Verkoophistoriek</h3>
+                            <textarea id="fiche-notes" rows="12" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); font-family:inherit; box-sizing:border-box;" oninput="autoSaveFiche('notes')"></textarea>
                         </div>
                     </div>
 
@@ -410,7 +423,7 @@
             <div class="stock-layout">
                 <div class="card" style="padding:0; overflow:hidden;">
                     <table id="stockTable">
-                        <thead><tr><th>Product</th><th>VP</th><th>Klant (€)</th><th>Inkoop (€)</th><th>Winst (€)</th><th>Voorraad</th><th>Actie</th></tr></thead>
+                        <thead><tr><th>Product</th><th>VP</th><th>Klant (€)</th><th>Inkoop (€)</th><th>Winst (€)</th><th>Voorraad</th><th>Acties</th></tr></thead>
                         <tbody id="stockTableBody"></tbody>
                     </table>
                 </div>
@@ -643,6 +656,7 @@
     function updateAnalysis() {
         const checked = document.querySelectorAll('.sc:checked');
         let tallies = {}; let names = []; let hasAllergy = false;
+        
         checked.forEach(c => {
             const sn = c.getAttribute('data-name');
             const st = c.getAttribute('data-tags').split(',');
@@ -650,7 +664,17 @@
             st.forEach(t => tallies[t] = (tallies[t]||0)+1);
             if (sn === "Allergieën") hasAllergy = true;
         });
+
+        // Allergie waarschuwing
         document.getElementById('allergy-box').style.display = hasAllergy ? 'block' : 'none';
+        
+        // Vitamine waarschuwing (>= 5 symptomen)
+        if (checked.length >= 5) {
+            document.getElementById('vitamin-warning').style.display = 'block';
+        } else {
+            document.getElementById('vitamin-warning').style.display = 'none';
+        }
+
         document.getElementById('symp-details').innerHTML = names.join('<br>') || "...";
         const sorted = Object.entries(tallies).sort((a,b) => b[1]-a[1]);
         document.getElementById('tally-results').innerHTML = sorted.map(r => `<div>${r[0]}: ${r[1]}x</div>`).join('') || "...";
@@ -661,6 +685,12 @@
         if(!name) return alert("Geef minstens de naam van de klant in!");
 
         const symptomList = Array.from(document.querySelectorAll('.sc:checked')).map(c => c.getAttribute('data-name'));
+        const extraNotes = document.getElementById('eval-extra-notes').value.trim();
+        
+        // Genereer de startnotitie inclusief extra opmerkingen
+        let initialNote = "Evaluatie opgeslagen op " + new Date().toLocaleDateString() + "\n";
+        if (extraNotes) initialNote += "\n--- Extra Opmerkingen Intake ---\n" + extraNotes + "\n";
+
         const newId = 'client_' + Date.now();
         
         db.collection('coaches').doc(currentCoach).collection('clients').doc(newId).set({
@@ -675,11 +705,11 @@
                 spier: document.getElementById('eval-t-spier').value, visc: document.getElementById('eval-t-visc').value, 
                 lft: document.getElementById('eval-t-lft').value 
             },
-            notes: "Evaluatie opgeslagen op " + new Date().toLocaleDateString() + "\n"
+            notes: initialNote
         }).then(() => {
             alert("Klantendossier aangemaakt!");
             // Reset fields
-            ['eval-name','eval-phone','eval-email','eval-why','eval-t-gew','eval-t-vet','eval-t-spier','eval-t-visc','eval-t-lft', 'eval-eet-ontbijt', 'eval-eet-middag', 'eval-eet-avond', 'eval-eet-tussen', 'eval-eet-water', 'eval-eet-drank'].forEach(id => document.getElementById(id).value = '');
+            ['eval-name','eval-phone','eval-email','eval-why','eval-t-gew','eval-t-vet','eval-t-spier','eval-t-visc','eval-t-lft', 'eval-eet-ontbijt', 'eval-eet-middag', 'eval-eet-avond', 'eval-eet-tussen', 'eval-eet-water', 'eval-eet-drank', 'eval-extra-notes'].forEach(id => document.getElementById(id).value = '');
             document.querySelectorAll('.sc').forEach(c => c.checked = false); 
             document.querySelectorAll('.focus-check').forEach(c => c.checked = false); 
             updateAnalysis(); updateScore();
@@ -800,7 +830,6 @@
         if(!currentClientId) return;
         const el = document.getElementById(`fiche-${field}`);
         
-        // Sla op de moderne manier op
         db.collection('coaches').doc(currentCoach).collection('clients').doc(currentClientId).set({ [field]: el.value }, { merge: true });
         
         if(field === 'name') { document.getElementById('header-client-name').innerText = el.value; renderClientList(); updateClientLinkDropdown(); }
@@ -811,9 +840,7 @@
         if(!currentClientId) return;
         const el = document.getElementById(`${sectie}-${field}`);
         
-        // Sla op op de moderne manier
         db.collection('coaches').doc(currentCoach).collection('clients').doc(currentClientId).set({ 
-            // Save as w2-q1 format
             [`${sectie.replace('week', 'w').replace('dag', 'd')}-${field}`]: el.value 
         }, { merge: true });
     }
@@ -880,10 +907,18 @@
                     <td>${formatMoney(p.retail)}</td>
                     <td>${formatMoney(buyPrice)}</td>
                     <td class="profit-green">${formatMoney(profit)}</td>
-                    <td><input type="number" min="0" class="stock-input ${sC}" value="${count}" onchange="updateStockCount('${p.sku}', this.value)"></td>
-                    <td class="actie-cel">
-                        <button class="btn-primary" style="padding:5px 10px; font-size:0.8rem;" onclick="sellProduct('${p.sku}', ${profit})" ${count===0?'disabled':''}>Verkoop</button>
-                        <button class="btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="usePersonal('${p.sku}')" ${count===0?'disabled':''}>Gebruik</button>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
+                            <div class="${sC}" style="width:30px; text-align:center; font-weight:bold; padding:4px; border-radius:4px; border:1px solid var(--border);">${count}</div>
+                            <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count + 1})">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="actie-cel">
+                            <button class="btn-primary" style="padding:6px 12px; font-size:0.8rem;" onclick="sellProduct('${p.sku}', ${profit})" ${count===0?'disabled':''}>Verkoop</button>
+                            <button class="btn-danger" style="padding:6px 12px; font-size:0.8rem;" onclick="usePersonal('${p.sku}')" ${count===0?'disabled':''}>Gebruik</button>
+                        </div>
                     </td>
                 </tr>`;
         });
@@ -898,7 +933,10 @@
         db.collection('coaches').doc(currentCoach).collection('inventory').doc('data').set({ stock: myStock, sales: salesHistory, personal: personalUse });
     }
 
-    function updateStockCount(sku, val) { myStock[sku] = parseInt(val) || 0; saveInventory(); }
+    function updateStockCount(sku, val) { 
+        myStock[sku] = Math.max(0, parseInt(val) || 0); 
+        saveInventory(); 
+    }
 
     function sellProduct(sku, profit) {
         const p = dbProducts.find(x => x.sku === sku);
