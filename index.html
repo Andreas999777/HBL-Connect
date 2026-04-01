@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBL-Connect</title>
+    <title>HBL-Connect Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -222,7 +222,7 @@
                         <div class="symp-grid" id="symp-list"></div>
                         
                         <div id="vitamin-warning" style="display:none; margin-top:20px; padding:15px; background:#ffeaea; border-left:4px solid var(--danger); color:var(--danger); font-weight:bold; border-radius:5px;">
-                            Let op: Bij 5 of meer symptomen is er tevens een tekort aan vitaminen & Mineralen!
+                            Let op: Bij 5 of meer symptomen is er tevens een algemeen tekort aan vitaminen!
                         </div>
 
                         <div id="allergy-box" style="display:none; margin-top:15px; padding:15px; background:#fff3cd; border-left:4px solid #f1c40f;">
@@ -404,16 +404,29 @@
         <div id="view-stock" class="view">
             <div class="stock-header">
                 <h2 style="margin:0; color:var(--theme-color);">📦 Voorraad & Winst</h2>
-                <div style="display:flex; gap:15px; align-items:center;">
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    
+                    <input type="month" id="monthSelector" style="padding:10px; border-radius:6px; border:2px solid var(--theme-color); color:var(--theme-color); font-weight:bold; outline:none;" onchange="renderHistoryLists()">
+                    
                     <select id="link-client-select" class="btn-primary" style="background:white; color:var(--theme-color); border:2px solid var(--theme-color);">
                         <option value="">-- Koppel verkoop aan klant --</option>
                     </select>
+                    
                     <select id="discountSelect" style="padding:10px; border-radius:6px; border:1px solid var(--border);" onchange="renderStockTable()">
-                        <option value="25">25% (VIP Zilver)</option>
-                        <option value="35">35% (VIP Goud)</option>
-                        <option value="42" selected>42% (Succes Builder)</option>
-                        <option value="50">50% (Supervisor)</option>
+                        <option value="25">Inkoop: 25%</option>
+                        <option value="35">Inkoop: 35%</option>
+                        <option value="42" selected>Inkoop: 42%</option>
+                        <option value="50">Inkoop: 50%</option>
                     </select>
+                    
+                    <select id="customerDiscount" style="padding:10px; border-radius:6px; border:1px solid var(--border);" onchange="renderStockTable()">
+                        <option value="0">Klant: 0% korting</option>
+                        <option value="5">Klant: 5% korting</option>
+                        <option value="10">Klant: 10% korting</option>
+                        <option value="15">Klant: 15% korting</option>
+                        <option value="20">Klant: 20% korting</option>
+                    </select>
+                    
                     <input type="text" id="searchStock" placeholder="Zoek SKU/Naam..." onkeyup="renderStockTable()" style="padding:10px; border-radius:6px; border:1px solid var(--border);">
                 </div>
             </div>
@@ -435,17 +448,17 @@
 
                 <div>
                     <div class="card">
-                        <h3 id="month-title-display">📈 Maandwinst</h3>
+                        <h3 id="month-title-display">📈 Winst</h3>
                         <h2 style="color:var(--success); margin:0;" id="current-month-profit">€ 0.00</h2>
                     </div>
                     
                     <div class="card">
-                        <h3>🛒 Laatste Verkopen</h3>
+                        <h3>🛒 Verkopen (Geselecteerde Maand)</h3>
                         <ul class="history-list" id="sales-history-list"></ul>
                     </div>
 
                     <div class="card">
-                        <h3>🙋‍♂️ Demo / Persoonlijk Gebruik</h3>
+                        <h3>🙋‍♂️ Demo / Persoonlijk Gebruik (Actief)</h3>
                         <ul class="history-list" id="personal-use-list"></ul>
                     </div>
                 </div>
@@ -611,10 +624,11 @@
         switchCoach();
         document.getElementById('eval-date').valueAsDate = new Date();
         
-        // Fix Maandwinst Text
-        const date = new Date();
-        const monthYear = date.toLocaleString('nl-NL', { month: 'long', year: 'numeric' });
-        document.getElementById('month-title-display').innerText = "📈 Maandwinst (" + monthYear.charAt(0).toUpperCase() + monthYear.slice(1) + ")";
+        // Zet maandselector standaard op huidige maand
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        document.getElementById('monthSelector').value = `${yyyy}-${mm}`;
     };
 
     // UI Functies
@@ -964,6 +978,7 @@
     function renderStockTable() {
         const tbody = document.getElementById('stockTableBody');
         const disc = parseFloat(document.getElementById('discountSelect').value) / 100;
+        const custDisc = parseFloat(document.getElementById('customerDiscount').value) / 100;
         const search = document.getElementById('searchStock').value.toLowerCase();
         tbody.innerHTML = '';
         
@@ -972,10 +987,13 @@
         dbProducts.forEach(p => {
             if (search && !p.name.toLowerCase().includes(search) && !p.sku.toLowerCase().includes(search)) return;
             const count = myStock[p.sku] || 0;
+            
             const buyPrice = p.retail * (1 - disc);
-            const profit = p.retail - buyPrice;
+            const sellPrice = p.retail * (1 - custDisc);
+            const profit = sellPrice - buyPrice;
 
-            if(count > 0) { tVP += (p.vp * count); tBuy += (buyPrice * count); tRet += (p.retail * count); tProf += (profit * count); }
+            if(count > 0) { tVP += (p.vp * count); tBuy += (buyPrice * count); tRet += (sellPrice * count); tProf += (profit * count); }
+            
             if (p.cat !== cCat) {
                 tbody.innerHTML += `<tr class="cat-row" onclick="collapsedCats['${p.cat}']=!collapsedCats['${p.cat}'];renderStockTable()"><td colspan="7">${p.cat} <span style="float:right;">${collapsedCats[p.cat]?'►':'▼'}</span></td></tr>`;
                 cCat = p.cat;
@@ -987,7 +1005,7 @@
                 <tr>
                     <td><strong>${p.name}</strong><br><small style="color:#888;">SKU: ${p.sku}</small></td>
                     <td>${p.vp.toFixed(1)}</td>
-                    <td>${formatMoney(p.retail)}</td>
+                    <td>${formatMoney(sellPrice)}</td>
                     <td>${formatMoney(buyPrice)}</td>
                     <td class="profit-green">${formatMoney(profit)}</td>
                     <td>
@@ -1029,8 +1047,7 @@
             // Voeg toe aan geschiedenis
             const sale = { id: Date.now(), sku: p.sku, name: p.name, profit: profit, date: new Date().toISOString() };
             salesHistory.unshift(sale); // Bovenaan toevoegen
-            if(salesHistory.length > 50) salesHistory.pop(); // Max 50 bewaren
-
+            
             // Koppel aan klant
             const linkedId = document.getElementById('link-client-select').value;
             if(linkedId && clients[linkedId]) {
@@ -1040,6 +1057,7 @@
                 document.getElementById('link-client-select').value = ""; 
             }
             saveInventory();
+            renderHistoryLists();
         }
     }
 
@@ -1049,27 +1067,37 @@
             myStock[sku] -= 1;
             personalUse.push({ id: Date.now(), name: p.name, date: new Date().toLocaleDateString() });
             saveInventory();
+            renderHistoryLists();
         }
     }
 
     function renderHistoryLists() {
-        // Maandwinst berekenen
-        const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
+        const selectedMonth = document.getElementById('monthSelector').value; // YYYY-MM
+        if (!selectedMonth) return;
+
+        // Maand titel fixen
+        const dateObj = new Date(selectedMonth + "-01");
+        const monthYearStr = dateObj.toLocaleString('nl-NL', { month: 'long', year: 'numeric' });
+        document.getElementById('month-title-display').innerText = "📈 Winst (" + monthYearStr.charAt(0).toUpperCase() + monthYearStr.slice(1) + ")";
+
+        // Maandwinst berekenen via filter
         let mProfit = 0;
-        salesHistory.forEach(s => { if(s.date.startsWith(currentMonth)) mProfit += s.profit; });
+        const filteredSales = salesHistory.filter(s => s.date.startsWith(selectedMonth));
+        filteredSales.forEach(s => { mProfit += s.profit; });
         document.getElementById('current-month-profit').innerText = formatMoney(mProfit);
 
-        // Verkooplijst
+        // Verkooplijst gefilterd
         const sList = document.getElementById('sales-history-list');
-        sList.innerHTML = salesHistory.length ? '' : '<li class="history-item">Nog geen verkopen.</li>';
-        salesHistory.slice(0, 10).forEach(s => {
+        sList.innerHTML = filteredSales.length ? '' : '<li class="history-item">Geen verkopen in deze maand.</li>';
+        filteredSales.slice(0, 15).forEach(s => {
             sList.innerHTML += `<li class="history-item">
                 <div><strong>${s.name}</strong><br><small style="color:#888">${new Date(s.date).toLocaleString()}</small></div>
                 <div style="text-align:right;"><span class="profit-green">+ ${formatMoney(s.profit)}</span><br><button class="btn-undo" onclick="undoSale(${s.id}, '${s.sku}')">Undo</button></div>
             </li>`;
         });
 
-        // Persoonlijk Gebruik
+        // Persoonlijk Gebruik / Demo
+        // Omdat een item pas uit de lijst gaat als je "Is op!" klikt, dragen deze automatisch over.
         const pList = document.getElementById('personal-use-list');
         pList.innerHTML = personalUse.length ? '' : '<li class="history-item">Geen actieve producten.</li>';
         personalUse.forEach(p => {
@@ -1084,11 +1112,14 @@
         salesHistory = salesHistory.filter(s => s.id !== id);
         myStock[sku] = (myStock[sku] || 0) + 1;
         saveInventory();
+        renderHistoryLists();
+        renderStockTable();
     }
 
     function finishPersonal(id) {
         personalUse = personalUse.filter(p => p.id !== id);
         saveInventory();
+        renderHistoryLists();
     }
 
 </script>
