@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBL-Connect</title>
+    <title>HBL-Connect Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -37,7 +37,10 @@
         /* --- VIEWS CONTAINER --- */
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .view { display: none; width: 100%; height: 100%; overflow-y: auto; }
-        .view.active { display: flex; flex-direction: column; }
+        
+        /* FIX VOOR GSM EVALUATIE LAYOUT: forceer row op desktop, column op mobile */
+        #view-eval.active { display: flex; flex-direction: row; }
+        .view.active:not(#view-eval) { display: flex; flex-direction: column; }
 
         /* --- SHARED CARDS --- */
         .card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid var(--border); }
@@ -58,7 +61,7 @@
         .btn-warning { background: var(--warning); color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold;}
 
         /* --- 1. EVALUATIE VIEW --- */
-        #view-eval { flex-direction: row; align-items: stretch; background: var(--bg-light); padding: 0;}
+        #view-eval { background: var(--bg-light); padding: 0;}
         .eval-scroll-area { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
         .eval-container { max-width: 1000px; width: 100%; }
         
@@ -112,6 +115,8 @@
         th { background: #f8fafc; color: #7f8c8d; text-transform: uppercase; font-size: 0.75rem;}
         .cat-row { background: var(--sidebar-dark); color: white; font-weight: bold; cursor: pointer; }
         
+        .nowrap { white-space: nowrap; } /* Euroteken Fix */
+        
         .btn-qty { background: #e0e6ed; border: none; width: 28px; height: 28px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: #333; transition: 0.2s;}
         .btn-qty:hover { background: #cbd5e1; }
         .st-0 { color: #888; } .st-1 { color: var(--danger); } .st-2 { color: var(--warning); } .st-3 { color: var(--success); }
@@ -128,6 +133,12 @@
         .filter-btn.active { background: var(--theme-color); color: white; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         .product-card { background: white; border-radius: 10px; padding:20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-top: 3px solid var(--theme-color); display: flex; flex-direction: column;}
+        
+        /* Foto Kader kleiner gemaakt */
+        .product-img { width: 100%; height: 120px; background-color: #f4f4f4; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; margin-bottom: 15px; border-radius: 6px;}
+        .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 5px; position: relative; z-index: 1; }
+        .product-img::after { content: "Geen afbeelding"; position: absolute; color: #bbb; font-size: 0.85rem; z-index: 0;}
+        
         .product-cat-label { font-size: 0.75rem; color: var(--hb-green); font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
 
         /* --- 5. TESTIMONIALS --- */
@@ -145,9 +156,9 @@
             #app-sidebar { position: fixed; left: -260px; height: 100%; width: 260px; }
             #app-sidebar.open { left: 0; }
             
-            /* Fix Info-muur op GSM (verhuist naar onder) */
-            #view-eval { flex-direction: column; }
-            .info-muur { width: 100%; height: auto; display: flex; flex-wrap: wrap; gap:10px; order: 2; padding: 20px; }
+            /* Fix Info-muur op GSM (verhuist nu 100% zeker naar onder) */
+            #view-eval.active { flex-direction: column; }
+            .info-muur { width: 100%; height: auto; display: flex; flex-wrap: wrap; gap:10px; order: 2; padding: 20px; box-shadow: none; border-top: 1px solid var(--border); }
             .eval-scroll-area { order: 1; padding: 15px; }
             .info-btn { width: auto; flex: 1 1 45%; }
             
@@ -369,6 +380,28 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="card">
+                            <h3>Verwachtingen & Eetgewoonten</h3>
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                                <div style="background:#f0f8ff; padding:15px; border-radius:8px; border-left:4px solid var(--theme-color);">
+                                    <h4 style="margin:0 0 10px 0;">Focus (Doelen)</h4>
+                                    <p id="crm-eval-focus" style="margin:0; font-size:0.9rem; line-height:1.5;">Geen</p>
+                                </div>
+                                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border-left:4px solid #95a5a6;">
+                                    <h4 style="margin:0 0 10px 0;">Eetgewoonten & Hydratatie</h4>
+                                    <p style="margin:0; font-size:0.85rem; line-height:1.6;">
+                                        <strong>Ontbijt:</strong> <span id="crm-eet-ontbijt"></span><br>
+                                        <strong>Middag:</strong> <span id="crm-eet-middag"></span><br>
+                                        <strong>Avond:</strong> <span id="crm-eet-avond"></span><br>
+                                        <strong>Tussendoor:</strong> <span id="crm-eet-tussen"></span><br>
+                                        <strong>Water:</strong> <span id="crm-eet-water"></span><br>
+                                        <strong>Dranken:</strong> <span id="crm-eet-drank"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="card">
                             <h3>Tanita Startwaarden (Intake)</h3>
                             <div style="display:flex; gap:20px; font-size:0.9rem; background:#f0f8ff; padding:15px; border-radius:8px; flex-wrap:wrap;">
@@ -599,7 +632,6 @@
         { cat: "ONTBIJT & DRANKEN", sku: "167K", name: "Instant Theedrank Citroen 51g", vp: 19.95, retail: 38.25, desc: "Kruidendrank met frisse citroensmaak. Boost je metabolisme." },
         { cat: "ONTBIJT & DRANKEN", sku: "168K", name: "Instant Theedrank Framboos 51g", vp: 19.95, retail: 38.25, desc: "Heerlijke fruitige theedrank voor langdurige energie." },
         { cat: "ONTBIJT & DRANKEN", sku: "169K", name: "Instant Theedrank Perzik 51g", vp: 19.95, retail: 38.25, desc: "Populaire theedrank met zachte perziksmaak. Stimuleert de verbranding." },
-        
         { cat: "F1 SHAKES", sku: "4462", name: "F1 Shake Bananen Crème 550g", vp: 23.95, retail: 60.90, desc: "Volwaardige maaltijdvervanger vol essentiële voedingsstoffen en eiwitten." },
         { cat: "F1 SHAKES", sku: "4463", name: "F1 Shake Frisse Aardbei 550g", vp: 23.95, retail: 60.90, desc: "Heerlijke, lichte aardbeiensmaak. Perfect als gezond ontbijt of lunch." },
         { cat: "F1 SHAKES", sku: "4465", name: "F1 Shake Cafè Latte 550g", vp: 23.95, retail: 60.90, desc: "Voor de koffieliefhebber. Volwaardige maaltijd met heerlijke koffiesmaak." },
@@ -611,7 +643,6 @@
         { cat: "F1 SHAKES", sku: "048K", name: "F1 Shake Romige Vanille 780g", vp: 32.75, retail: 79.85, desc: "De klassieke Romige Vanille, maar dan in een voordelige XXL pot." },
         { cat: "F1 SHAKES", sku: "053K", name: "F1 Shake 7 zakjes (Vanille/Choco/Cookie)", vp: 10.00, retail: 25.35, desc: "Handige proefpakketten of on-the-go zakjes met gemixte smaken." },
         { cat: "F1 SHAKES", sku: "4472", name: "Express Maaltijdreep (7 stuks)", vp: 14.00, retail: 30.70, desc: "Geen tijd om te shaken? Deze reep bevat alle voedingsstoffen van 1 maaltijd." },
-        
         { cat: "PROTEÏNE & SNACKS", sku: "528K", name: "Proteïne Bak Mix (PBM)", vp: 26.90, retail: 68.35, desc: "Bak gezonde, eiwitrijke pannenkoeken, wafels of muffins zonder toegevoegde suikers." },
         { cat: "PROTEÏNE & SNACKS", sku: "013K", name: "Tri Blend Select Banaan 600g", vp: 37.50, retail: 90.25, desc: "100% plantaardige, natuurlijke premium eiwitshake. Rijk aan vezels." },
         { cat: "PROTEÏNE & SNACKS", sku: "172K", name: "Vegan Proteïnedrankmix Vanille 560g", vp: 31.45, retail: 68.35, desc: "De vegan variant van de PDM. Voeg toe aan je F1 voor extra eiwitten en smaak." },
@@ -623,7 +654,6 @@
         { cat: "PROTEÏNE & SNACKS", sku: "0242", name: "F3 Proteïnepoeder 240g", vp: 17.95, retail: 48.90, desc: "Smaakloos eiwitpoeder. Perfect om toe te voegen aan sauzen, soep of shakes voor extra verzadiging." },
         { cat: "PROTEÏNE & SNACKS", sku: "3968", name: "Proteïnereep Vanille Amandel", vp: 13.22, retail: 27.80, desc: "Ideaal 4-uurtje. Stilt de honger, voedt de spieren en helpt tegen zoete trek." },
         { cat: "PROTEÏNE & SNACKS", sku: "3976", name: "Proteïnereep Citroen", vp: 13.22, retail: 27.80, desc: "Frisse, eiwitrijke snack voor tussendoor om je energie op peil te houden." },
-        
         { cat: "SUPPLEMENTEN", sku: "376K", name: "Herbalife Gels ViewVita", vp: 27.20, retail: 62.60, desc: "Ondersteunt optimaal zicht en de gezondheid van de ogen." },
         { cat: "SUPPLEMENTEN", sku: "378K", name: "Herbalife Gels CoQ10Vita", vp: 23.20, retail: 53.35, desc: "Voor celenergie en bescherming tegen oxidatieve stress." },
         { cat: "SUPPLEMENTEN", sku: "379K", name: "Herbalife Gels MindVita Kids", vp: 20.50, retail: 47.15, desc: "Speciaal geformuleerd voor kinderen ter ondersteuning van hersenfunctie." },
@@ -642,7 +672,6 @@
         { cat: "SUPPLEMENTEN", sku: "3150", name: "Niteworks", vp: 48.75, retail: 108.65, desc: "Voor een gezonde bloedcirculatie en cardiovasculair systeem tijdens de nacht." },
         { cat: "SUPPLEMENTEN", sku: "3152", name: "Lift Off Citroen (10 tab)", vp: 15.95, retail: 39.95, desc: "Bruistablet voor een onmiddellijke suikervrije energieboost en scherpe focus." },
         { cat: "SUPPLEMENTEN", sku: "076K", name: "SKIN Collageen Booster", vp: 37.10, retail: 83.00, desc: "Vermindert rimpels en verbetert de huidelasticiteit van binnenuit in 4 weken." },
-        
         { cat: "HERBALIFE 24", sku: "488K", name: "H24 Creatine Plus", vp: 15.95, retail: 36.35, desc: "Verbetert fysieke prestaties tijdens opeenvolgende reeksen korte, hoogintensieve oefeningen." },
         { cat: "HERBALIFE 24", sku: "402K", name: "ProLong Energy gel", vp: 13.60, retail: 27.75, desc: "Koolhydraten-proteïne gel voor spierondersteuning tijdens langdurige inspanningen." },
         { cat: "HERBALIFE 24", sku: "403K", name: "H24 Rebuild Strength Choco", vp: 33.55, retail: 78.75, desc: "De ultieme herstelshake met 25g proteïne, ijzer en L-Glutamine na krachttraining." },
@@ -653,7 +682,6 @@
         { cat: "HERBALIFE 24", sku: "1466", name: "CR7 Drive Açai Bessen 540g", vp: 12.50, retail: 26.80, desc: "Sportdrank (samen met Cristiano Ronaldo) voor optimale hydratatie tijdens uithouding." },
         { cat: "HERBALIFE 24", sku: "1467", name: "CR7 Drive Açai Bessen (10 zakjes)", vp: 8.00, retail: 16.15, desc: "Handige meeneemzakjes van de CR7 Drive." },
         { cat: "HERBALIFE 24", sku: "1433", name: "H24 Hydrate Sinaasappel", vp: 17.20, retail: 42.90, desc: "Caloriearme elektrolytendrank. Hydrateert beter dan water alleen." },
-
         { cat: "SKIN & BODY", sku: "539K", name: "HL/Skin Revitaliserende Nachtcrème", vp: 35.20, retail: 66.00, desc: "Rijke crème die de huid 's nachts helpt herstellen en hydrateren." },
         { cat: "SKIN & BODY", sku: "508K", name: "HL/Skin 10% Niacinamide Serum", vp: 31.70, retail: 59.40, desc: "Verfijnt poriën en geeft de huid een egale, stralende teint." },
         { cat: "SKIN & BODY", sku: "511K", name: "HL/Skin Vernieuwende Gel Cleanser", vp: 21.30, retail: 39.95, desc: "Frisse reinigingsgel. Verwijdert onzuiverheden en make-up effectief." },
@@ -826,7 +854,6 @@
             st.forEach(t => tallies[t] = (tallies[t]||0)+1);
             if (sn === "Allergieën") hasAllergy = true;
             
-            // STRICTE MATCHING ZODAT HET WEGGAAT BIJ UITVINKEN
             if (sn === "Energiegebrek" || sn === "Concentratieverlies" || sn === "Minder aankunnen") { suggested.add("Lift-Off (Focus & Energie)"); }
             if (sn === "Slechte slaper") { suggested.add("Night Mode (Betere nachtrust)"); }
             if (sn === "Spierpijn" || sn === "Spierkrampen" || sn === "Gewrichtspijn") { suggested.add("H24 Rebuild Strength"); suggested.add("Xtra-Cal"); }
@@ -860,6 +887,17 @@
         const extraNotes = document.getElementById('eval-extra-notes').value.trim();
         
         let adviceText = Array.from(document.querySelectorAll('#suggested-products div')).map(d => d.innerText.replace('+ ', '')).join(', ');
+        
+        const focusList = Array.from(document.querySelectorAll('.focus-check:checked')).map(c => c.value);
+        const eetgewoonten = {
+            ontbijt: document.getElementById('eval-eet-ontbijt').value,
+            middag: document.getElementById('eval-eet-middag').value,
+            avond: document.getElementById('eval-eet-avond').value,
+            tussen: document.getElementById('eval-eet-tussen').value,
+            water: document.getElementById('eval-eet-water').value,
+            drank: document.getElementById('eval-eet-drank').value
+        };
+
         let initialNote = "Intake opmerkingen:\n" + extraNotes;
 
         const newId = 'client_' + Date.now();
@@ -873,6 +911,8 @@
             score: pts,
             symptoms: symptomList,
             advies: adviceText, 
+            focus: focusList,
+            eetgewoonten: eetgewoonten,
             active: true, 
             tanita_start: { 
                 gew: document.getElementById('eval-t-gew').value, vet: document.getElementById('eval-t-vet').value, 
@@ -973,6 +1013,8 @@
         
         const advies = c.advies || 'Geen advies geregistreerd.';
         const symptomsArr = c.symptoms && c.symptoms.length ? c.symptoms : ['Geen symptomen geselecteerd'];
+        const focusArr = c.focus && c.focus.length ? c.focus : ['Geen focus geselecteerd'];
+        const eet = c.eetgewoonten || {};
 
         document.getElementById('header-client-name').innerText = name;
         document.getElementById('header-client-phone').innerText = phone;
@@ -988,6 +1030,14 @@
         document.getElementById('crm-eval-score').innerText = c.score !== undefined ? c.score : '?';
         document.getElementById('crm-eval-symptoms').innerHTML = symptomsArr.map(s => `&bull; ${s}`).join('<br>');
         document.getElementById('crm-eval-products').innerHTML = advies.split(', ').map(p => `&bull; <strong>${p}</strong>`).join('<br>');
+        
+        document.getElementById('crm-eval-focus').innerHTML = focusArr.map(f => `&bull; ${f}`).join('<br>');
+        document.getElementById('crm-eet-ontbijt').innerText = eet.ontbijt || '-';
+        document.getElementById('crm-eet-middag').innerText = eet.middag || '-';
+        document.getElementById('crm-eet-avond').innerText = eet.avond || '-';
+        document.getElementById('crm-eet-tussen').innerText = eet.tussen || '-';
+        document.getElementById('crm-eet-water').innerText = eet.water || '-';
+        document.getElementById('crm-eet-drank').innerText = eet.drank || '-';
         
         // Vul Week 2 Herinnering
         document.getElementById('w2-symp-reminder').innerText = (c.symptoms && c.symptoms.length) ? c.symptoms.join(', ') : 'Geen';
@@ -1037,7 +1087,6 @@
             ['gew', 'vet', 'spier', 'visc', 'lft'].forEach(t => document.getElementById(`disp-t-${t}`).innerText = '-');
         }
 
-        // Zorg dat hij automatisch de Evaluatie tab opent
         const evalBtn = document.getElementById('tab-btn-eval');
         if(evalBtn) openTab('tab-evaluatie', evalBtn);
     }
@@ -1122,9 +1171,9 @@
                 <tr>
                     <td><strong>${p.name}</strong><br><small style="color:#888;">SKU: ${p.sku}</small></td>
                     <td>${p.vp.toFixed(1)}</td>
-                    <td>${formatMoney(sellPrice)}</td>
-                    <td>${formatMoney(buyPrice)}</td>
-                    <td class="profit-green">${formatMoney(profit)}</td>
+                    <td class="nowrap">${formatMoney(sellPrice)}</td>
+                    <td class="nowrap">${formatMoney(buyPrice)}</td>
+                    <td class="profit-green nowrap">${formatMoney(profit)}</td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
                             <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
@@ -1290,6 +1339,9 @@
             let card = document.createElement('div');
             card.className = "product-card";
             card.innerHTML = `
+                <div class="product-img">
+                    <img src="${p.sku}.jpg" alt="${p.name}" onerror="this.style.display='none'">
+                </div>
                 <div class="product-info-cat">
                     <div class="product-cat-label">${p.cat}</div>
                     <h4 style="margin:0 0 5px 0; color:#2C3E50;">${p.name}</h4>
