@@ -1029,7 +1029,7 @@
                 renderClientList();
                 updateClientLinkDropdown();
                 document.getElementById('stat-clients').innerText = Object.keys(clients).length;
-                if(currentClientId && clients[currentClientId]) loadClientFiche();
+                if(currentClientId && clients[currentClientId]) selectClient(currentClientId);
             });
 
             unsubStock = coachRef.collection('inventory').doc('data').onSnapshot(doc => {
