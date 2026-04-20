@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBL-Connect Pro | Dashboard</title>
+    <title>HBL-Connect</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -38,6 +38,11 @@
             overflow: hidden;
         }
 
+        /* --- GLOBALE MOBIELE ELEMENTEN (VERBORGEN OP DESKTOP) --- */
+        .mobile-header { display: none; width: 100%; }
+        .mobile-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+        .mobile-overlay.active { display: block; animation: fadeIn 0.2s; }
+
         /* --- AUTH SCREEN --- */
         #login-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -49,31 +54,53 @@
             width: 100%; max-width: 400px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
             text-align: center;
         }
-        .login-card h2 { margin-bottom: 8px; font-weight: 700; color: var(--sidebar-bg); font-size: 1.8rem;}
+        .login-card h2 { margin-bottom: 8px; font-weight: 800; color: var(--sidebar-bg); font-size: 1.8rem; letter-spacing: -0.5px;}
         .login-card h2 span { color: var(--primary); }
         .login-input { 
             width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); 
-            border-radius: var(--radius); font-size: 1rem; outline: none;
+            border-radius: var(--radius); font-size: 1rem; outline: none; background: #f8fafc;
         }
-        .login-input:focus { border-color: var(--primary); }
+        .login-input:focus { border-color: var(--primary); background: white; }
 
         /* --- SIDEBAR --- */
         aside { 
-            width: 260px; background: var(--sidebar-bg); color: white; 
-            display: flex; flex-direction: column; padding: 20px;
-            z-index: 1000; box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            width: 280px; background: var(--sidebar-bg); color: white; 
+            display: flex; flex-direction: column; padding: 25px 20px;
+            z-index: 1000; box-shadow: 2px 0 15px rgba(0,0,0,0.05);
         }
-        .brand { font-size: 1.4rem; font-weight: 800; padding: 15px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px; letter-spacing: 0.5px;}
+        .brand { font-size: 1.5rem; font-weight: 800; padding-bottom: 25px; border-bottom: 1px solid #1e293b; margin-bottom: 25px; letter-spacing: -0.5px;}
         .brand span { color: var(--primary); }
         
         .nav-link { 
             display: flex; align-items: center; padding: 12px 16px; 
             color: #94a3b8; text-decoration: none; border-radius: var(--radius);
-            margin-bottom: 4px; cursor: pointer; border: none; background: transparent;
+            margin-bottom: 5px; cursor: pointer; border: none; background: transparent;
             width: 100%; text-align: left; font-size: 0.95rem; font-weight: 500;
         }
         .nav-link:hover { background: #1e293b; color: white; }
         .nav-link.active { background: var(--primary); color: white; font-weight: 600;}
+
+        /* Moderne Styling voor de Coach Dropdown */
+        #coach-selector {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #1e293b;
+            color: white;
+            border: 1px solid #334155;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            margin-bottom: 10px;
+        }
+        #coach-selector:focus { border-color: var(--primary); outline: none; }
 
         /* --- MAIN CONTENT --- */
         main { flex: 1; overflow-y: auto; position: relative; display: flex; flex-direction: column; }
@@ -83,7 +110,7 @@
             padding: 0 40px; position: sticky; top: 0; z-index: 100;
         }
         .view { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .view.active { display: block; }
+        .view.active { display: block; animation: fadeIn 0.3s ease-out;}
 
         /* --- CARDS & UI ELEMENTS --- */
         .card { 
@@ -91,16 +118,16 @@
             border: 1px solid var(--border); padding: 24px; margin-bottom: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
-        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--sidebar-bg); border-bottom: 2px solid var(--bg-main); padding-bottom: 10px; }
+        .card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; color: var(--sidebar-bg); border-bottom: 2px solid var(--bg-main); padding-bottom: 12px; }
 
         .btn { 
-            padding: 10px 20px; border-radius: var(--radius); cursor: pointer; 
+            padding: 12px 20px; border-radius: var(--radius); cursor: pointer; 
             font-weight: 600; border: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem;
         }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-success { background: var(--secondary); color: white; }
-        .btn-success:hover { opacity: 0.9; }
+        .btn-success:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-outline { border: 1px solid var(--border); background: white; color: var(--text-main); }
         .btn-outline:hover { background: var(--bg-main); }
         .btn-danger { background: var(--danger); color: white;}
@@ -110,16 +137,16 @@
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
         input, textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid var(--border); 
+            width: 100%; padding: 12px; border: 1px solid var(--border); 
             border-radius: var(--radius); font-family: inherit; font-size: 0.95rem; background: #fdfdfd;
         }
         input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; background: white; }
-        .coach-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+        .coach-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; font-style: italic; }
 
         /* --- SPECIFIC VIEWS --- */
         /* Dashboard Stats */
         .stat-card { padding: 25px; border-left: 4px solid var(--primary); }
-        .stat-val { font-size: 2rem; font-weight: 800; display: block; margin-top: 5px; color: var(--text-main);}
+        .stat-val { font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px; color: var(--text-main); letter-spacing: -1px;}
         .stat-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
 
         /* Client List */
@@ -152,16 +179,16 @@
         .symp-item input { margin: 0; cursor: pointer; width: auto;}
 
         /* Tabbladen */
-        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; gap: 10px; }
-        .tab-btn { padding: 10px 15px; cursor: pointer; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; font-size: 0.9rem;}
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; overflow-x: auto; gap: 10px; }
+        .tab-btn { padding: 10px 15px; cursor: pointer; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; font-size: 0.95rem;}
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
 
         /* Stock Table */
         .stock-table { width: 100%; border-collapse: collapse; }
-        .stock-table th, .stock-table td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
-        .stock-table th { background: var(--bg-main); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
+        .stock-table th, .stock-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+        .stock-table th { background: var(--bg-main); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-qty { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-main); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;}
         .btn-qty:hover { background: #e2e8f0; }
 
@@ -185,7 +212,7 @@
 
         /* Float Save Button */
         .fab-save {
-            position: absolute; bottom: 30px; right: 30px; border-radius: 30px; padding: 15px 25px;
+            position: absolute; bottom: 30px; right: 40px; border-radius: 30px; padding: 15px 25px;
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); font-size: 1rem; z-index: 50;
         }
 
@@ -194,11 +221,13 @@
 
         /* Mobile */
         @media (max-width: 768px) {
-            aside { position: fixed; left: -260px; height: 100%; transition: 0.3s; }
+            body { flex-direction: column; }
+            aside { position: fixed; left: -280px; height: 100%; transition: 0.3s; z-index: 1002;}
             aside.open { left: 0; }
-            .mobile-header { display: flex; background: var(--sidebar-bg); padding: 15px 20px; color: white; justify-content: space-between; align-items: center;}
+            /* Zorgt dat mobiele header zichtbaar wordt op gsm */
+            .mobile-header { display: flex; background: var(--sidebar-bg); padding: 15px 20px; color: white; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;}
             .client-grid { grid-template-columns: 1fr; height: auto; }
-            .scroll-list { height: 300px; margin-bottom: 20px; }
+            .scroll-list { height: 350px; margin-bottom: 20px; }
             .header-bar { display: none; }
             .view { padding: 20px; }
             .fab-save { bottom: 15px; right: 15px; padding: 12px 20px; }
@@ -229,7 +258,7 @@
             </div>
             
             <label style="display: flex; align-items: center; gap: 8px; margin: 20px 0; font-size: 0.9rem; color: var(--text-main); cursor: pointer; font-weight: 500;">
-                <input type="checkbox" id="login-remember" checked style="width: auto; accent-color: var(--primary);"> Onthoud mij op dit apparaat
+                <input type="checkbox" id="login-remember" checked style="width: auto; accent-color: var(--primary); cursor: pointer;"> Onthoud mij op dit apparaat
             </label>
             
             <button id="login-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 15px; font-size: 1.05rem;" onclick="loginUser()">Veilig Inloggen</button>
@@ -238,8 +267,9 @@
 
     <div class="mobile-header">
         <div style="font-weight: 800; font-size: 1.2rem;">HBL-Connect <span style="color:var(--primary);">Pro</span></div>
-        <button class="hamburger" onclick="document.getElementById('app-sidebar').classList.toggle('open')">☰</button>
+        <button class="hamburger" onclick="document.getElementById('app-sidebar').classList.toggle('open')" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">☰</button>
     </div>
+    <div id="mobile-overlay" class="mobile-overlay" onclick="document.getElementById('app-sidebar').classList.remove('open'); this.classList.remove('active');"></div>
 
     <div id="product-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -289,8 +319,8 @@
         </nav>
 
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #1e293b;">
-            <p style="font-size: 0.75rem; color: #64748b; margin: 0 0 5px 5px; font-weight: 600;">Ingelogd als:</p>
-            <select id="coach-selector" onchange="switchCoach()" style="background: #1e293b; color: white; border: 1px solid #334155; margin-bottom: 10px; cursor: pointer; width: 100%; padding: 10px; border-radius: 6px;">
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0 0 8px 5px; font-weight: 600;">Ingelogd als:</p>
+            <select id="coach-selector" onchange="switchCoach()">
                 <option value="Andreas">Coach Andreas</option>
                 <option value="Thalyssa">Coach Thalyssa</option>
                 <option value="Silvia">Coach Silvia</option>
@@ -301,11 +331,8 @@
 
     <main id="main-content">
         <div class="header-bar">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button class="hamburger" onclick="document.getElementById('app-sidebar').classList.toggle('open')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
-                <h2 id="view-title" style="margin: 0; font-weight: 700; color: var(--text-main);">Dashboard Overzicht</h2>
-            </div>
-            <div id="user-display" style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted); background: var(--bg-main); padding: 8px 16px; border-radius: 20px;">Laden...</div>
+            <h2 id="view-title" style="margin: 0; font-weight: 700; color: var(--text-main);">Dashboard Overzicht</h2>
+            <div id="user-display" style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted); background: var(--bg-main); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border);">Laden...</div>
         </div>
 
         <div id="view-dash" class="view active">
@@ -711,35 +738,8 @@
 
     <script>
         // =========================================================================
-        // 1. FIREBASE INIT
+        // DATA & CONFIG
         // =========================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyD9xhQuLnjgbaMHZI_vWp4FoUUjTNbA0tM",
-            authDomain: "follow-up-coaches.firebaseapp.com",
-            projectId: "follow-up-coaches",
-            storageBucket: "follow-up-coaches.firebasestorage.app",
-            messagingSenderId: "273305831461",
-            appId: "1:273305831461:web:4471b563a5d0da164457cc"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        // =========================================================================
-        // 2. GLOBALS & DATA
-        // =========================================================================
-        let currentCoach = 'Andreas';
-        let clients = {};
-        let myStock = {};
-        let salesHistory = [];
-        let personalUse = [];
-        let currentClientId = null;
-        let currentCatFilter = "Alles";
-        let collapsedCats = {};
-        let unsubClients, unsubStock;
-
-        const formatMoney = (amt) => "€ " + parseFloat(amt).toFixed(2).replace('.', ',');
-
         const evalQuestions = [
             {q: "Ik ben uitgeslapen als ik 's morgens opsta", val: "JA"}, {q: "Ik start elke ochtend met een volwaardig ontbijt", val: "JA"},
             {q: "Ik heb tijdens de dag last van energiedips", val: "NEE"}, {q: "Ik heb geregeld honger of snoepzin", val: "NEE"},
@@ -970,6 +970,7 @@
             const titles = { 'view-dash': 'Dashboard Overzicht', 'view-eval': 'Nieuwe Intake Starten', 'view-fu': 'Klantendossiers', 'view-stock': 'Voorraad & Administratie', 'view-catalog': 'Producten Catalogus', 'view-recipes': 'Gezonde Recepten', 'view-testimonials': 'Succesverhalen' };
             document.getElementById('view-title').innerText = titles[viewId] || 'HBL-Connect';
             document.getElementById('app-sidebar').classList.remove('open');
+            document.getElementById('mobile-overlay').classList.remove('active');
         }
 
         function switchCoach() {
@@ -1262,7 +1263,7 @@
         // =========================================================================
         function updateClientLinkDropdown() {
             const sel = document.getElementById('link-client-select');
-            sel.innerHTML = '<option value="">Koppel aan klant...</option>';
+            sel.innerHTML = '<option value="">-- Koppel verkoop aan klant --</option>';
             Object.keys(clients).forEach(id => { 
                 if(clients[id].active !== false) sel.innerHTML += `<option value="${id}">${clients[id].name}</option>`; 
             });
@@ -1285,7 +1286,7 @@
                 if(count > 0) { tVP += (p.vp * count); tBuy += (buyP * count); tRet += (p.retail * count); tProf += (prof * count); }
                 
                 if (p.cat !== cCat) {
-                    tbody.innerHTML += `<tr><td colspan="5" style="background:#f1f5f9; font-weight:700; font-size:0.8rem; padding:10px 15px; color:var(--text-muted);">${p.cat}</td></tr>`;
+                    tbody.innerHTML += `<tr><td colspan="6" style="background:#f1f5f9; font-weight:700; font-size:0.8rem; padding:10px 15px; color:var(--text-muted);">${p.cat}</td></tr>`;
                     cCat = p.cat;
                 }
 
@@ -1296,9 +1297,9 @@
                         <td style="color:var(--secondary); font-weight:600;">+ ${formatMoney(prof)}</td>
                         <td>
                             <div style="display:flex; align-items:center; gap:8px;">
-                                <button class="btn btn-outline" style="padding:4px 10px;" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
+                                <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
                                 <span style="font-weight:700; width:20px; text-align:center; color:${count===0?'var(--text-muted)':(count<3?'var(--accent)':'var(--text-main)')};">${count}</span>
-                                <button class="btn btn-outline" style="padding:4px 10px;" onclick="updateStockCount('${p.sku}', ${count + 1})">+</button>
+                                <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count + 1})">+</button>
                             </div>
                         </td>
                         <td>
@@ -1315,6 +1316,7 @@
 
             document.getElementById('dash-vp').innerText = tVP.toFixed(2);
             document.getElementById('dash-inkoop').innerText = formatMoney(tBuy);
+            document.getElementById('dash-verkoop').innerText = formatMoney(tRet);
             document.getElementById('dash-winst').innerText = formatMoney(tProf);
             
             // Stats op Home Dashboard
@@ -1450,20 +1452,20 @@
 
             filtered.forEach(p => {
                 let card = document.createElement('div');
-                card.className = "product-card";
+                card.className = "product-card card";
+                card.style.padding = "20px"; card.style.cursor = "pointer"; card.style.borderTop = "4px solid var(--primary)"; card.style.marginBottom = "0";
                 // Koppel de openModal functie aan de klik op de kaart
                 card.onclick = () => openProductModal(p.sku);
                 
                 card.innerHTML = `
-                    <div class="product-img">
-                        <img src="${p.sku}.jpg" alt="${p.name}" onerror="this.style.display='none'">
-                    </div>
                     <div class="product-info-cat">
-                        <div class="product-cat-label">${p.cat}</div>
-                        <h4 style="margin:0 0 5px 0; color:#2C3E50;">${p.name}</h4>
-                        <p style="margin: 0 0 10px 0; font-size:0.8rem; color:#666; font-style:italic;">${p.desc}</p>
-                        <p style="margin: 0 0 5px 0; font-size:0.85rem; color:#888;"><strong>SKU:</strong> ${p.sku} | <strong>VP:</strong> ${p.vp.toFixed(2)}</p>
-                        <p style="margin: 0 0 0 0; font-size:0.95rem; color:var(--theme-color); font-weight:bold;">${formatMoney(p.retail)}</p>
+                        <div class="product-cat-label" style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform: uppercase; margin-bottom: 5px;">${p.cat}</div>
+                        <h4 style="margin:0 0 5px 0; color:var(--text-main); font-size:1.1rem;">${p.name}</h4>
+                        <p style="margin: 0 0 15px 0; font-size:0.85rem; color:var(--text-muted); line-height: 1.5;">${p.desc}</p>
+                        <div style="display:flex; justify-content:space-between; align-items:end; margin-top: auto;">
+                            <span style="font-size:0.75rem; color:#888;">SKU: ${p.sku} | VP: ${p.vp.toFixed(2)}</span>
+                            <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">${formatMoney(p.retail)}</span>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -1489,7 +1491,7 @@
             benefitsList.innerHTML = "";
             if (p.benefits && p.benefits.length > 0) {
                 p.benefits.forEach(b => {
-                    benefitsList.innerHTML += `<li>${b}</li>`;
+                    benefitsList.innerHTML += `<li style="margin-bottom: 5px;">${b}</li>`;
                 });
             } else {
                 benefitsList.innerHTML = "<li>Geen specifieke voordelen geregistreerd.</li>";
@@ -1511,17 +1513,18 @@
             
             dbTestimonials.forEach(t => {
                 let card = document.createElement('div');
-                card.className = "testi-card";
+                card.className = "testi-card card";
+                card.style.marginBottom = "0"; card.style.padding = "0"; card.style.overflow = "hidden"; card.style.border = "1px solid var(--border)";
                 card.innerHTML = `
-                    <div class="testi-header">${t.naam} <span style="font-size:0.8rem; font-weight:normal; display:block; color:#bdc3c7;">${t.label}</span></div>
-                    <div class="testi-body">
-                        <div class="testi-box">
-                            <strong style="color:var(--danger)">VOORHEEN:</strong><br>
-                            ${t.fase}
+                    <div style="background:var(--sidebar-bg); color:white; padding:20px; text-align:center;">
+                        <strong style="font-size:1.2rem;">${t.naam}</strong><br><span style="font-size:0.85rem; color:#94a3b8;">${t.label}</span>
+                    </div>
+                    <div style="padding:25px;">
+                        <div style="background:#fef2f2; padding:15px; border-radius:8px; border-left:4px solid var(--danger); margin-bottom:15px; font-size:0.9rem;">
+                            <strong style="color:var(--danger)">VOORHEEN:</strong><br>${t.fase}
                         </div>
-                        <div class="testi-box nu">
-                            <strong style="color:var(--success)">NU:</strong><br>
-                            ${t.nu}
+                        <div style="background:#ecfdf5; padding:15px; border-radius:8px; border-left:4px solid var(--secondary); font-size:0.9rem;">
+                            <strong style="color:var(--secondary)">NU:</strong><br>${t.nu}
                         </div>
                     </div>
                 `;
