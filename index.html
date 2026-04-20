@@ -12,6 +12,7 @@
     
     <style>
         :root {
+            /* Modern Kleurenpalet */
             --primary: #2563eb;
             --primary-dark: #1e40af;
             --secondary: #10b981;
@@ -46,21 +47,24 @@
         .login-card { 
             background: white; padding: 40px; border-radius: 16px; 
             width: 100%; max-width: 400px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            text-align: center;
         }
-        .login-card h2 { margin-bottom: 8px; font-weight: 700; color: var(--sidebar-bg); }
+        .login-card h2 { margin-bottom: 8px; font-weight: 700; color: var(--sidebar-bg); font-size: 1.8rem;}
+        .login-card h2 span { color: var(--primary); }
         .login-input { 
             width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); 
-            border-radius: var(--radius); font-size: 1rem;
+            border-radius: var(--radius); font-size: 1rem; outline: none;
         }
+        .login-input:focus { border-color: var(--primary); }
 
         /* --- SIDEBAR --- */
         aside { 
-            width: 280px; background: var(--sidebar-bg); color: white; 
+            width: 260px; background: var(--sidebar-bg); color: white; 
             display: flex; flex-direction: column; padding: 20px;
-            z-index: 1000;
+            z-index: 1000; box-shadow: 2px 0 10px rgba(0,0,0,0.05);
         }
-        .brand { font-size: 1.5rem; font-weight: 800; padding: 20px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
-        .brand span { color: var(--secondary); }
+        .brand { font-size: 1.4rem; font-weight: 800; padding: 15px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px; letter-spacing: 0.5px;}
+        .brand span { color: var(--primary); }
         
         .nav-link { 
             display: flex; align-items: center; padding: 12px 16px; 
@@ -69,7 +73,7 @@
             width: 100%; text-align: left; font-size: 0.95rem; font-weight: 500;
         }
         .nav-link:hover { background: #1e293b; color: white; }
-        .nav-link.active { background: var(--primary); color: white; }
+        .nav-link.active { background: var(--primary); color: white; font-weight: 600;}
 
         /* --- MAIN CONTENT --- */
         main { flex: 1; overflow-y: auto; position: relative; display: flex; flex-direction: column; }
@@ -85,83 +89,119 @@
         .card { 
             background: var(--card-bg); border-radius: 12px; 
             border: 1px solid var(--border); padding: 24px; margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
         .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--sidebar-bg); border-bottom: 2px solid var(--bg-main); padding-bottom: 10px; }
 
         .btn { 
             padding: 10px 20px; border-radius: var(--radius); cursor: pointer; 
-            font-weight: 600; border: none; display: inline-flex; align-items: center; gap: 8px;
+            font-weight: 600; border: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem;
         }
         .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
         .btn-success { background: var(--secondary); color: white; }
+        .btn-success:hover { opacity: 0.9; }
         .btn-outline { border: 1px solid var(--border); background: white; color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-main); }
         .btn-danger { background: var(--danger); color: white;}
+        .btn-warning { background: var(--accent); color: white;}
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
         input, textarea, select { 
             width: 100%; padding: 10px; border: 1px solid var(--border); 
-            border-radius: var(--radius); font-family: inherit; font-size: 0.95rem;
+            border-radius: var(--radius); font-family: inherit; font-size: 0.95rem; background: #fdfdfd;
         }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; background: white; }
+        .coach-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-style: italic; }
 
         /* --- SPECIFIC VIEWS --- */
         /* Dashboard Stats */
-        .stat-card { padding: 20px; text-align: center; border-left: 4px solid var(--primary); }
-        .stat-val { font-size: 1.8rem; font-weight: 800; display: block; }
-        .stat-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card { padding: 25px; border-left: 4px solid var(--primary); }
+        .stat-val { font-size: 2rem; font-weight: 800; display: block; margin-top: 5px; color: var(--text-main);}
+        .stat-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
 
         /* Client List */
-        .client-grid { display: grid; grid-template-columns: 320px 1fr; gap: 30px; height: calc(100vh - 180px); }
-        .scroll-list { background: white; border-radius: 12px; border: 1px solid var(--border); overflow-y: auto; padding: 10px; }
+        .client-grid { display: grid; grid-template-columns: 320px 1fr; gap: 30px; height: calc(100vh - 150px); }
+        .scroll-list { background: white; border-radius: 12px; border: 1px solid var(--border); overflow-y: auto; padding: 10px; height: 100%;}
         .client-row { 
             padding: 15px; border-bottom: 1px solid var(--bg-main); cursor: pointer;
             display: flex; justify-content: space-between; align-items: center; border-radius: 8px;
         }
         .client-row:hover { background: var(--bg-main); }
-        .client-row.active { background: var(--primary); color: white; }
+        .client-row.active { background: var(--primary); color: white; border-bottom: none;}
+        .client-row.active .text-muted { color: #e2e8f0 !important; }
+        
+        .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; background: var(--danger); color: white;}
 
         /* Catalogus / Recepten Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .recipe-card { overflow: hidden; position: relative; padding: 20px; border-radius: 12px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .recipe-card { overflow: hidden; position: relative; padding: 25px; border-radius: 12px; border: 1px solid var(--border); }
         .recipe-tag { 
-            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.1); 
-            color: #333; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;
+            position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.08); 
+            color: #333; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;
         }
 
         /* Checklist Evaluatie */
         .check-table { width: 100%; border-collapse: collapse; }
         .check-table td { padding: 12px 5px; border-bottom: 1px solid var(--border); font-size: 0.9rem;}
-        .col-option { width: 80px; text-align: center; font-weight: bold; color: var(--text-muted); }
+        .col-option { width: 60px; text-align: center; font-weight: bold; color: var(--text-muted); }
         
         .symp-item { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer; color:var(--text-main);}
         .symp-item input { margin: 0; cursor: pointer; width: auto;}
 
         /* Tabbladen */
-        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
-        .tab-btn { padding: 10px 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; gap: 10px; }
+        .tab-btn { padding: 10px 15px; cursor: pointer; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; font-size: 0.9rem;}
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
 
+        /* Stock Table */
+        .stock-table { width: 100%; border-collapse: collapse; }
+        .stock-table th, .stock-table td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+        .stock-table th { background: var(--bg-main); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
+        .btn-qty { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-main); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;}
+        .btn-qty:hover { background: #e2e8f0; }
+
+        /* Product Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);}
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        .modal-content { background: white; width: 100%; max-width: 600px; max-height: 90vh; border-radius: 16px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); display: flex; flex-direction: column;}
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; background: none; border: none; z-index: 10;}
+        .modal-close:hover { color: var(--danger); }
+        .modal-header-img { width: 100%; height: 250px; background: var(--bg-main); display: flex; justify-content: center; align-items: center; border-bottom: 1px solid var(--border); padding: 20px; position: relative;}
+        .modal-header-img img { max-width: 100%; max-height: 100%; object-fit: contain; z-index: 1;}
+        .modal-header-img::after { content: "📷 Geen afbeelding"; position: absolute; color: var(--text-muted); font-size: 0.9rem; z-index: 0;}
+        
         /* Toast */
         #toast { 
-            position: fixed; bottom: 30px; right: 30px; background: var(--sidebar-bg); 
+            position: fixed; bottom: 30px; right: 30px; background: var(--secondary); 
             color: white; padding: 16px 24px; border-radius: var(--radius); 
-            box-shadow: 0 10px 15px rgba(0,0,0,0.2); display: none; z-index: 10000;
-            animation: slideIn 0.3s ease-out; font-weight: 500;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1); display: none; z-index: 10000;
+            font-weight: 600; font-size: 0.95rem;
         }
 
+        /* Float Save Button */
+        .fab-save {
+            position: absolute; bottom: 30px; right: 30px; border-radius: 30px; padding: 15px 25px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); font-size: 1rem; z-index: 50;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
         /* Mobile */
         @media (max-width: 768px) {
-            aside { position: fixed; left: -280px; height: 100%; transition: 0.3s; }
+            aside { position: fixed; left: -260px; height: 100%; transition: 0.3s; }
             aside.open { left: 0; }
-            .client-grid { grid-template-columns: 1fr; }
-            .header-bar { padding: 0 20px; }
+            .mobile-header { display: flex; background: var(--sidebar-bg); padding: 15px 20px; color: white; justify-content: space-between; align-items: center;}
+            .client-grid { grid-template-columns: 1fr; height: auto; }
+            .scroll-list { height: 300px; margin-bottom: 20px; }
+            .header-bar { display: none; }
             .view { padding: 20px; }
+            .fab-save { bottom: 15px; right: 15px; padding: 12px 20px; }
         }
     </style>
 </head>
@@ -171,24 +211,71 @@
 
     <div id="login-overlay">
         <div class="login-card">
-            <h2>HBL-Connect <span style="color: var(--secondary);">Pro</span></h2>
-            <p>Geavanceerd Coach Management Systeem</p>
+            <h2>HBL-Connect <span>Pro</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">Geavanceerd Coach Dashboard</p>
             
-            <div id="login-error" style="color: white; background: var(--danger); padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; display: none; font-weight: bold;">Oeps! E-mail of wachtwoord onjuist.</div>
+            <div id="login-error" style="color: white; background: var(--danger); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px; display: none; font-weight: 600;">Oeps! E-mail of wachtwoord onjuist.</div>
             
-            <input type="email" id="login-email" class="login-input" placeholder="E-mailadres">
-            <input type="password" id="login-password" class="login-input" placeholder="Wachtwoord" onkeyup="if(event.key === 'Enter') loginUser()">
+            <div style="text-align: left;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">E-mailadres</label>
+                <input type="email" id="login-email" class="login-input" placeholder="jouw@email.com">
+            </div>
             
-            <label style="display: flex; align-items: center; gap: 8px; margin: 15px 0; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
-                <input type="checkbox" id="login-remember" checked style="width: auto;"> Onthoud mij op dit apparaat
+            <div style="text-align: left; margin-top: 10px;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Wachtwoord</label>
+                <input type="password" id="login-password" class="login-input" placeholder="••••••••" onkeyup="if(event.key === 'Enter') loginUser()">
+            </div>
+            
+            <label style="display: flex; align-items: center; gap: 8px; margin: 20px 0; font-size: 0.9rem; color: var(--text-main); cursor: pointer; font-weight: 500;">
+                <input type="checkbox" id="login-remember" checked style="width: auto; accent-color: var(--primary);"> Onthoud mij op dit apparaat
             </label>
             
             <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 15px; font-size: 1.05rem;" onclick="loginUser()">Veilig Inloggen</button>
         </div>
     </div>
 
+    <div class="mobile-header">
+        <div style="font-weight: 800; font-size: 1.2rem;">HBL-Connect <span style="color:var(--primary);">Pro</span></div>
+        <button class="hamburger" onclick="document.getElementById('app-sidebar').classList.toggle('open')">☰</button>
+    </div>
+
+    <div id="product-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal(event)">×</button>
+            <div class="modal-header-img">
+                <img id="modal-img" src="" alt="Product Afbeelding" onerror="this.style.display='none'">
+            </div>
+            <div style="padding: 30px;">
+                <div style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 5px;" id="modal-cat">Categorie</div>
+                <h2 id="modal-title" style="margin: 0 0 5px 0; color: var(--text-main);">Product Naam</h2>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
+                    <strong>SKU:</strong> <span id="modal-sku"></span> | 
+                    <strong>VP:</strong> <span id="modal-vp"></span> | 
+                    <strong style="color:var(--primary);">Prijs:</strong> <span id="modal-price" style="color:var(--primary); font-weight:bold;"></span>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <p id="modal-desc" style="font-size: 1rem; font-style: italic; color: var(--text-muted); border-left: 3px solid var(--border); padding-left: 15px; margin: 0;"></p>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color:var(--secondary); margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">✨ Belangrijkste Voordelen</h4>
+                    <ul id="modal-benefits" style="color: var(--text-main); line-height: 1.6; font-size: 0.95rem; margin: 0; padding-left: 20px;"></ul>
+                </div>
+                
+                <div style="background: var(--bg-main); padding: 20px; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="margin: 0 0 10px 0; color: var(--text-main);">🥄 Gebruiksadvies</h4>
+                    <p id="modal-usage" style="margin: 0; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;"></p>
+                </div>
+                
+                <button class="btn btn-outline" style="width:100%; margin-top: 15px; justify-content: center;" onclick="closeModal(event)">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
     <aside id="app-sidebar">
         <div class="brand">HBL-Connect <span>Pro</span></div>
+        
         <nav style="flex: 1; overflow-y: auto;">
             <button class="nav-link active" onclick="switchView('view-dash', this)">📊 Dashboard</button>
             <button class="nav-link" onclick="switchView('view-eval', this)">📝 Nieuwe Intake</button>
@@ -200,7 +287,8 @@
         </nav>
 
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #1e293b;">
-            <select id="coach-selector" onchange="switchCoach()" style="background: #1e293b; color: white; border: 1px solid #334155; margin-bottom: 10px; cursor: pointer;">
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0 0 5px 5px; font-weight: 600;">Ingelogd als:</p>
+            <select id="coach-selector" onchange="switchCoach()" style="background: #1e293b; color: white; border: 1px solid #334155; margin-bottom: 10px; cursor: pointer; width: 100%; padding: 10px; border-radius: 6px;">
                 <option value="Andreas">Coach Andreas</option>
                 <option value="Thalyssa">Coach Thalyssa</option>
                 <option value="Silvia">Coach Silvia</option>
@@ -211,11 +299,8 @@
 
     <main id="main-content">
         <div class="header-bar">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button class="hamburger" onclick="document.getElementById('app-sidebar').classList.toggle('open')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
-                <h2 id="view-title" style="margin: 0; font-weight: 700;">Dashboard Overzicht</h2>
-            </div>
-            <div id="user-display" style="font-weight: 600; font-size: 0.9rem; color: var(--text-muted);">Laden...</div>
+            <h2 id="view-title" style="margin: 0; font-weight: 700; color: var(--text-main);">Dashboard Overzicht</h2>
+            <div id="user-display" style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted); background: var(--bg-main); padding: 8px 16px; border-radius: 20px;">Laden...</div>
         </div>
 
         <div id="view-dash" class="view active">
@@ -236,144 +321,159 @@
             
             <div class="grid">
                 <div class="card">
-                    <div class="card-title">Snelkoppelingen</div>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="btn btn-primary" onclick="switchView('view-eval', document.querySelectorAll('.nav-link')[1])" style="justify-content: center;">+ Nieuwe Intake Starten</button>
-                        <button class="btn btn-outline" onclick="switchView('view-fu', document.querySelectorAll('.nav-link')[2])" style="justify-content: center;">Open Klantendossiers</button>
+                    <div class="card-title">🚀 Snelkoppelingen</div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="btn btn-primary" onclick="switchView('view-eval', document.querySelectorAll('.nav-link')[1])" style="justify-content: center; padding: 15px;">+ Nieuwe Intake Starten</button>
+                        <button class="btn btn-outline" onclick="switchView('view-fu', document.querySelectorAll('.nav-link')[2])" style="justify-content: center; padding: 15px;">Open Klantendossiers</button>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">Hulp & Info Documenten</div>
+                    <div class="card-title">📚 Hulp & Info Documenten</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="window.open('Visceraal-vet.pdf')">Visceraal vet</button>
-                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="window.open('Vetpercentage.pdf')">Vetpercentage</button>
-                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="window.open('Prijslijst.pdf')">Prijslijst</button>
-                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="window.open('Ontbijtopties.jpg')">Ontbijtopties</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('Visceraal-vet.pdf')">Visceraal vet</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('Vetpercentage.pdf')">Vetpercentage</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('centimeters.pdf')">Centimeters/Kilo's</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('Prijslijst.pdf')">Prijslijst</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('Ontbijtopties.jpg')">Ontbijtopties</button>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; justify-content: center;" onclick="window.open('Ontbijt-vs-shake.jpg')">Ontbijt vs Shake</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="view-eval" class="view">
-            <div class="card">
-                <div class="card-title">1. Persoonsgegevens</div>
-                <div class="grid">
-                    <div class="form-group"><label>Naam Klant</label><input type="text" id="eval-name" placeholder="Verplicht"></div>
-                    <div class="form-group"><label>Start Datum</label><input type="date" id="eval-date"></div>
-                    <div class="form-group"><label>Telefoonnummer</label><input type="text" id="eval-phone"></div>
-                    <div class="form-group"><label>E-mailadres</label><input type="email" id="eval-email"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">2. Verwachtingen & Focus</div>
-                <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-bottom: 15px;">
-                    <label class="symp-item"><input type="checkbox" value="Energie" class="focus-check"> Energie</label>
-                    <label class="symp-item"><input type="checkbox" value="Gewicht" class="focus-check"> Gewicht</label>
-                    <label class="symp-item"><input type="checkbox" value="Sport" class="focus-check"> Sport</label>
-                    <label class="symp-item"><input type="checkbox" value="Slaap" class="focus-check"> Slaap</label>
-                    <label class="symp-item"><input type="checkbox" value="Immuniteit" class="focus-check"> Immuniteit</label>
-                    <label class="symp-item"><input type="checkbox" value="Spijsvertering" class="focus-check"> Spijsvertering</label>
-                </div>
-                <div class="form-group"><label>De "Why" (Waarom is dit belangrijk?)</label><textarea id="eval-why" rows="2"></textarea></div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">3. Lichaamsanalyse (Tanita Startwaarden)</div>
-                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
-                    <div class="form-group"><label>Gewicht (kg)</label><input type="text" id="eval-t-gew"></div>
-                    <div class="form-group"><label>Vet %</label><input type="text" id="eval-t-vet"></div>
-                    <div class="form-group"><label>Spier (kg)</label><input type="text" id="eval-t-spier"></div>
-                    <div class="form-group"><label>Visceraal</label><input type="text" id="eval-t-visc"></div>
-                    <div class="form-group"><label>Metab. Lft</label><input type="text" id="eval-t-lft"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">4. Checklist Levensstijl</div>
-                <table class="check-table">
-                    <thead><tr><th align="left" style="color:var(--text-muted);">Vraagstelling</th><th class="col-option">NEE</th><th class="col-option">JA</th></tr></thead>
-                    <tbody id="check-list"></tbody>
-                </table>
-                <div style="margin-top: 20px; padding: 15px; background: var(--bg-main); border-radius: 8px;">
-                    <strong>Score: <span id="score-num">0</span> / 15</strong>
-                    <div style="background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 10px; overflow: hidden;">
-                        <div id="score-fill" style="height: 100%; width: 0%; background: var(--danger); transition: 0.3s;"></div>
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="card">
+                    <div class="card-title">1. Persoonsgegevens</div>
+                    <div class="grid">
+                        <div class="form-group"><label>Naam Klant</label><input type="text" id="eval-name" placeholder="Volledige naam (Verplicht)"></div>
+                        <div class="form-group"><label>Start Datum</label><input type="date" id="eval-date"></div>
+                        <div class="form-group"><label>Telefoonnummer</label><input type="text" id="eval-phone" placeholder="04xx xxx xxx"></div>
+                        <div class="form-group"><label>E-mailadres</label><input type="email" id="eval-email"></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="card-title">5. Eetgewoonten & Hydratatie</div>
-                <div class="grid">
-                    <div class="form-group"><label>Ontbijt</label><textarea id="eval-eet-ontbijt" rows="2"></textarea></div>
-                    <div class="form-group"><label>Middag</label><textarea id="eval-eet-middag" rows="2"></textarea></div>
-                    <div class="form-group"><label>Avond</label><textarea id="eval-eet-avond" rows="2"></textarea></div>
-                    <div class="form-group"><label>Tussendoortjes</label><textarea id="eval-eet-tussen" rows="2"></textarea></div>
-                    <div class="form-group"><label>Water (Liters)</label><input type="text" id="eval-eet-water"></div>
-                    <div class="form-group"><label>Andere dranken</label><input type="text" id="eval-eet-drank"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">6. Analyse Voedingstekorten</div>
-                <div class="grid" id="symp-list" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"></div>
-                
-                <div id="vitamin-warning" style="display:none; margin-top:20px; padding:15px; background:#fef2f2; border-left:4px solid var(--danger); color:var(--danger); font-weight:bold; border-radius:4px;">
-                    Let op: Bij 5 of meer symptomen is er tevens een algemeen tekort aan vitaminen!
-                </div>
-
-                <div class="grid" style="margin-top: 20px;">
-                    <div style="background: var(--bg-main); padding: 15px; border-radius: 8px;">
-                        <strong style="color:var(--primary)">Vermoedelijke Tekorten:</strong>
-                        <div id="tally-results" style="margin-top:10px; font-size: 0.9rem;">...</div>
+                <div class="card">
+                    <div class="card-title">2. Verwachtingen & Focus</div>
+                    <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); margin-bottom: 20px; gap: 10px;">
+                        <label class="symp-item"><input type="checkbox" value="Energie" class="focus-check"> Energie</label>
+                        <label class="symp-item"><input type="checkbox" value="Gewicht" class="focus-check"> Gewicht</label>
+                        <label class="symp-item"><input type="checkbox" value="Sport" class="focus-check"> Sport</label>
+                        <label class="symp-item"><input type="checkbox" value="Slaap" class="focus-check"> Slaap</label>
+                        <label class="symp-item"><input type="checkbox" value="Immuniteit" class="focus-check"> Immuniteit</label>
+                        <label class="symp-item"><input type="checkbox" value="Spijsvertering" class="focus-check"> Spijsvertering</label>
+                        <label class="symp-item"><input type="checkbox" value="Gewrichten" class="focus-check"> Gewrichten</label>
+                        <label class="symp-item"><input type="checkbox" value="Huid" class="focus-check"> Huid</label>
+                        <label class="symp-item"><input type="checkbox" value="Concentratie" class="focus-check"> Concentratie</label>
                     </div>
-                    <div style="background: #ecfdf5; padding: 15px; border-radius: 8px;">
-                        <strong style="color:var(--secondary)">Voorgestelde Producten:</strong>
-                        <div id="suggested-products" style="margin-top:10px; font-size:0.9rem;">...</div>
+                    <div class="form-group"><label>Belang van dit doel? (De "Why")</label><textarea id="eval-why" rows="2" placeholder="Waarom is dit belangrijk voor de klant?"></textarea></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">3. Lichaamsanalyse (Tanita Startwaarden)</div>
+                    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                        <div class="form-group"><label>Gewicht (kg)</label><input type="text" id="eval-t-gew"></div>
+                        <div class="form-group"><label>Vet %</label><input type="text" id="eval-t-vet"></div>
+                        <div class="form-group"><label>Spier (kg)</label><input type="text" id="eval-t-spier"></div>
+                        <div class="form-group"><label>Visceraal</label><input type="text" id="eval-t-visc"></div>
+                        <div class="form-group"><label>Metab. Lft</label><input type="text" id="eval-t-lft"></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="card-title">7. Medisch & Notities</div>
-                <div class="form-group">
-                    <label>Medicatiegebruik (Optioneel)</label>
-                    <textarea id="eval-medication" rows="2" placeholder="Noteer hier eventuele medicatie..."></textarea>
+                <div class="card">
+                    <div class="card-title">4. Checklist Huidige Levensstijl</div>
+                    <table class="check-table">
+                        <thead><tr><th align="left" style="color:var(--text-muted);">Vraagstelling</th><th class="col-option">NEE</th><th class="col-option">JA</th></tr></thead>
+                        <tbody id="check-list"></tbody>
+                    </table>
+                    <div style="margin-top: 25px; padding: 20px; background: var(--bg-main); border-radius: 8px; display: flex; align-items: center; gap: 20px;">
+                        <strong style="font-size: 1.2rem; white-space: nowrap;">Score: <span id="score-num" style="color: var(--primary);">0</span> / 15</strong>
+                        <div style="background: #e2e8f0; height: 12px; border-radius: 6px; width: 100%; overflow: hidden;">
+                            <div id="score-fill" style="height: 100%; width: 0%; background: var(--danger); transition: 0.4s ease-out;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Extra Opmerkingen</label>
-                    <textarea id="eval-extra-notes" rows="4" placeholder="Vragen van de klant, bijzonderheden..."></textarea>
-                </div>
-            </div>
 
-            <button class="btn btn-success" style="width: 100%; padding: 20px; font-size: 1.1rem; justify-content: center;" onclick="saveEvaluatie()">💾 Opslaan & Klantendossier Aanmaken</button>
+                <div class="card">
+                    <div class="card-title">5. Eetgewoonten & Hydratatie</div>
+                    <div class="grid">
+                        <div class="form-group"><label>Ontbijt</label><textarea id="eval-eet-ontbijt" rows="2"></textarea></div>
+                        <div class="form-group"><label>Middag</label><textarea id="eval-eet-middag" rows="2"></textarea></div>
+                        <div class="form-group"><label>Avond</label><textarea id="eval-eet-avond" rows="2"></textarea></div>
+                        <div class="form-group"><label>Tussendoortjes</label><textarea id="eval-eet-tussen" rows="2"></textarea></div>
+                        <div class="form-group"><label>Water per dag (Liters)</label><input type="text" id="eval-eet-water"></div>
+                        <div class="form-group"><label>Andere dranken (koffie, fris...)</label><input type="text" id="eval-eet-drank"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">6. Analyse Voedingstekorten</div>
+                    <div class="grid" id="symp-list" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;"></div>
+                    
+                    <div id="vitamin-warning" style="display:none; margin-top:20px; padding:15px; background:#fef2f2; border-left:4px solid var(--danger); color:var(--danger); font-weight:bold; border-radius:4px;">
+                        ⚠️ Let op: Bij 5 of meer symptomen is er tevens een algemeen tekort aan vitaminen!
+                    </div>
+
+                    <div id="allergy-box" style="display:none; margin-top:15px; padding:15px; background:#fffbeb; border-left:4px solid var(--accent); border-radius:4px;">
+                        <label style="color:#b45309; font-weight:bold; display: block; margin-bottom: 5px;">Allergieën / Intoleranties gesignaleerd:</label>
+                        <input type="text" id="eval-allergie-detail" placeholder="Specificeer allergieën..." style="border:1px solid #fde68a;">
+                    </div>
+
+                    <div class="grid" style="margin-top: 25px;">
+                        <div style="background: var(--bg-main); padding: 20px; border-radius: 8px; border: 1px solid var(--border);">
+                            <strong style="color:var(--text-main); font-size: 1.05rem;">Vermoedelijke Tekorten:</strong>
+                            <div id="tally-results" style="margin-top:12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Geen symptomen geselecteerd.</div>
+                        </div>
+                        <div style="background: #ecfdf5; padding: 20px; border-radius: 8px; border: 1px solid #a7f3d0; border-left: 4px solid var(--secondary);">
+                            <strong style="color:var(--secondary); font-size: 1.05rem;">Voorgestelde Producten:</strong>
+                            <div id="suggested-products" style="margin-top:12px; font-size:0.95rem; font-weight: 500; line-height: 1.6; color: #065f46;">Geen advies nog.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">7. Medisch & Notities</div>
+                    <div class="form-group">
+                        <label>Medicatiegebruik (Optioneel maar belangrijk)</label>
+                        <textarea id="eval-medication" rows="2" placeholder="Noteer hier eventuele medicatie..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Extra Opmerkingen / Vrije Notities</label>
+                        <textarea id="eval-extra-notes" rows="4" placeholder="Vragen van de klant, bijzonderheden, afspraken..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 20px; font-size: 1.1rem; justify-content: center; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);" onclick="saveEvaluatie()">💾 Opslaan & Klantendossier Aanmaken</button>
+            </div>
         </div>
 
-        <div id="view-fu" class="view" style="padding: 20px;">
+        <div id="view-fu" class="view" style="padding: 20px 40px; max-width: 1400px;">
             <div class="client-grid">
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <input type="text" id="search-client" placeholder="🔍 Zoek klant..." oninput="renderClientList()" style="padding: 12px; border-radius: 12px;">
+                
+                <div style="display: flex; flex-direction: column; gap: 15px; height: 100%;">
+                    <input type="text" id="search-client" placeholder="🔍 Zoek klant op naam..." oninput="renderClientList()" style="padding: 12px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                     <div class="scroll-list" id="client-list"></div>
                 </div>
                 
-                <div class="card" id="fu-workspace" style="display: none; margin: 0; position: relative;">
-                    <button class="btn btn-success" style="position: absolute; bottom: 30px; right: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-radius: 30px; padding: 12px 24px;" onclick="showToast('Alle wijzigingen opgeslagen')">💾 Opslaan</button>
+                <div class="card" id="fu-workspace" style="display: none; margin: 0; position: relative; height: 100%; overflow-y: auto; padding: 30px;">
+                    
+                    <button class="btn btn-success fab-save" onclick="showToast('Alle wijzigingen lokaal opgeslagen in database')">💾 Opslaan</button>
 
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 15px;">
                         <div>
-                            <h2 id="header-client-name" style="margin: 0 0 5px 0;">Selecteer Klant</h2>
-                            <span id="header-client-phone" style="color: var(--text-muted); font-size: 0.9rem;"></span>
+                            <h2 id="header-client-name" style="margin: 0 0 5px 0; font-size: 1.6rem; color: var(--sidebar-bg);">Selecteer Klant</h2>
+                            <span id="header-client-phone" style="color: var(--text-muted); font-size: 0.95rem; font-weight: 500;"></span>
                         </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-success" id="wa-btn" onclick="openWA()" style="background: #25D366;">WhatsApp</button>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn" id="wa-btn" onclick="openWA()" style="background: #25D366; color: white;">💬 WhatsApp</button>
                             <button class="btn btn-outline" id="btn-toggle-active" onclick="toggleActiveStatus()">Inactief</button>
-                            <button class="btn btn-danger" onclick="deleteClient()">Verwijder</button>
+                            <button class="btn btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="deleteClient()">Verwijder</button>
                         </div>
                     </div>
 
-                    <div style="background:#eff6ff; padding:15px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom: 20px;">
-                        <strong style="color:var(--primary);">De "WHY":</strong> <span id="sticky-why"></span>
+                    <div style="background:#eff6ff; padding:15px 20px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
+                        <strong style="color:var(--primary); font-size: 1.1rem; white-space: nowrap;">De "WHY":</strong> 
+                        <span id="sticky-why" style="font-size: 1rem; color: var(--text-main); font-style: italic;"></span>
                     </div>
 
                     <div class="tabs">
@@ -386,26 +486,33 @@
                     </div>
 
                     <div id="tab-fiche" class="tab-content active">
-                        <h3 style="color: var(--primary);">Basisgegevens</h3>
-                        <div class="grid" style="margin-bottom: 20px;">
+                        <h3 style="color: var(--text-main); margin-top: 0;">Basisgegevens</h3>
+                        <div class="grid" style="margin-bottom: 30px;">
                             <div class="form-group"><label>Naam</label><input type="text" id="fiche-name" oninput="autoSaveFiche('name')"></div>
                             <div class="form-group"><label>Telefoon</label><input type="text" id="fiche-phone" oninput="autoSaveFiche('phone')"></div>
                             <div class="form-group"><label>Startdatum</label><input type="date" id="fiche-startdate" oninput="autoSaveFiche('startdate')"></div>
-                            <div class="form-group"><label>Waarom (Why)</label><input type="text" id="fiche-why" oninput="autoSaveFiche('why')"></div>
+                            <div class="form-group"><label>De "WHY"</label><input type="text" id="fiche-why" oninput="autoSaveFiche('why')"></div>
                         </div>
 
-                        <h3 style="color: var(--primary);">Intake Resultaten & Start Tanita</h3>
-                        <div class="grid" style="margin-bottom: 20px;">
-                            <div style="background: var(--bg-main); padding: 15px; border-radius: 8px;">
-                                <p style="margin:0 0 10px 0;"><strong>Score:</strong> <span id="crm-eval-score">?</span>/15</p>
-                                <strong>Symptomen:</strong> <p id="crm-eval-symptoms" style="margin: 5px 0 0 0; font-size: 0.85rem; color: var(--text-muted);"></p>
+                        <h3 style="color: var(--text-main);">Intake Resultaten</h3>
+                        <div class="grid" style="margin-bottom: 15px;">
+                            <div style="background: var(--bg-main); padding: 20px; border-radius: 8px; border: 1px solid var(--border);">
+                                <p style="margin:0 0 10px 0; font-size: 1.1rem;"><strong>Score:</strong> <span id="crm-eval-score" style="color: var(--danger);">?</span> / 15</p>
+                                <strong>Symptomen:</strong> <p id="crm-eval-symptoms" style="margin: 5px 0 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;"></p>
                             </div>
-                            <div style="background: var(--bg-main); padding: 15px; border-radius: 8px;">
-                                <strong>Aangeraden Producten:</strong> <p id="crm-eval-products" style="margin: 5px 0 0 0; font-size: 0.85rem; color: var(--text-muted);"></p>
+                            <div style="background: #ecfdf5; padding: 20px; border-radius: 8px; border: 1px solid #a7f3d0;">
+                                <strong style="color: var(--secondary);">Geadviseerde Producten:</strong> 
+                                <p id="crm-eval-products" style="margin: 10px 0 0 0; font-size: 0.9rem; color: #065f46; line-height: 1.6;"></p>
                             </div>
                         </div>
+
+                        <div style="background:#e8f4f8; padding:15px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom: 30px;">
+                            <h4 style="margin:0 0 5px 0; color: var(--primary-dark);">💊 Medicatiegebruik bij start</h4>
+                            <p id="crm-eval-meds" style="margin:0; font-size:0.9rem; color: var(--text-main);">Geen</p>
+                        </div>
                         
-                        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); margin-bottom: 20px;">
+                        <h3 style="color: var(--text-main);">Lichaamsanalyse (Startwaarden)</h3>
+                        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); margin-bottom: 30px; background: var(--bg-main); padding: 20px; border-radius: 8px; border: 1px solid var(--border);">
                             <div class="form-group"><label>Start Gew.</label><input type="text" id="fiche-t-gew" oninput="autoSaveTanitaStart('gew')"></div>
                             <div class="form-group"><label>Start Vet%</label><input type="text" id="fiche-t-vet" oninput="autoSaveTanitaStart('vet')"></div>
                             <div class="form-group"><label>Start Spier</label><input type="text" id="fiche-t-spier" oninput="autoSaveTanitaStart('spier')"></div>
@@ -413,140 +520,184 @@
                             <div class="form-group"><label>Start Metab.</label><input type="text" id="fiche-t-lft" oninput="autoSaveTanitaStart('lft')"></div>
                         </div>
 
+                        <h3 style="color: var(--text-main);">Eetgewoonten (Intake)</h3>
+                        <div class="grid" style="margin-bottom: 30px;">
+                            <div class="form-group"><label>Ontbijt</label><div id="crm-eet-ontbijt" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                            <div class="form-group"><label>Middag</label><div id="crm-eet-middag" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                            <div class="form-group"><label>Avond</label><div id="crm-eet-avond" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                            <div class="form-group"><label>Tussendoor</label><div id="crm-eet-tussen" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                            <div class="form-group"><label>Water</label><div id="crm-eet-water" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                            <div class="form-group"><label>Dranken</label><div id="crm-eet-drank" style="font-size:0.9rem; color:var(--text-muted); background:var(--bg-main); padding:10px; border-radius:6px;">-</div></div>
+                        </div>
+
+                        <h3 style="color: var(--text-main);">Aanpasbare Dossier Notities</h3>
                         <div class="grid">
-                            <div class="form-group"><label>Medicatie</label><textarea id="fiche-meds" rows="3" oninput="autoSaveFiche('medicatie')"></textarea></div>
-                            <div class="form-group"><label>Vrije Notities</label><textarea id="fiche-notes" rows="3" oninput="autoSaveFiche('notes')"></textarea></div>
+                            <div class="form-group"><label>Actuele Medicatie / Wijzigingen</label><textarea id="fiche-meds" rows="3" oninput="autoSaveFiche('medicatie')"></textarea></div>
+                            <div class="form-group"><label>Vrije Interne Notities</label><textarea id="fiche-notes" rows="3" oninput="autoSaveFiche('notes')"></textarea></div>
                         </div>
                     </div>
 
                     <div id="tab-d1" class="tab-content">
-                        <h3 style="color: var(--primary);">Opvolging Dag 1</h3>
-                        <div class="form-group"><label>1. Hoe smaakte de shake? Lekker?</label><textarea id="dag1-q1" oninput="autoSaveDag('dag1', 'q1')"></textarea></div>
-                        <div class="form-group"><label>2. Hoe heb je hem gemaakt?</label><textarea id="dag1-q2" oninput="autoSaveDag('dag1', 'q2')"></textarea></div>
-                        <div class="form-group"><label>3. Nuchter gemeten?</label><textarea id="dag1-q3" oninput="autoSaveDag('dag1', 'q3')"></textarea></div>
-                        <div class="form-group"><label>4. Water gedronken?</label><textarea id="dag1-q4" oninput="autoSaveDag('dag1', 'q4')"></textarea></div>
-                        <div class="form-group"><label>5. Hoe voel je je?</label><textarea id="dag1-q6" oninput="autoSaveDag('dag1', 'q6')"></textarea></div>
-                        <div class="form-group"><label>Extra Notities Dag 1</label><textarea id="dag1-notes" oninput="autoSaveDag('dag1', 'notes')"></textarea></div>
+                        <h3 style="color: var(--text-main); margin-top: 0;">Opvolging Dag 1</h3>
+                        <div class="form-group"><label>1. Hoe smaakte de shake? Lekker?</label><textarea id="dag1-q1" oninput="autoSaveDag('dag1', 'q1')"></textarea><div class="coach-note">Laat ze vertellen - heel belangrijk!</div></div>
+                        <div class="form-group"><label>2. Hoe heb je de shake gemaakt?</label><textarea id="dag1-q2" oninput="autoSaveDag('dag1', 'q2')"></textarea><div class="coach-note">Blender is lekkerst. Check hoeveelheid scheppen en vloeistof.</div></div>
+                        <div class="form-group"><label>3. Heb je gemeten toen je opstond?</label><textarea id="dag1-q3" oninput="autoSaveDag('dag1', 'q3')"></textarea><div class="coach-note">Centimeters noteren. Altijd nuchter meten.</div></div>
+                        <div class="form-group"><label>4. Hoeveel water heb je gedronken?</label><textarea id="dag1-q4" oninput="autoSaveDag('dag1', 'q4')"></textarea><div class="coach-note">Focus: 1 liter per 30kg lichaamsgewicht.</div></div>
+                        <div class="form-group"><label>5. Heb je de vezels al genomen?</label><textarea id="dag1-q5" oninput="autoSaveDag('dag1', 'q5')"></textarea></div>
+                        <div class="form-group"><label>6. Hoe voel je je? (Stoelgang, hoofdpijn?)</label><textarea id="dag1-q6" oninput="autoSaveDag('dag1', 'q6')"></textarea></div>
+                        <div class="form-group"><label>7. Heb je honger gehad?</label><textarea id="dag1-q7" oninput="autoSaveDag('dag1', 'q7')"></textarea></div>
+                        <div class="form-group"><label>8. Is het gelukt om voorfoto's te nemen?</label><textarea id="dag1-q8" oninput="autoSaveDag('dag1', 'q8')"></textarea></div>
+                        <div class="form-group" style="margin-top: 20px;"><label>Extra Vrije Notities (Dag 1)</label><textarea id="dag1-notes" rows="4" oninput="autoSaveDag('dag1', 'notes')"></textarea></div>
                     </div>
 
                     <div id="tab-d3" class="tab-content">
-                        <h3 style="color: var(--primary);">Opvolging Dag 3</h3>
-                        <div class="form-group"><label>1. Hoe voel je je? Energie?</label><textarea id="dag3-q1" oninput="autoSaveDag('dag3', 'q1')"></textarea></div>
-                        <div class="form-group"><label>2. Water gedronken?</label><textarea id="dag3-q3" oninput="autoSaveDag('dag3', 'q3')"></textarea></div>
-                        <div class="form-group"><label>3. Gemeten?</label><textarea id="dag3-q4" oninput="autoSaveDag('dag3', 'q4')"></textarea></div>
-                        <div class="form-group"><label>4. Honger gehad?</label><textarea id="dag3-q5" oninput="autoSaveDag('dag3', 'q5')"></textarea></div>
-                        <div class="form-group"><label>Extra Notities Dag 3</label><textarea id="dag3-notes" oninput="autoSaveDag('dag3', 'notes')"></textarea></div>
+                        <h3 style="color: var(--text-main); margin-top: 0;">Opvolging Dag 3</h3>
+                        <div class="form-group"><label>1. Hoe voel je je? Meer energie?</label><textarea id="dag3-q1" oninput="autoSaveDag('dag3', 'q1')"></textarea></div>
+                        <div class="form-group"><label>2. Hoe heb je de shake gemaakt?</label><textarea id="dag3-q2" oninput="autoSaveDag('dag3', 'q2')"></textarea></div>
+                        <div class="form-group"><label>3. Hoeveel water heb je gedronken?</label><textarea id="dag3-q3" oninput="autoSaveDag('dag3', 'q3')"></textarea></div>
+                        <div class="form-group"><label>4. Heb je vanmorgen gemeten?</label><textarea id="dag3-q4" oninput="autoSaveDag('dag3', 'q4')"></textarea></div>
+                        <div class="form-group"><label>5. Honger gehad?</label><textarea id="dag3-q5" oninput="autoSaveDag('dag3', 'q5')"></textarea></div>
+                        <div class="form-group" style="margin-top: 20px;"><label>Extra Vrije Notities (Dag 3)</label><textarea id="dag3-notes" rows="4" oninput="autoSaveDag('dag3', 'notes')"></textarea></div>
                     </div>
 
                     <div id="tab-d7" class="tab-content">
-                        <h3 style="color: var(--primary);">Opvolging Dag 7</h3>
-                        <div class="form-group"><label>1. Hoe voel je je?</label><textarea id="dag7-q1" oninput="autoSaveDag('dag7', 'q1')"></textarea></div>
-                        <div class="form-group"><label>2. Water?</label><textarea id="dag7-q2" oninput="autoSaveDag('dag7', 'q2')"></textarea></div>
-                        <div class="form-group"><label>3. Heeft iemand al iets gezegd?</label><textarea id="dag7-q5" oninput="autoSaveDag('dag7', 'q5')"></textarea></div>
-                        <div class="form-group"><label>Extra Notities Dag 7</label><textarea id="dag7-notes" oninput="autoSaveDag('dag7', 'notes')"></textarea></div>
+                        <h3 style="color: var(--text-main); margin-top: 0;">Opvolging Dag 7</h3>
+                        <div class="form-group"><label>1. Hoe voel je je? Meer energie?</label><textarea id="dag7-q1" oninput="autoSaveDag('dag7', 'q1')"></textarea></div>
+                        <div class="form-group"><label>2. Hoeveel water heb je gedronken?</label><textarea id="dag7-q2" oninput="autoSaveDag('dag7', 'q2')"></textarea></div>
+                        <div class="form-group"><label>3. Heb je vanmorgen gemeten?</label><textarea id="dag7-q3" oninput="autoSaveDag('dag7', 'q3')"></textarea></div>
+                        <div class="form-group"><label>4. Ben je per ongeluk op de weegschaal terecht gekomen?</label><textarea id="dag7-q4" oninput="autoSaveDag('dag7', 'q4')"></textarea><div class="coach-note">Spieren zijn zwaarder dan vet. Focus op centimeters!</div></div>
+                        <div class="form-group"><label>5. Heeft iemand al iets gezegd?</label><textarea id="dag7-q5" oninput="autoSaveDag('dag7', 'q5')"></textarea></div>
+                        <div class="form-group" style="margin-top: 20px;"><label>Extra Vrije Notities (Dag 7)</label><textarea id="dag7-notes" rows="4" oninput="autoSaveDag('dag7', 'notes')"></textarea></div>
                     </div>
 
                     <div id="tab-w2" class="tab-content">
-                        <h3 style="color: var(--primary);">Opvolging Week 2</h3>
-                        <p style="color: var(--danger); font-size: 0.85rem; margin-top: -10px;">Herinnering symptomen: <strong id="w2-symp-reminder"></strong></p>
-                        <div class="form-group"><label>1. Hoe gaat het nu?</label><textarea id="week2-q1" oninput="autoSaveDag('week2', 'q1')"></textarea></div>
-                        <div class="form-group"><label>Extra Notities Week 2</label><textarea id="week2-notes" oninput="autoSaveDag('week2', 'notes')"></textarea></div>
+                        <h3 style="color: var(--text-main); margin-top: 0;">Opvolging Week 2</h3>
+                        <div style="background:#fffbeb; border-left:4px solid var(--accent); padding:15px; border-radius: 8px; margin-bottom:20px;">
+                            <h4 style="margin:0 0 5px 0; color:#b45309;">Symptomen Check</h4>
+                            <p style="margin:0; font-size:0.85rem; color: #92400e;">Klant gaf bij de intake aan last te hebben van: <strong id="w2-symp-reminder" style="color:var(--danger);"></strong></p>
+                        </div>
+                        <div class="form-group"><label>1. Hoe voel je je nu? Meer energie? (Zijn symptomen weg?)</label><textarea id="week2-q1" oninput="autoSaveDag('week2', 'q1')"></textarea></div>
+                        <div class="form-group"><label>2. Hoeveel water heb je gedronken?</label><textarea id="week2-q2" oninput="autoSaveDag('week2', 'q2')"></textarea></div>
+                        <div class="form-group"><label>3. Heb je vanmorgen gemeten?</label><textarea id="week2-q3" oninput="autoSaveDag('week2', 'q3')"></textarea></div>
+                        <div class="form-group" style="margin-top: 20px;"><label>Extra Vrije Notities (Week 2)</label><textarea id="week2-notes" rows="4" oninput="autoSaveDag('week2', 'notes')"></textarea></div>
                     </div>
 
                     <div id="tab-w3" class="tab-content">
-                        <h3 style="color: var(--primary);">Opvolging Week 3+</h3>
-                        <div class="form-group"><label>Nieuwe bestelling afgesproken?</label><textarea id="week3-q1" oninput="autoSaveDag('week3', 'q1')"></textarea></div>
-                        <div class="form-group"><label>VIP-klant voorstel?</label><textarea id="week3-q3" oninput="autoSaveDag('week3', 'q3')"></textarea></div>
-                        <div class="form-group"><label>Lange termijn notities</label><textarea id="week3-notes" oninput="autoSaveDag('week3', 'notes')"></textarea></div>
-
-                        <h3 style="color: var(--secondary); margin-top: 30px;">Nieuwe Lichaamsanalyse (Tanita)</h3>
-                        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
-                            <div class="form-group"><label>Gewicht (kg)</label><input type="text" id="w3-t-gew" oninput="autoSaveTanitaW3('gew')"></div>
-                            <div class="form-group"><label>Vet %</label><input type="text" id="w3-t-vet" oninput="autoSaveTanitaW3('vet')"></div>
-                            <div class="form-group"><label>Spier (kg)</label><input type="text" id="w3-t-spier" oninput="autoSaveTanitaW3('spier')"></div>
-                            <div class="form-group"><label>Visceraal</label><input type="text" id="w3-t-visc" oninput="autoSaveTanitaW3('visc')"></div>
-                            <div class="form-group"><label>Metab. Lft</label><input type="text" id="w3-t-lft" oninput="autoSaveTanitaW3('lft')"></div>
+                        <h3 style="color: var(--text-main); margin-top: 0;">Verdere Opvolging (Week 3+)</h3>
+                        
+                        <div style="background:#ecfdf5; border: 1px solid #a7f3d0; border-left:4px solid var(--secondary); padding:20px; border-radius: 8px; margin-bottom:30px;">
+                            <h4 style="margin:0 0 15px 0; color:#065f46; display: flex; justify-content: space-between; align-items: center;">Nieuwe Lichaamsanalyse (Tanita) <span style="font-size: 0.8rem; font-weight: normal; color: #047857;">Meting Week 3+</span></h4>
+                            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+                                <div class="form-group" style="margin:0;"><label>Gewicht (kg)</label><input type="text" id="w3-t-gew" oninput="autoSaveTanitaW3('gew')"></div>
+                                <div class="form-group" style="margin:0;"><label>Vet %</label><input type="text" id="w3-t-vet" oninput="autoSaveTanitaW3('vet')"></div>
+                                <div class="form-group" style="margin:0;"><label>Spier (kg)</label><input type="text" id="w3-t-spier" oninput="autoSaveTanitaW3('spier')"></div>
+                                <div class="form-group" style="margin:0;"><label>Visceraal</label><input type="text" id="w3-t-visc" oninput="autoSaveTanitaW3('visc')"></div>
+                                <div class="form-group" style="margin:0;"><label>Metab. Lft</label><input type="text" id="w3-t-lft" oninput="autoSaveTanitaW3('lft')"></div>
+                            </div>
                         </div>
+
+                        <div class="form-group"><label>Nieuwe afspraak / Producten besteld?</label><textarea id="week3-q1" oninput="autoSaveDag('week3', 'q1')"></textarea><div class="coach-note">Zorg dat ze op tijd bestellen zodat ze niet zonder zitten.</div></div>
+                        <div class="form-group"><label>Dankbaarheidsvragen / Vragen voor Referenties</label><textarea id="week3-q2" oninput="autoSaveDag('week3', 'q2')"></textarea></div>
+                        <div class="form-group"><label>Eventueel VIP-Klant voorstel gedaan?</label><textarea id="week3-q3" oninput="autoSaveDag('week3', 'q3')"></textarea></div>
+                        <div class="form-group"><label>Lange termijn doelen & notities</label><textarea id="week3-q4" oninput="autoSaveDag('week3', 'q4')"></textarea></div>
+                        <div class="form-group" style="margin-top: 20px;"><label>Extra Vrije Notities</label><textarea id="week3-notes" rows="4" oninput="autoSaveDag('week3', 'notes')"></textarea></div>
                     </div>
 
                 </div>
             </div>
         </div>
 
-        <div id="view-stock" class="view">
-            <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div id="view-stock" class="view" style="max-width: 1400px;">
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: var(--sidebar-bg); color: white;">
                 <div>
-                    <h3 style="margin: 0; color: var(--primary);">Voorraad & Verkopen</h3>
+                    <h3 style="margin: 0; color: white;">Voorraad & Winst Administratie</h3>
+                    <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 0.85rem;">Beheer je inkoop, verkopen en eigen gebruik.</p>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="month" id="monthSelector" style="padding:10px; border-radius:6px; border:1px solid var(--border);" onchange="renderHistoryLists()">
-                    <select id="link-client-select" class="btn btn-outline">
-                        <option value="">Koppel aan klant...</option>
+                    <input type="month" id="monthSelector" style="padding:10px; border-radius:var(--radius); border:none; font-weight: bold; outline: none; background: white;" onchange="renderHistoryLists()">
+                    
+                    <select id="link-client-select" class="btn btn-outline" style="border: none;">
+                        <option value="">-- Koppel verkoop aan klant --</option>
                     </select>
-                    <select id="discountSelect" style="padding:10px; border-radius:6px; border:1px solid var(--border);" onchange="renderStockTable()">
-                        <option value="25">Inkoop 25%</option>
-                        <option value="35">Inkoop 35%</option>
-                        <option value="42" selected>Inkoop 42%</option>
-                        <option value="50">Inkoop 50%</option>
+                    
+                    <select id="discountSelect" style="padding:10px; border-radius:var(--radius); border:none; font-weight: 600; outline: none; background: white;" onchange="renderStockTable()">
+                        <option value="25">Inkoop: 25%</option>
+                        <option value="35">Inkoop: 35%</option>
+                        <option value="42" selected>Inkoop: 42%</option>
+                        <option value="50">Inkoop: 50%</option>
                     </select>
-                    <input type="text" id="searchStock" placeholder="Zoek SKU/Naam..." onkeyup="renderStockTable()" style="padding:10px; border-radius:6px; border:1px solid var(--border);">
+                    
+                    <input type="text" id="searchStock" placeholder="🔍 Zoek SKU/Naam..." onkeyup="renderStockTable()" style="padding:10px; border-radius:var(--radius); border:none; outline: none;">
                 </div>
             </div>
 
-            <div class="grid" style="margin-bottom: 20px;">
-                <div class="card stat-card"><span class="stat-label">VP in Stock</span><span class="stat-val" id="dash-vp">0</span></div>
-                <div class="card stat-card" style="border-left-color: var(--accent);"><span class="stat-label">Inkoopwaarde</span><span class="stat-val" id="dash-inkoop">€ 0</span></div>
-                <div class="card stat-card" style="border-left-color: var(--secondary);"><span class="stat-label">Potentiële Winst</span><span class="stat-val" style="color: var(--secondary);" id="dash-winst">€ 0</span></div>
+            <div class="grid" style="margin-bottom: 25px;">
+                <div class="card stat-card"><span class="stat-label">Totaal VP in Stock</span><span class="stat-val" id="dash-vp">0</span></div>
+                <div class="card stat-card" style="border-left-color: var(--accent);"><span class="stat-label">Inkoopwaarde Stock</span><span class="stat-val" id="dash-inkoop">€ 0</span></div>
+                <div class="card stat-card" style="border-left-color: #8b5cf6;"><span class="stat-label">Verkoopwaarde (100%)</span><span class="stat-val" id="dash-verkoop">€ 0</span></div>
+                <div class="card stat-card" style="border-left-color: var(--secondary);"><span class="stat-label">Potentiële Winst (Max)</span><span class="stat-val" style="color: var(--secondary);" id="dash-winst">€ 0</span></div>
             </div>
 
-            <div class="grid" style="grid-template-columns: 2fr 1fr;">
+            <div class="grid" style="grid-template-columns: 2.5fr 1fr; align-items: start;">
                 <div class="card" style="padding: 0; overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead style="background: var(--bg-main); text-align: left; font-size: 0.85rem; color: var(--text-muted);">
+                    <table class="stock-table">
+                        <thead>
                             <tr>
-                                <th style="padding: 15px;">Product</th>
-                                <th>Klantprijs</th>
-                                <th>Winst</th>
+                                <th>Product</th>
+                                <th>VP</th>
+                                <th>Klant (€)</th>
+                                <th>Winst (€)</th>
                                 <th>Voorraad</th>
-                                <th>Actie</th>
+                                <th>Verkoop / Demo</th>
                             </tr>
                         </thead>
                         <tbody id="stockTableBody"></tbody>
                     </table>
                 </div>
-                <div>
-                    <div class="card">
-                        <h3 id="month-title-display">Gerealiseerde Winst</h3>
-                        <h2 style="color: var(--secondary); margin: 10px 0;" id="current-month-profit">€ 0.00</h2>
+
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div class="card" style="margin:0;">
+                        <h3 id="month-title-display" style="margin-top:0; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">📈 Gerealiseerde Winst</h3>
+                        <h2 style="color: var(--secondary); margin: 0; font-size: 2.5rem; font-weight: 800;" id="current-month-profit">€ 0.00</h2>
                     </div>
-                    <div class="card">
-                        <h3>Verkopen</h3>
+                    
+                    <div class="card" style="margin:0; flex: 1;">
+                        <h3 style="margin-top:0;">🛒 Verkopen (Maand)</h3>
                         <ul id="sales-history-list" style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem;"></ul>
+                    </div>
+
+                    <div class="card" style="margin:0; flex: 1;">
+                        <h3 style="margin-top:0; color: var(--danger);">🙋‍♂️ Eigen Gebruik & Demo</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -10px;">Producten opengehaald voor eigen consumptie of demonstratie.</p>
+                        <ul id="personal-use-list" style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem;"></ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-catalog" class="view">
-            <div class="card" style="position: sticky; top: 70px; z-index: 10;">
-                <input type="text" id="search-catalog" placeholder="Zoek product of SKU..." onkeyup="renderCatalog()" style="width: 100%; max-width: 400px; margin-bottom: 15px;">
+        <div id="view-catalog" class="view" style="max-width: 1400px;">
+            <div class="card" style="position: sticky; top: 70px; z-index: 10; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="search-catalog" placeholder="🔍 Zoek product of SKU..." onkeyup="renderCatalog()" style="width: 100%; max-width: 300px; margin: 0;">
                 <div id="catalog-filters" style="display:flex; gap:10px; flex-wrap:wrap; font-size: 0.85rem;"></div>
             </div>
             <div class="product-grid" id="catalog-grid"></div>
         </div>
 
         <div id="view-recipes" class="view">
-            <div class="card">
-                <h3 style="margin: 0; color: var(--primary);">Gezonde Recepten</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Deel deze makkelijk met je klanten voor extra inspiratie.</p>
+            <div class="card" style="background: var(--sidebar-bg); color: white; border: none;">
+                <h2 style="margin: 0; color: white;">🥗 Gezonde Recepten Boek</h2>
+                <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 5px;">Kopieer en deel deze heerlijke creaties eenvoudig met je klanten via WhatsApp voor extra inspiratie!</p>
             </div>
             <div class="grid" id="recipe-grid"></div>
         </div>
 
         <div id="view-testimonials" class="view">
-            <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0; color: var(--primary);">Wall of Fame</h3>
-                <button class="btn btn-outline" onclick="window.open('Testimonials.pdf')">Open PDF Versie</button>
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: var(--sidebar-bg); color: white;">
+                <div>
+                    <h2 style="margin: 0; color: white;">⭐ Wall of Fame</h2>
+                    <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 5px;">Gebruik deze verhalen als sociaal bewijs om je prospects te overtuigen.</p>
+                </div>
+                <button class="btn btn-success" onclick="window.open('Testimonials.pdf')">📄 Open Volledige PDF</button>
             </div>
             <div class="grid" id="testi-grid"></div>
         </div>
@@ -586,72 +737,113 @@
         ];
 
         const dbProducts = [
-            { cat: "ONTBIJT & DRANKEN", sku: "1188", name: "Herbal Aloe Drank Original 1,9L", vp: 91.10, retail: 190.90, desc: "Verzacht de maag en bevordert spijsvertering.", benefits: ["Ondersteunt spijsvertering", "Caloriearm"], usage: "3 dopjes in 120ml water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "0006", name: "Herbal Aloë Drank Original 473ml", vp: 24.95, retail: 52.80, desc: "Verzacht de maag. Ideaal voor hydratatie.", benefits: ["Ondersteunt spijsvertering", "Caloriearm"], usage: "3 dopjes in 120ml water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "1065", name: "Herbal Aloë Drank Mango 473ml", vp: 24.95, retail: 52.80, desc: "Zoete mangosmaak. Kalmeert de maag.", benefits: ["Natuurlijke smaak", "Caloriearm"], usage: "3 dopjes in 120ml water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "1196", name: "Herbal Aloë Max 473ml", vp: 28.15, retail: 61.70, desc: "97% Aloë Vera sap. Puurste vorm.", benefits: ["97% puur", "IASC gecertificeerd"], usage: "3 dopjes in 120ml water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "166K", name: "Instant Theedrank Original 102g", vp: 34.95, retail: 73.25, desc: "Energie en vetverbranding. (Grote pot)", benefits: ["6 kcal per portie", "Verhoogt alertheid"], usage: "Halve theelepel in water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "165K", name: "Instant Theedrank Original 51g", vp: 19.95, retail: 38.25, desc: "Energie en thermogenese.", benefits: ["6 kcal per portie", "Verhoogt alertheid"], usage: "Halve theelepel in water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "167K", name: "Instant Theedrank Citroen 51g", vp: 19.95, retail: 38.25, desc: "Frisse citroensmaak. Boost metabolisme.", benefits: ["6 kcal per portie", "Verhoogt alertheid"], usage: "Halve theelepel in water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "168K", name: "Instant Theedrank Framboos 51g", vp: 19.95, retail: 38.25, desc: "Fruitige theedrank voor energie.", benefits: ["6 kcal per portie", "Verhoogt alertheid"], usage: "Halve theelepel in water." },
-            { cat: "ONTBIJT & DRANKEN", sku: "169K", name: "Instant Theedrank Perzik 51g", vp: 19.95, retail: 38.25, desc: "Zachte perziksmaak. Stimuleert verbranding.", benefits: ["6 kcal per portie", "Verhoogt alertheid"], usage: "Halve theelepel in water." },
-            
-            { cat: "F1 SHAKES", sku: "4462", name: "F1 Shake Bananen Crème 550g", vp: 23.95, retail: 60.90, desc: "Volwaardige maaltijdvervanger.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4463", name: "F1 Shake Frisse Aardbei 550g", vp: 23.95, retail: 60.90, desc: "Lichte aardbeiensmaak.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4465", name: "F1 Shake Cafè Latte 550g", vp: 23.95, retail: 60.90, desc: "Voor de koffieliefhebber.", benefits: ["Echt koffie-extract", "Vegan", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4466", name: "F1 Shake Romige Vanille 550g", vp: 23.95, retail: 60.90, desc: "De klassieker. Neutraal.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4467", name: "F1 Shake Cookie Crunch 550g", vp: 23.95, retail: 60.90, desc: "Met krokante stukjes.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4468", name: "F1 Shake Zachte Chocolade 550g", vp: 23.95, retail: 60.90, desc: "Rijke chocoladesmaak.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4471", name: "F1 Shake Munt Chocolade 550g", vp: 23.95, retail: 60.90, desc: "Frisse munt en chocolade.", benefits: ["Vegan", "25 vitaminen", "Eiwitrijk"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "4469", name: "F1 Vrij Van Framboos & Witte Choc", vp: 23.95, retail: 60.90, desc: "Vrij van soja, zuivel en gluten.", benefits: ["Allergievrij", "Erwtenproteïne"], usage: "2 scheppen met hypoallergene drank." },
-            { cat: "F1 SHAKES", sku: "048K", name: "F1 Shake Romige Vanille XXL 780g", vp: 32.75, retail: 79.85, desc: "De klassieker in XXL pot.", benefits: ["Voordeliger per portie", "Vegan"], usage: "2 scheppen met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "053K", name: "F1 Shake 7 zakjes (Mix)", vp: 10.00, retail: 25.35, desc: "Handige proefpakketten.", benefits: ["On-the-go", "Makkelijk doseren"], usage: "1 zakje met 250ml melk." },
-            { cat: "F1 SHAKES", sku: "8888", name: "F1 Shake Limited Edition 550g", vp: 23.95, retail: 60.90, desc: "Tijdelijke exclusieve smaak.", benefits: ["Vegan", "25 vitaminen", "Uniek"], usage: "2 scheppen met 250ml melk." },
-            
-            { cat: "PROTEÏNE & SNACKS", sku: "528K", name: "Proteïne Bak Mix (PBM)", vp: 26.90, retail: 68.35, desc: "Bak gezonde pannenkoeken of wafels.", benefits: ["Hittebestendig", "Suikervrij"], usage: "Meng met F1 en water/melk." },
-            { cat: "PROTEÏNE & SNACKS", sku: "013K", name: "Tri Blend Select Banaan 600g", vp: 37.50, retail: 90.25, desc: "100% plantaardige eiwitshake.", benefits: ["Vegan", "20g proteïne", "Natuurlijk"], usage: "3 eetlepels met water." },
-            { cat: "PROTEÏNE & SNACKS", sku: "172K", name: "Vegan PDM Vanille 560g", vp: 31.45, retail: 68.35, desc: "Vegan variant van PDM.", benefits: ["Vegan", "Ideaal met water"], usage: "1-2 scheppen toevoegen aan F1." },
-            { cat: "PROTEÏNE & SNACKS", sku: "012K", name: "High Protein Iced Coffee 308g", vp: 30.55, retail: 72.75, desc: "IJskoffie met 15g proteïne.", benefits: ["15g eiwit", "80 kcal", "Echte koffie"], usage: "2 scheppen in koud water met ijs." },
-            { cat: "PROTEÏNE & SNACKS", sku: "141K", name: "Proteïne Chips Barbecue", vp: 11.75, retail: 26.70, desc: "Hartige eiwitchips (10 stuks).", benefits: ["11g eiwit", "Gepopt, niet gefrituurd"], usage: "Eet als gezond tussendoortje." },
-            { cat: "PROTEÏNE & SNACKS", sku: "142K", name: "Proteïne Chips Sour Cream", vp: 11.75, retail: 26.70, desc: "Sour Cream chips (10 stuks).", benefits: ["12g eiwit", "Gepopt, niet gefrituurd"], usage: "Eet als gezond tussendoortje." },
-            { cat: "PROTEÏNE & SNACKS", sku: "2600", name: "Proteïnedrankmix Vanille (PDM)", vp: 33.00, retail: 71.75, desc: "Maakt melk overbodig in je shake.", benefits: ["15g extra eiwit", "Romig resultaat"], usage: "Voeg toe aan F1 met water." },
-            { cat: "PROTEÏNE & SNACKS", sku: "3968", name: "Proteïnereep Vanille Amandel", vp: 13.22, retail: 27.80, desc: "Stilt de honger en zoete trek.", benefits: ["10g eiwit", "140 kcal"], usage: "Gezond tussendoortje." },
-            { cat: "PROTEÏNE & SNACKS", sku: "3976", name: "Proteïnereep Citroen", vp: 13.22, retail: 27.80, desc: "Frisse, eiwitrijke snack.", benefits: ["10g eiwit", "140 kcal"], usage: "Gezond tussendoortje." },
-
-            { cat: "SUPPLEMENTEN", sku: "376K", name: "ViewVita", vp: 27.20, retail: 62.60, desc: "Ondersteunt optimaal zicht.", benefits: ["Omega-3", "Luteïne"], usage: "1 capsule per dag." },
-            { cat: "SUPPLEMENTEN", sku: "282K", name: "Night Mode", vp: 31.25, retail: 63.35, desc: "Verbetert slaap met Saffraan.", benefits: ["Bewezen werking", "Geen melatonine"], usage: "1 schepje uur voor slapen." },
-            { cat: "SUPPLEMENTEN", sku: "236K", name: "Phyto Complete", vp: 38.15, retail: 85.35, desc: "Buikvetverbranding en energie.", benefits: ["Fiit-NS™", "Natuurlijke energie"], usage: "2x per dag 1 capsule." },
-            { cat: "SUPPLEMENTEN", sku: "173K", name: "Microbiotic Max", vp: 27.10, retail: 62.65, desc: "Pro- en prebiotica voor darmen.", benefits: ["2 miljard bacteriën", "Vezels"], usage: "1 zakje in water of shake." },
-            { cat: "SUPPLEMENTEN", sku: "233K", name: "Immune Booster", vp: 18.90, retail: 50.65, desc: "Versterkt het immuunsysteem.", benefits: ["EpiCor®", "Vitamine C, D, Zink"], usage: "1 zakje in water." },
-            { cat: "SUPPLEMENTEN", sku: "0043", name: "Herbalifeline Max", vp: 19.40, retail: 40.70, desc: "Hoogwaardige Omega-3.", benefits: ["EPA en DHA", "Geen vissmaak"], usage: "1-5 capsules per dag." },
-            { cat: "SUPPLEMENTEN", sku: "2554", name: "Multivezel Drank", vp: 22.95, retail: 43.40, desc: "Haver-Appel vezels voor de darmen.", benefits: ["5g vezels", "18 kcal"], usage: "1 schep in water of shake." },
-            { cat: "SUPPLEMENTEN", sku: "0267", name: "Beta Heart", vp: 25.95, retail: 57.20, desc: "Verlaagt cholesterol.", benefits: ["Haver-bètaglucanen", "Vezelrijk"], usage: "1-2 scheppen per dag." },
-            { cat: "SUPPLEMENTEN", sku: "2039", name: "F2 Vitaminen VROUW", vp: 13.55, retail: 30.95, desc: "Multivitaminen voor vrouwen.", benefits: ["Hormonale balans", "Huid/Haar/Nagels"], usage: "1-2 tabletten per dag." },
-            { cat: "SUPPLEMENTEN", sku: "1746", name: "F2 Vitaminen MAN", vp: 13.55, retail: 30.95, desc: "Multivitaminen voor mannen.", benefits: ["Spierfunctie", "Immuunsysteem"], usage: "1-2 tabletten per dag." },
-            { cat: "SUPPLEMENTEN", sku: "0020", name: "Xtra-Cal", vp: 10.25, retail: 24.35, desc: "Calcium voor botten en spieren.", benefits: ["Met Vitamine D", "Tegen krampen"], usage: "1-3 tabletten per dag." },
-            { cat: "SUPPLEMENTEN", sku: "3152", name: "Lift Off Citroen", vp: 15.95, retail: 39.95, desc: "Suikervrije energieboost.", benefits: ["0% suiker", "Guarana en Cafeïne"], usage: "1 tablet in water." },
-
-            { cat: "H24 SPORT", sku: "403K", name: "H24 Rebuild Strength", vp: 33.55, retail: 78.75, desc: "Ultieme herstelshake na kracht.", benefits: ["25g eiwit", "L-Glutamine", "Ijzer"], usage: "5 scheppen na training." },
-            { cat: "H24 SPORT", sku: "1466", name: "CR7 Drive", vp: 12.50, retail: 26.80, desc: "Sportdrank voor hydratatie.", benefits: ["Elektrolyten", "B12 Vitamine"], usage: "2 scheppen in bidon." },
-            { cat: "H24 SPORT", sku: "150K", name: "H24 Achieve Reep Choco", vp: 11.30, retail: 23.65, desc: "Sportreep met 21g eiwit.", benefits: ["21g eiwit", "Weinig suiker"], usage: "Direct na sport of tussendoor." }
+            { cat: "ONTBIJT & DRANKEN", sku: "1188", name: "Herbal Aloe Drank Original 1,9L", vp: 91.10, retail: 190.90, desc: "Verzacht de maag en bevordert een optimale spijsvertering en opname van voedingsstoffen. Extra grote fles.", benefits: ["Gemaakt met hoogwaardig Aloë Vera sap", "Ondersteunt een gezonde spijsvertering", "Helpt bij de opname van voedingsstoffen", "Caloriearm, een gezond alternatief voor suikerrijke dranken"], usage: "Meng 3 dopjes (15 ml) met 120 ml water. Om een liter te bereiden, meng je 120 ml met 1 liter water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "0006", name: "Herbal Aloë Drank Original 473ml", vp: 24.95, retail: 52.80, desc: "Verzacht de maag en bevordert de spijsvertering. Ideaal voor hydratatie.", benefits: ["Gemaakt met hoogwaardig Aloë Vera sap", "Ondersteunt een gezonde spijsvertering", "Helpt bij de opname van voedingsstoffen", "Caloriearm, een gezond alternatief voor suikerrijke dranken"], usage: "Meng 3 dopjes (15 ml) met 120 ml water. Om een liter te bereiden, meng je 120 ml met 1 liter water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "1065", name: "Herbal Aloë Drank Mango 473ml", vp: 24.95, retail: 52.80, desc: "Heerlijke zoete mangosmaak. Verzacht en kalmeert de maag.", benefits: ["Gemaakt met hoogwaardig Aloë Vera sap", "Ondersteunt een gezonde spijsvertering", "Natuurlijke mangosmaak, zonder kunstmatige zoetstoffen", "Caloriearm, perfect voor dagelijkse hydratatie"], usage: "Meng 3 dopjes (15 ml) met 120 ml water. Om een liter te bereiden, meng je 120 ml met 1 liter water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "1196", name: "Herbal Aloë Max 473ml", vp: 28.15, retail: 61.70, desc: "Bevat maar liefst 97% Aloë Vera sap. De puurste vorm voor maximale hydratatie.", benefits: ["Bevat 97% puur Aloë Vera-sap", "Zonder kunstmatige kleur-, smaak- of zoetstoffen", "Ondersteunt een optimale spijsvertering en hydratatie", "Gecertificeerd door het International Aloe Science Council"], usage: "Meng 3 dopjes (15 ml) met 120 ml water. Om een liter te bereiden, meng je 120 ml met 1 liter water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "166K", name: "Instant Theedrank Original 102g", vp: 34.95, retail: 73.25, desc: "Kruidendrank die energie geeft en de vetverbranding stimuleert. (Grote pot)", benefits: ["Slechts 6 kcal per portie", "Verhoogt de alertheid en concentratie (cafeïne)", "Stimuleert het metabolisme en de vetverbranding", "Zowel koud als warm heerlijk om te drinken"], usage: "Meng een halve theelepel (ongeveer 1,7g) met 250 ml heet of koud water. Drink het 's ochtends of in de namiddag voor een energieboost." },
+            { cat: "ONTBIJT & DRANKEN", sku: "165K", name: "Instant Theedrank Original 51g", vp: 19.95, retail: 38.25, desc: "Verkwikkende theedrank voor energie en thermogenese (vetverbranding).", benefits: ["Slechts 6 kcal per portie", "Verhoogt de alertheid en concentratie (cafeïne)", "Stimuleert het metabolisme en de vetverbranding", "Zowel koud als warm heerlijk om te drinken"], usage: "Meng een halve theelepel (ongeveer 1,7g) met 250 ml heet of koud water. Drink het 's ochtends of in de namiddag voor een energieboost." },
+            { cat: "ONTBIJT & DRANKEN", sku: "167K", name: "Instant Theedrank Citroen 51g", vp: 19.95, retail: 38.25, desc: "Kruidendrank met frisse citroensmaak. Boost je metabolisme.", benefits: ["Slechts 6 kcal per portie", "Verhoogt de alertheid en concentratie", "Frisse citroensmaak", "Stimuleert de thermogenese"], usage: "Meng een halve theelepel (ongeveer 1,7g) met 250 ml heet of koud water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "168K", name: "Instant Theedrank Framboos 51g", vp: 19.95, retail: 38.25, desc: "Heerlijke fruitige theedrank voor langdurige energie.", benefits: ["Slechts 6 kcal per portie", "Verhoogt de alertheid en concentratie", "Lekkere, zoete frambozensmaak", "Ondersteunt je stofwisseling"], usage: "Meng een halve theelepel (ongeveer 1,7g) met 250 ml heet of koud water." },
+            { cat: "ONTBIJT & DRANKEN", sku: "169K", name: "Instant Theedrank Perzik 51g", vp: 19.95, retail: 38.25, desc: "Populaire theedrank met zachte perziksmaak. Stimuleert de verbranding.", benefits: ["Slechts 6 kcal per portie", "Verhoogt de alertheid en concentratie", "Populaire, zachte perziksmaak", "Ideaal alternatief voor suikerhoudende frisdranken"], usage: "Meng een halve theelepel (ongeveer 1,7g) met 250 ml heet of koud water." },
+            { cat: "F1 SHAKES", sku: "4462", name: "F1 Shake Bananen Crème 550g", vp: 23.95, retail: 60.90, desc: "Volwaardige maaltijdvervanger vol essentiële voedingsstoffen en eiwitten.", benefits: ["Veganistische ingrediënten, glutenvrij", "25 vitaminen en mineralen", "Hoog proteïnegehalte ter ondersteuning van spiermassa", "Heerlijke, romige bananensmaak"], usage: "Meng twee eetlepels (26g) poeder met 250 ml koude, halfvolle melk (of plantaardige variant). Voor vegan: meng met 250 ml verrijkte sojadrank." },
+            { cat: "F1 SHAKES", sku: "4463", name: "F1 Shake Frisse Aardbei 550g", vp: 23.95, retail: 60.90, desc: "Heerlijke, lichte aardbeiensmaak. Perfect als gezond ontbijt of lunch.", benefits: ["Veganistische ingrediënten, glutenvrij", "Ondersteunt gewichtsbeheersing en energie", "Rijk aan eiwitten (18g per portie bij bereiding met melk)"], usage: "Meng 2 maatlepels (26g) met 250ml (plantaardige) melk. Goed shaken!" },
+            { cat: "F1 SHAKES", sku: "4465", name: "F1 Shake Cafè Latte 550g", vp: 23.95, retail: 60.90, desc: "Voor de koffieliefhebber. Volwaardige maaltijd met heerlijke koffiesmaak.", benefits: ["Bevat écht koffie-extract voor de perfecte smaak", "Glutenvrij en vegan (mits bereid met sojadrank)", "Complete maaltijd in 1 glas"], usage: "Meng 2 scheppen (26g) in 250ml vloeistof. Liefst blenden met een paar ijsblokjes!" },
+            { cat: "F1 SHAKES", sku: "4466", name: "F1 Shake Romige Vanille 550g", vp: 23.95, retail: 60.90, desc: "De klassieker. Zeer neutraal en perfect om te blenden met fruit.", benefits: ["De meest veelzijdige smaak voor eigen creaties", "Boordevol 25 vitamines en mineralen", "Ideaal als gezond en snel ontbijt"], usage: "De perfecte basis! Meng 2 eetlepels poeder met 250 ml vloeistof. Voeg naar wens vers fruit toe en blend glad." },
+            { cat: "F1 SHAKES", sku: "4467", name: "F1 Shake Cookie Crunch 550g", vp: 23.95, retail: 60.90, desc: "Bevat krokante stukjes. Ideaal voor de zoetekauw als gezonde maaltijd.", benefits: ["Heerlijke krokante cookie-stukjes (zonder schuldgevoel)", "Ondersteunt je doelen voor gewichtsbeheersing", "Volledig vegan (indien juist bereid) en vol proteïne"], usage: "Meng 2 scheppen (26g) met 250ml melk of water (indien je PDM toevoegt). Goed schudden." },
+            { cat: "F1 SHAKES", sku: "4468", name: "F1 Shake Zachte Chocolade 550g", vp: 23.95, retail: 60.90, desc: "Rijke chocoladesmaak, maar toch een 100% verantwoorde, gebalanceerde maaltijd.", benefits: ["Rijke, volle chocoladesmaak zonder overtollig suiker", "18g eiwitten per portie ter ondersteuning van de spieren", "Perfect voor het stillen van chocoladetrek"], usage: "Meng 2 eetlepels poeder met 250ml (plantaardige) melk." },
+            { cat: "F1 SHAKES", sku: "4471", name: "F1 Shake Munt Chocolade 550g", vp: 23.95, retail: 60.90, desc: "Verfrissende munt gecombineerd met heerlijke chocolade. Vol vitaminen.", benefits: ["Unieke, frisse smaakcombinatie", "Complete maaltijdvervanger", "Glutenvrij en veganistisch"], usage: "Meng 2 scheppen (26g) met 250ml koude (plantaardige) melk." },
+            { cat: "F1 SHAKES", sku: "4469", name: "F1 Vrij Van Framboos & Witte Choc 500g", vp: 23.95, retail: 60.90, desc: "Vrij van soja, zuivel en gluten. Perfect voor mensen met allergieën.", benefits: ["Vrij van soja, zuivel en gluten (bij gebruik met aangepaste vloeistof)", "Erwtenproteïne in plaats van soja", "Lekkere, unieke smaakcombinatie"], usage: "Meng 2 eetlepels poeder met 250 ml van je favoriete hypoallergene drank (bijv. rijst- of amandeldrink)." },
+            { cat: "F1 SHAKES", sku: "048K", name: "F1 Shake Romige Vanille 780g", vp: 32.75, retail: 79.85, desc: "De klassieke Romige Vanille, maar dan in een voordelige XXL pot.", benefits: ["Voordeliger per portie", "Langere gebruiksduur (ideaal voor 2 shakes per dag)", "Dezelfde hoogwaardige voeding en vitaminen"], usage: "Meng 2 eetlepels (26g) poeder met 250 ml vloeistof naar keuze." },
+            { cat: "F1 SHAKES", sku: "053K", name: "F1 Shake 7 zakjes (Vanille/Choco/Cookie)", vp: 10.00, retail: 25.35, desc: "Handige proefpakketten of on-the-go zakjes met gemixte smaken.", benefits: ["Super handig om mee te nemen naar het werk of op vakantie", "Perfect proefpakket om smaken te testen", "Individueel verpakt, altijd de juiste dosering"], usage: "Gooi 1 zakje in je shaker, voeg 250ml melk (of water+PDM) toe en shake it!" },
+            { cat: "F1 SHAKES", sku: "8888", name: "F1 shake limited Edition 550g", vp: 23.95, retail: 60.90, desc: "Tijdelijk verkrijgbare limited edition F1 shake met een unieke smaak.", benefits: ["Veganistische ingrediënten, glutenvrij", "25 vitaminen en mineralen", "Unieke en tijdelijke smaaksensatie"], usage: "Meng 2 maatlepels (26g) met 250ml (plantaardige) melk. Goed shaken!" },
+            { cat: "F1 SHAKES", sku: "4472", name: "Express Maaltijdreep (7 stuks)", vp: 14.00, retail: 30.70, desc: "Geen tijd om te shaken? Deze reep bevat alle voedingsstoffen van 1 maaltijd.", benefits: ["Complete maaltijd in een handige reep", "Rijk aan vezels en eiwitten", "Bevat 25 vitamines en mineralen", "Slechts 207 calorieën per reep"], usage: "Eet 1 reep als vervanging voor 1 maaltijd, of snij hem in kleine stukjes als verantwoorde snacks door de dag heen." },
+            { cat: "PROTEÏNE & SNACKS", sku: "528K", name: "Proteïne Bak Mix (PBM)", vp: 26.90, retail: 68.35, desc: "Bak gezonde, eiwitrijke pannenkoeken, wafels of muffins zonder toegevoegde suikers.", benefits: ["Ontwikkeld om mee te bakken (hittebestendig)", "Vrij van kunstmatige kleur- en zoetstoffen", "Glutenvrij en geschikt voor vegetariërs", "Hoog in eiwitten en vezels"], usage: "Meng met je favoriete F1 smaak en wat water of melk om heerlijk beslag te maken. Bak in de pan of in het wafelijzer." },
+            { cat: "PROTEÏNE & SNACKS", sku: "013K", name: "Tri Blend Select Banaan 600g", vp: 37.50, retail: 90.25, desc: "100% plantaardige, natuurlijke premium eiwitshake. Rijk aan vezels.", benefits: ["100% veganistische ingrediënten (erwt, quinoa, lijnzaad)", "20g proteïne per portie", "Geen kunstmatige kleurstoffen, aroma's of zoetstoffen", "Hoog in vezels (6g per portie)"], usage: "Meng 3 eetlepels (40g) met 250 ml water, vruchtensap of plantaardige melk. Ideaal als post-workout of voedzaam tussendoortje." },
+            { cat: "PROTEÏNE & SNACKS", sku: "172K", name: "Vegan Proteïnedrankmix Vanille 560g", vp: 31.45, retail: 68.35, desc: "De vegan variant van de PDM. Voeg toe aan je F1 voor extra eiwitten en smaak.", benefits: ["100% Vegan (vrij van zuivel)", "Ideaal om te mengen met water (in plaats van melk)", "Verhoogt de eiwitinname aanzienlijk", "Lekkere, romige vanillesmaak"], usage: "Voeg 1 of 2 scheppen Vegan PDM toe aan je F1 Shake en meng simpelweg met water. Perfect voor onderweg!" },
+            { cat: "PROTEÏNE & SNACKS", sku: "441K", name: "Vegan PDM Vanille (7 zakjes)", vp: 13.25, retail: 29.90, desc: "Vegan Proteïnedrankmix in handige meeneemzakjes.", benefits: ["Makkelijk mee te nemen porties", "100% Vegan (vrij van zuivel)", "Ideaal om te mengen met water", "Verhoogt eiwitten en romigheid van je shake"], usage: "1 zakje Vegan PDM + 2 scheppen F1 Shake + 250ml water. Shake and go!" },
+            { cat: "PROTEÏNE & SNACKS", sku: "012K", name: "High Protein Iced Coffee 308g", vp: 30.55, retail: 72.75, desc: "Heerlijke ijskoffie met 15g proteïne en slechts 80 calorieën. Ideaal als 10-uurtje.", benefits: ["15g whey-eiwitten per portie", "Met 100% Robusta espresso koffiebonen", "Zonder toegevoegde suikers (bevat Stevia)", "Slechts 80 kcal per portie"], usage: "Voeg 2 scheppen toe aan 250 ml koud water. Voeg ijsblokjes toe en shake krachtig in een shakerbeker." },
+            { cat: "PROTEÏNE & SNACKS", sku: "141K", name: "Proteïne Chips Barbecue (10 stuks)", vp: 11.75, retail: 26.70, desc: "Gezond snacken! Hartige chips met extra proteïne en 50% minder vet.", benefits: ["11g plantaardige (erwten)eiwitten per zakje", "50% minder vet dan gefrituurde chips", "Gepopt, niet gefrituurd", "Geschikt voor veganisten"], usage: "Eet als een heerlijk, verantwoord tussendoortje wanneer je zin hebt in iets hartigs." },
+            { cat: "PROTEÏNE & SNACKS", sku: "142K", name: "Proteïne Chips Sour Cream (10 stuks)", vp: 11.75, retail: 26.70, desc: "Lekkere Sour Cream & Onion chips, gebakken (niet gefrituurd) voor verantwoord snacken.", benefits: ["12g eiwitten per zakje", "Gepopt, niet gefrituurd", "Geschikt voor vegetariërs", "Heerlijke, rijke Sour Cream en Onion smaak"], usage: "Perfect als gezonde hartige snack voor onderweg of 's avonds op de bank." },
+            { cat: "PROTEÏNE & SNACKS", sku: "2600", name: "Proteïnedrankmix Vanille 588g", vp: 33.00, retail: 71.75, desc: "PDM: Meng dit met je F1 Shake in plaats van melk voor een voller, eiwitrijk ontbijt.", benefits: ["Maakt melk overbodig (meng met water)", "15g extra proteïne per portie", "Maakt je shake dikker en romiger", "Bevat ook extra vitaminen B en C"], usage: "De ultieme combo: Meng 2 scheppen F1 + 1 of 2 scheppen PDM met 250ml-300ml water." },
+            { cat: "PROTEÏNE & SNACKS", sku: "0242", name: "F3 Proteïnepoeder 240g", vp: 17.95, retail: 48.90, desc: "Smaakloos eiwitpoeder. Perfect om toe te voegen aan sauzen, soep of shakes voor extra verzadiging.", benefits: ["Rijk aan soja- en wei-eiwitten", "Bouwt spiermassa op en behoudt deze", "Helpt je langer verzadigd te blijven", "Volledig smaakloos, dus mengbaar in warme en koude gerechten"], usage: "Voeg 1 tot 3 afgestreken eetlepels toe aan shakes, yoghurt, saus of soep." },
+            { cat: "PROTEÏNE & SNACKS", sku: "3968", name: "Proteïnereep Vanille Amandel", vp: 13.22, retail: 27.80, desc: "Ideaal 4-uurtje. Stilt de honger, voedt de spieren en helpt tegen zoete trek.", benefits: ["Ongeveer 140 kcal per reep", "10 gram hoogwaardige eiwitten", "Rijk aan vitamine B1, B2 en B6", "Ideaal om de zoete trek te stillen"], usage: "Eet 1 of 2 repen per dag als gezond tussendoortje." },
+            { cat: "PROTEÏNE & SNACKS", sku: "3976", name: "Proteïnereep Citroen", vp: 13.22, retail: 27.80, desc: "Frisse, eiwitrijke snack voor tussendoor om je energie op peil te houden.", benefits: ["Ongeveer 140 kcal per reep", "10 gram eiwitten voor spierherstel", "Frisse citroensmaak met een heerlijke bite", "Past perfect in een gewichtsbeheersingsprogramma"], usage: "Eet als gezond tussendoortje tussen je maaltijden door." },
+            { cat: "SUPPLEMENTEN", sku: "376K", name: "Herbalife Gels ViewVita", vp: 27.20, retail: 62.60, desc: "Ondersteunt optimaal zicht en de gezondheid van de ogen.", benefits: ["Bevat DHA en EPA omega-3 vetzuren", "Ondersteunt een normaal gezichtsvermogen", "Rijk aan Luteïne en Zeaxanthine", "Ideaal voor mensen die veel achter schermen werken"], usage: "Neem dagelijks 1 softgel capsule in met water, bij voorkeur tijdens de maaltijd." },
+            { cat: "SUPPLEMENTEN", sku: "378K", name: "Herbalife Gels CoQ10Vita", vp: 23.20, retail: 53.35, desc: "Voor celenergie en bescherming tegen oxidatieve stress.", benefits: ["Ondersteunt de energieproductie op cellulair niveau", "Helpt cellen beschermen tegen oxidatieve stress", "Speciaal geformuleerd voor optimale opname"], usage: "Neem dagelijks 1 capsule in, bij voorkeur bij de maaltijd." },
+            { cat: "SUPPLEMENTEN", sku: "379K", name: "Herbalife Gels MindVita Kids", vp: 20.50, retail: 47.15, desc: "Speciaal geformuleerd voor kinderen ter ondersteuning van hersenfunctie.", benefits: ["Bevat essentiële Omega-3 voor de hersenontwikkeling", "Kindvriendelijke kauwbare of doorslikbare capsule", "Ondersteunt focus en concentratie bij opgroeiende kinderen"], usage: "1 softgel per dag. Geschikt voor kinderen. Raadpleeg de verpakking voor de exacte dosering op leeftijd." },
+            { cat: "SUPPLEMENTEN", sku: "369K", name: "Herbalife Gels NutrientVita Kids", vp: 9.30, retail: 21.50, desc: "Aanvullende essentiële vitamines voor opgroeiende kinderen.", benefits: ["Dagelijkse aanvulling van belangrijke vitamines", "Ondersteunt de groei en een gezond immuunsysteem", "Lekkere, makkelijk inneembare vorm voor kinderen"], usage: "Dagelijks 1 capsule in de ochtend. Raadpleeg het etiket." },
+            { cat: "SUPPLEMENTEN", sku: "282K", name: "Night mode Kamille & Perzik", vp: 31.25, retail: 63.35, desc: "Verbetert de slaapkwaliteit met Saffraan-extract. Zonder melatonine.", benefits: ["Verbetert de slaapkwaliteit na slechts 7 dagen", "Bevat wetenschappelijk bewezen Saffraan-extract", "Zonder melatonine (niet verslavend)", "Heerlijke, rustgevende Kamille-Perzik smaak"], usage: "Meng 1 maatschep (6g) met een half kopje koud of warm water. Drink ongeveer één uur voor het slapengaan." },
+            { cat: "SUPPLEMENTEN", sku: "236K", name: "Phyto Complete 42,8g", vp: 38.15, retail: 85.35, desc: "Helpt bij buikvetverbranding en ondersteunt een vitaal energieniveau met fytonutriënten.", benefits: ["Bevat Fiit-NS™ (wetenschappelijk bewezen formule)", "Ondersteunt de vermindering van buikvet en tailleomvang", "Boordevol fytonutriënten uit citrus, guarana en druiven", "Geeft een natuurlijke energieboost"], usage: "Neem tweemaal daags 1 capsule bij de maaltijd. Ideaal in combinatie met een gezond dieet en beweging." },
+            { cat: "SUPPLEMENTEN", sku: "243K", name: "Active Mind Complex", vp: 27.25, retail: 54.90, desc: "Ondersteunt mentale prestaties, focus en concentratie.", benefits: ["Bevat Neumentix™, wetenschappelijk bewezen om werkgeheugen te ondersteunen", "Verbetert focus en concentratie", "Rijk aan Vitamine B6 en B12 voor het zenuwstelsel", "Perfect voor drukke werk- of studiedagen"], usage: "Neem dagelijks 2 capsules, bij voorkeur bij de maaltijd in de ochtend of vroege middag." },
+            { cat: "SUPPLEMENTEN", sku: "173K", name: "Microbiotic Max (20 zakjes)", vp: 27.10, retail: 62.65, desc: "Pro- en prebiotica voor een optimale darmflora en sterke spijsvertering.", benefits: ["Levert 2 miljard levende bacteriën per portie", "Combineert probiotica EN prebiotische vezels", "Ondersteunt de darmgezondheid", "Glutenvrij en subtiele vanillesmaak"], usage: "Meng 1 zakje door 100 ml water of voeg het toe aan je favoriete F1 Shake (na het blenden, om de bacteriën in leven te houden)." },
+            { cat: "SUPPLEMENTEN", sku: "233K", name: "Immune Booster (21 zakjes)", vp: 18.90, retail: 50.65, desc: "Met EpiCor®. Versterkt je immuunsysteem, ideaal in de herfst en winter.", benefits: ["Bevat het gepatenteerde EpiCor®-ingrediënt", "Rijk aan Vitamine C, D, Selenium en Zink", "Lekkere bessensmaak", "Verhoogt de natuurlijke weerstand"], usage: "Meng dagelijks 1 zakje (3.7g) in 150 ml koud of warm water. Perfect bij de lunch." },
+            { cat: "SUPPLEMENTEN", sku: "0043", name: "Herbalifeline Max", vp: 19.40, retail: 40.70, desc: "Hoogwaardige Omega-3 vetzuren voor hart, hersenen en gezichtsvermogen.", benefits: ["Hoog gedoseerd met essentiële EPA en DHA vetzuren", "Ondersteunt een normaal hart- en hersenfunctioneren", "Ondersteunt een normaal gezichtsvermogen", "Makkelijk slikbare capsules zonder vis-smaak of oprispingen"], usage: "Neem 1, 4 of 5 capsules per dag, afhankelijk van de voordelen die je wenst te bereiken. (Lees de verpakking)" },
+            { cat: "SUPPLEMENTEN", sku: "2554", name: "Multivezel Drank", vp: 22.95, retail: 43.40, desc: "Haver-Appel vezels. Stimuleert de darmwerking en geeft een langdurig vol gevoel.", benefits: ["5g hoogwaardige vezels per portie", "Slechts 18 kcal per portie", "Mix van oplosbare en onoplosbare vezels uit 6 bronnen", "Heerlijke zachte appelsmaak"], usage: "Meng 1 maatschep in water of voeg het direct toe aan je F1 Ontbijtshake voor een extra vullend ontbijt." },
+            { cat: "SUPPLEMENTEN", sku: "0267", name: "Beta Heart Vanille 229g", vp: 25.95, retail: 57.20, desc: "Bewezen dat het de cholesterol verlaagt of in balans houdt met haver-bètaglucanen.", benefits: ["Wetenschappelijk bewezen om cholesterol te verlagen (OatWell)", "Rijk aan vezels (3g per schep)", "Bron van eiwitten", "Zonder toegevoegde suikers"], usage: "Voor cholesterolverlaging: 2 scheppen per dag. Voor behoud: 1 schep per dag. Meng met water of voeg toe aan je shake." },
+            { cat: "SUPPLEMENTEN", sku: "2039", name: "F2 Vitaminen VROUWEN", vp: 13.55, retail: 30.95, desc: "Multivitaminencomplex afgestemd op de specifieke behoefte van de vrouw.", benefits: ["Ontwikkeld door voedingsdeskundigen specifiek voor vrouwen", "Ondersteunt hormonale activiteit (Vit B6)", "Ondersteunt huid, haar en nagels (Zink, Biotine)", "Ondersteunt de botten (Calcium)"], usage: "Neem 2 tabletten per dag bij de maaltijden. Neem je ook al een F1 shake? Dan volstaat 1 tablet per dag." },
+            { cat: "SUPPLEMENTEN", sku: "1746", name: "F2 Vitaminen MANNEN", vp: 13.55, retail: 30.95, desc: "Multivitaminencomplex afgestemd op de specifieke behoefte van de man.", benefits: ["Ontwikkeld door voedingsdeskundigen specifiek voor mannen", "Ondersteunt immuunsysteem (Vit A & C)", "Ondersteunt spierfunctie (Magnesium)", "Ondersteunt mentale prestaties (Pantotheenzuur)"], usage: "Neem 2 tabletten per dag bij de maaltijden. Neem je ook al een F1 shake? Dan volstaat 1 tablet per dag." },
+            { cat: "SUPPLEMENTEN", sku: "0020", name: "Xtra-Cal", vp: 10.25, retail: 24.35, desc: "Calciumsupplement ter ondersteuning van sterke botten en tanden.", benefits: ["Rijk aan Calcium (nodig voor behoud van normale botten/tanden)", "Bevat Vitamine D voor een betere opname van calcium", "Bevat magnesium", "Ideaal voor sporters (tegen spierkrampen) en actieve mensen"], usage: "Neem 1 tot 3 tabletten per dag, verdeeld over de dag bij de maaltijden." },
+            { cat: "SUPPLEMENTEN", sku: "3150", name: "Niteworks", vp: 48.75, retail: 108.65, desc: "Voor een gezonde bloedcirculatie en cardiovasculair systeem tijdens de nacht.", benefits: ["Ontwikkeld met Nobelprijswinnaar Dr. Lou Ignarro", "Verhoogt de stikstofmonoxide productie in het bloed", "Ondersteunt de bloedsomloop en doorbloeding", "Ideaal voor of na het sporten, of voor het slapengaan"], usage: "Meng 2 maatlepels met 250ml water of bruiswater. Drink dit vlak voor het slapengaan." },
+            { cat: "SUPPLEMENTEN", sku: "3152", name: "Lift Off Citroen (10 tab)", vp: 15.95, retail: 39.95, desc: "Bruistablet voor een onmiddellijke suikervrije energieboost en scherpe focus.", benefits: ["Slechts 10 kcal per portie, 0% suiker", "100% van de ADH Vitamine C en B-vitaminen", "Geformuleerd met Guarana en 75mg cafeïne", "Helpt concentratie en alertheid te verhogen"], usage: "Los 1 bruistablet op in 250ml koud water. Een perfecte vervanger voor ongezonde energiedranken!" },
+            { cat: "SUPPLEMENTEN", sku: "076K", name: "SKIN Collageen Booster", vp: 37.10, retail: 83.00, desc: "Vermindert rimpels en verbetert de huidelasticiteit van binnenuit in 4 weken.", benefits: ["Bevat wetenschappelijk bewezen Verisol® P collageenpeptiden", "Verbetert de elasticiteit van de huid na 4 weken", "Helpt rimpels rond de ogen te verminderen", "Rijk aan 9 vitaminen en mineralen voor huid, haar en nagels"], usage: "Meng 1 maatlepel met 250ml water. Geniet dagelijks van deze heerlijke aardbei-citroen drank, bij voorkeur bij het ontbijt." },
+            { cat: "HERBALIFE 24", sku: "488K", name: "H24 Creatine Plus", vp: 15.95, retail: 36.35, desc: "Verbetert fysieke prestaties tijdens opeenvolgende reeksen korte, hoogintensieve oefeningen.", benefits: ["Zuivere Creapure® creatine", "Helpt om explosieve kracht en spiergroei te verhogen", "Bevat vitamine B en C voor een sneller herstel", "Smaakloos, dus makkelijk toe te voegen aan je shake"], usage: "Los 1 afgestreken maatschep (5g) op in je pre-workout drank of herstelshake." },
+            { cat: "HERBALIFE 24", sku: "402K", name: "ProLong Energy gel", vp: 13.60, retail: 27.75, desc: "Koolhydraten-proteïne gel voor spierondersteuning tijdens langdurige inspanningen.", benefits: ["Dubbele bron van koolhydraten voor snelle én langdurige energie", "Bevat extra eiwitten om spierafbraak tijdens duursport te voorkomen", "Makkelijk in te nemen tijdens het lopen of fietsen"], usage: "Consumeer 1 zakje per uur tijdens langdurige inspanningen (zoals marathons of lange fietstochten)." },
+            { cat: "HERBALIFE 24", sku: "403K", name: "H24 Rebuild Strength Choco", vp: 33.55, retail: 78.75, desc: "De ultieme herstelshake met 25g proteïne, ijzer en L-Glutamine na krachttraining.", benefits: ["25g hoogwaardige wei- en caseïne eiwitten", "Bevat ijzer ter ondersteuning van het zuurstoftransport", "L-Glutamine ter ondersteuning van spierherstel", "Geen kunstmatige kleur- of smaakstoffen"], usage: "Meng 5 afgestreken maatscheppen (50g) met 250 ml water en shake krachtig. Consumeer binnen 30 minuten na de training." },
+            { cat: "HERBALIFE 24", sku: "486K", name: "H24 Rebuild Strength zakjes", vp: 15.20, retail: 34.45, desc: "Handige meeneemzakjes van de Rebuild Strength choco.", benefits: ["Perfect geportioneerd in handige zakjes", "Gooi makkelijk in je sporttas", "Alle voordelen van Rebuild Strength, maar dan voor onderweg"], usage: "Meng 1 zakje met 250 ml water. Drink binnen 30 minuten na je zware training." },
+            { cat: "HERBALIFE 24", sku: "192K", name: "H24 LiftOff Max Grapefruit", vp: 15.95, retail: 36.90, desc: "Extra sterke pre-workout / energy drink zonder suiker.", benefits: ["Suikervrij, 13 kcal per portie", "180 mg cafeïne (uit Guarana en cafeïnepoeder)", "Frisse Grapefruit smaak", "Informed Sports gecertificeerd (Dopingvrij)"], usage: "Los 1 zakje op in 250 ml water. Drink als pre-workout of wanneer je een stevige focus nodig hebt." },
+            { cat: "HERBALIFE 24", sku: "149K", name: "H24 Achieve Repen Cookie Dough", vp: 11.30, retail: 23.65, desc: "Verantwoorde sportreep met 21g proteïne en weinig suiker.", benefits: ["Maar liefst 21g proteïne per reep", "Zeer laag in suikers (slechts 2g per reep)", "Ondersteunt spieropbouw na de training", "Heerlijke Cookie Dough smaak met krokante stukjes"], usage: "Eet direct na het sporten of als stevig, eiwitrijk tussendoortje door de dag." },
+            { cat: "HERBALIFE 24", sku: "150K", name: "H24 Achieve Repen Pure Choco", vp: 11.30, retail: 23.65, desc: "Pure chocolade sportreep voor snel spierherstel on-the-go.", benefits: ["21g proteïne per reep", "Helpt de opbouw en het behoud van spiermassa", "Volle en rijke smaak van pure chocolade", "Slechts 2g suiker per reep"], usage: "Eet direct na het sporten of als een eiwitrijk vier-uurtje." },
+            { cat: "HERBALIFE 24", sku: "1466", name: "CR7 Drive Açai Bessen 540g", vp: 12.50, retail: 26.80, desc: "Sportdrank (samen met Cristiano Ronaldo) voor optimale hydratatie tijdens uithouding.", benefits: ["Verbetert de wateropname tijdens fysieke inspanningen", "Zonder kunstmatige smaakstoffen of zoetstoffen", "Levert koolhydraten voor een snel herstel van spierfunctie", "Vitamine B12 draagt bij tot een normaal energieleverend metabolisme"], usage: "Meng 2 scheppen met 500 ml water. Drink tijdens inspanning (lopen, fietsen, voetbal, etc)." },
+            { cat: "HERBALIFE 24", sku: "1467", name: "CR7 Drive Açai Bessen (10 zakjes)", vp: 8.00, retail: 16.15, desc: "Handige meeneemzakjes van de CR7 Drive.", benefits: ["Verbetert hydratatie en uithoudingsvermogen", "Individueel verpakt, ideaal voor in je bidon onderweg", "Heerlijke subtiele Açai-bessen smaak"], usage: "Giet 1 zakje leeg in 500 ml water. Drink tijdens het sporten." },
+            { cat: "HERBALIFE 24", sku: "1433", name: "H24 Hydrate Sinaasappel", vp: 17.20, retail: 42.90, desc: "Caloriearme elektrolytendrank. Hydrateert beter dan water alleen.", benefits: ["Slechts 12 kcal per portie", "Ondersteunt een optimale vochtbalans", "Levert 100% van de ADH Vitamine C ter bescherming tegen oxidatieve stress", "Ideaal voor sporters of als dagelijkse hydratatie bij warm weer"], usage: "Meng 1 zakje in 500 ml water en shake krachtig. Kan op elk moment van de dag gedronken worden." },
+            { cat: "SKIN & BODY", sku: "539K", name: "HL/Skin Revitaliserende Nachtcrème", vp: 35.20, retail: 66.00, desc: "Rijke crème die de huid 's nachts helpt herstellen en hydrateren.", benefits: ["Verdubbelt de vochtigheidsgraad van de huid gedurende 8 uur", "Helpt het verschijnen van fijne lijntjes en rimpels in 7 dagen te verminderen", "Getest door dermatologen", "Geen toegevoegde parabenen"], usage: "Aanbrengen op gezicht en hals voor het slapengaan, ná de reiniger, toner en het serum." },
+            { cat: "SKIN & BODY", sku: "508K", name: "HL/Skin 10% Niacinamide Serum", vp: 31.70, retail: 59.40, desc: "Verfijnt poriën en geeft de huid een egale, stralende teint.", benefits: ["Helpt om roodheid, vlekjes en oneffenheden te verminderen", "Minimaliseert zichtbaar poriën", "Bevat 10% Niacinamide (Vitamine B3)", "Geschikt voor alle huidtypes"], usage: "Breng een paar druppels aan op een gereinigde huid, laat intrekken en breng daarna je dag- of nachtcrème aan." },
+            { cat: "SKIN & BODY", sku: "511K", name: "HL/Skin Vernieuwende Gel Cleanser", vp: 21.30, retail: 39.95, desc: "Frisse reinigingsgel. Verwijdert onzuiverheden en make-up effectief.", benefits: ["Milde maar diepgaande reiniging", "Bevat sinaasappelolie voor een heerlijk frisse geur", "Verwijdert overtollig talg zonder uit te drogen"], usage: "Met ronddraaiende bewegingen zachtjes inmasseren op een vochtige huid. Daarna afspoelen met lauwwarm water." },
+            { cat: "SKIN & BODY", sku: "513K", name: "HL/Skin Versterkende Crème", vp: 35.20, retail: 66.00, desc: "Dagcrème voor een versterkte, gehydrateerde en zachte huid.", benefits: ["Bevat kalmerende kruidenextracten en vitaminen", "Biedt langdurige hydratatie", "Laat de huid soepel en zacht aanvoelen", "Geen toegevoegde parabenen"], usage: "Na de toner en serum aanbrengen op gezicht en hals in de ochtend." },
+            { cat: "SKIN & BODY", sku: "514K", name: "HL/Skin Hand/Bodylotion", vp: 15.90, retail: 29.80, desc: "Voedende lotion met Aloë Vera. Trekt snel in zonder vet aan te voelen.", benefits: ["Helpt een droge huid te voeden en te hydrateren", "Klinisch bewezen dat het de vochtigheidsgraad van de huid de hele dag verhoogt", "Geformuleerd met Aloë Vera, Afrikaanse Shea Boter en verzachtende kruiden"], usage: "Breng dagelijks royaal aan op de huid voor een zachte en gehydrateerde body." },
+            { cat: "SKIN & BODY", sku: "515K", name: "HL/Skin Voedende Oogcrème", vp: 26.70, retail: 50.15, desc: "Vermindert donkere kringen en fijne lijntjes rondom de ogen.", benefits: ["Minimaliseert wallen en donkere kringen zichtbaar", "Helpt rimpels en lijntjes rondom de ogen te verminderen in 7 dagen", "Ondersteunt de kwetsbare huid rond de ogen"], usage: "Dep voorzichtig een kleine hoeveelheid onder en rond de ogen ('s ochtends en 's avonds)." },
+            { cat: "SKIN & BODY", sku: "0765", name: "SKIN Verzachtende Aloë Cleanser", vp: 16.75, retail: 33.70, desc: "Zachte reiniger voor de normale tot droge huid, kalmeert dankzij Aloë.", benefits: ["Op basis van Aloë Vera met een lichte, zachte geur", "Reinigt mild maar effectief", "Laat de huid zacht en fris achter zonder trekkerig gevoel"], usage: "Masseer in op een vochtige huid, goed afspoelen met water." },
+            { cat: "SKIN & BODY", sku: "0767", name: "SKIN Verfrissende Toner", vp: 12.70, retail: 25.55, desc: "Verfrist de huid en bereidt deze voor op serums en crèmes.", benefits: ["Aloë Vera-gebaseerde, alcoholvrije toner", "Geeft een snelle vochtboost aan de vermoeide huid", "Verwijdert de laatste restjes vuil na de cleanser"], usage: "Spray lichtjes op je gezicht of breng het aan met een wattenschijfje." },
+            { cat: "SKIN & BODY", sku: "0770", name: "SKIN Verstevigende Ooggel", vp: 26.35, retail: 53.05, desc: "Helpt de elasticiteit van de gevoelige huid rond de ogen te verbeteren.", benefits: ["Bevat revitaliserend komkommerextract", "Helpt de huid te verstevigen en te liften", "Biedt een onmiddellijk verkoelend en kalmerend effect"], usage: "Breng de gel 's ochtends lichtjes kloppend aan rond de ogen (boven en onder)." },
+            { cat: "SKIN & BODY", sku: "0773", name: "SKIN Zuiverend Kleimasker", vp: 14.20, retail: 28.55, desc: "Diepreinigend masker met munt. Verwijdert overtollig talg.", benefits: ["Rijk aan klei om onzuiverheden op te nemen", "Klinisch bewezen dat het de poriën verfijnt in slechts één gebruik", "Bereidt de huid voor op een betere opname van crèmes"], usage: "1 tot 3 keer per week aanbrengen op een gereinigde huid. Na 10-15 minuten verwijderen met warm water." },
+            { cat: "SKIN & BODY", sku: "0827", name: "SKIN Herstellende Nachtcrème", vp: 32.65, retail: 65.70, desc: "Verdubbelt de hydratatie van je huid binnen acht uur.", benefits: ["Ondersteunt celvernieuwing tijdens de slaap", "Zichtbaar minder lijntjes na 7 dagen", "Voelt heerlijk rijk en zacht aan"], usage: "Royaal aanbrengen voor het slapengaan als laatste stap in je verzorgingsroutine." },
+            { cat: "SKIN & BODY", sku: "0828", name: "SKIN Beschermende Moisturiser SPF 30", vp: 32.65, retail: 65.70, desc: "Dagcrème met zonnefactor. Beschermt tegen UVA/UVB straling.", benefits: ["Essentiële SPF30 bescherming tegen huidveroudering door de zon", "Verdubbelt de hydratatie gedurende 8 uur", "Ideaal voor dagelijks gebruik"], usage: "In de ochtend rijkelijk aanbrengen op het gezicht, zo'n 15 minuten voor je naar buiten gaat." },
+            { cat: "SKIN & BODY", sku: "0829", name: "SKIN Lijn Minimaliserend Serum", vp: 43.35, retail: 87.25, desc: "Krachtig serum, vermindert zichtbaar fijne lijntjes en rimpels.", benefits: ["Zichtbare verbetering van rimpels in slechts 7 dagen", "Klinisch getest om te helpen de zachtheid en glans te herstellen", "Te gebruiken in de ochtend én avond"], usage: "Aanbrengen ná de reiniger en toner, en vóór je moisturiser (crème)." },
+            { cat: "SKIN & BODY", sku: "0830", name: "SKIN Dagelijkse Glow Moisturizer", vp: 32.65, retail: 65.70, desc: "Laat de huid stralen, zelfs zonder make-up. Diep voedend.", benefits: ["Klinisch getest om de huid te laten stralen en gloeien in 7 dagen", "Ideaal voor als je geen make-up wilt dragen maar er wél fris uit wilt zien", "Lichte structuur, niet vettig"], usage: "Gebruik 's ochtends over het gehele gezicht." },
+            { cat: "SKIN & BODY", sku: "2561", name: "Herbal Aloë Hand & Body Wash", vp: 8.30, retail: 18.60, desc: "Milde zeep met Aloë Vera. Reinigt zonder de huid uit te drogen.", benefits: ["Zonder sulfaten en toegevoegde parabenen", "Bevat verzachtende botanische extracten", "Perfect voor dagelijks gebruik in de douche"], usage: "Royaal gebruiken tijdens het douchen. Spoel goed af." },
+            { cat: "SKIN & BODY", sku: "2562", name: "Herbal Aloë Soothing Gel", vp: 8.30, retail: 18.00, desc: "De redding bij zonnebrand of irritatie. Pure, verkoelende Aloë gel.", benefits: ["Ongeparfumeerd en verrijkt met pure Aloë Vera", "Absorbeert snel en kalmeert direct", "Helpt de huid herstellen na een lange dag in de zon of na het scheren"], usage: "Smeer direct op een rode, geïrriteerde of verbrande huid. Kan meermaals per dag." },
+            { cat: "SKIN & BODY", sku: "2564", name: "Herbal Aloë Strengthening Shampoo", vp: 8.30, retail: 18.40, desc: "Versterkt het haar, vermindert haarbreuk en maakt het zachter.", benefits: ["Maakt je haar 10x sterker na één keer wassen", "Vermindert haarbreuk tot wel 90%", "Plantaardige micro-eiwitten voeden van binnenuit"], usage: "Inmasseren op nat haar, goed uitspoelen." },
+            { cat: "SKIN & BODY", sku: "2565", name: "Herbal Aloë Strengthening Conditioner", vp: 8.30, retail: 18.40, desc: "Kleurbehoudende crèmespoeling voor sterk, glad en glanzend haar.", benefits: ["Perfecte aanvulling op de Aloë Shampoo", "Bevat tarwe-eiwit om het haar zacht en sterk te maken", "Vrij van parabenen en toegevoegde sulfaten"], usage: "Verdeel over de haarpunten, laat tot 3 minuten inwerken en spoel goed uit." }
         ];
 
         const dbTestimonials = [
             { naam: "Marieke", fase: "Hersenletsel, altijd moe", nu: "Energie, geen dutjes meer, -63cm", label: "Energie & Herstel" },
             { naam: "Huguette", fase: "Maatje 42, snoepverslaving", nu: "Maatje 38, fit & uitgeslapen", label: "Afslanken & Fit" },
-            { naam: "Geert", fase: "Ondergewicht, stressvet", nu: "Spiermassa, dagelijks vitaal", label: "Spiermassa" },
-            { naam: "Twan", fase: "Geen tijd voor ontbijt, moe", nu: "Bootcamp, windsurfen: Fitte 65+ Opa!", label: "Vitaliteit 60+" }
+            { naam: "Geert", fase: "Ondergewicht, stressvet", nu: "Spiermassa, dagelijks vitaal", label: "Aankomen & Spiermassa" },
+            { naam: "Tasja", fase: "Zwanger, futloos", nu: "Fitte mama, energie ondanks korte nachten", label: "Fitte Mama" },
+            { naam: "Betty", fase: "Ondergewicht (26j), ongelukkig", nu: "+10kg spiermassa, fitte oma van 6", label: "Aankomen & Vitaliteit" },
+            { naam: "Chella", fase: "Slank maar niet fit, onzeker", nu: "Strong & Fit, geen snoepbehoefte", label: "Spieropbouw & Zelfvertrouwen" },
+            { naam: "Brigitte", fase: "Middagdipjes, enorm overgewicht", nu: "2-3 kledingmaten minder, vitaliteit!", label: "Afslanken & Energie" },
+            { naam: "Mirlande", fase: "Veel diëten, suikerverslaving", nu: "Minder vet/gewicht, geen suikerdip", label: "Gezonde Levensstijl" },
+            { naam: "Lieke", fase: "Emotie-eten, negatief zelfbeeld", nu: "-14kg, emotie-eten onder controle", label: "Balans & Afslanken" },
+            { naam: "Twan", fase: "Geen tijd voor ontbijt, moe", nu: "Bootcamp, windsurfen: Fitte 65+ Opa!", label: "Vitaliteit 60+" },
+            { naam: "Wendy", fase: "Veel gewicht, laag zelfbeeld", nu: "Gehalveerd in vet%, stralend", label: "Vetverlies & Glow" },
+            { naam: "Sam", fase: "Weinig zelfvertrouwen", nu: "Persoonlijke ontwikkeling, bewust lichaam", label: "Mindset & Spieren" },
+            { naam: "Martine", fase: "Vermoeide 50'er", nu: "Fitte 60'er, meer spiermassa", label: "Energie & Fit ouder worden" }
         ];
 
         const dbRecipesData = [
-            { title: "Snickers Shake", tag: "Zoet & Eiwitrijk", desc: "1. 250ml Melk<br>2. 2 scheppen F1 Choco<br>3. 1 el pure pindakaas<br>4. IJsblokjes<br>Blend tot een romige snickers vervanger!", color: "#fef3c7" },
-            { title: "Appeltaart Ontbijt", tag: "Vezelrijk", desc: "1. 250ml Melk<br>2. 2 scheppen F1 Vanille<br>3. Halve appel (in stukjes)<br>4. Theelepel kaneel<br>Blend goed door!", color: "#dcfce7" },
-            { title: "Krokante Wafeltjes", tag: "Baking", desc: "1. 170g F1 Vanille<br>2. 80g PBM<br>3. 100g Zusto<br>4. 1 ei & 75ml melk<br>5. 125g gesmolten kokosolie<br>Mix & bak 4-5 min in wafelijzer.", color: "#fee2e2" },
-            { title: "Chocopudding", tag: "Dessert", desc: "1. 1L Sojamelk Choco (warmen)<br>2. 10 scheppen F1 Choco<br>3. 10 scheppen Rebuild Strength<br>Mixen, verdelen en 3 uur in koelkast.", color: "#e0e7ff" }
+            { title: "Snickers Shake", tag: "Zoet & Eiwitrijk", desc: "1. 250ml Melk of Water<br>2. 2 scheppen F1 Zachte Chocolade<br>3. 1 el pure pindakaas<br>4. IJsblokjes<br><br>Mix op hoge snelheid tot een heerlijk romige Snickers-vervanger!", color: "#fef3c7" },
+            { title: "Appeltaart Shake", tag: "Vezelrijk", desc: "1. 250ml Melk of Sojadrank<br>2. 2 scheppen F1 Romige Vanille<br>3. Halve frisse appel (in stukjes)<br>4. Theelepel kaneel<br>5. Paar ijsblokjes<br><br>Blend lang genoeg zodat de appelstukjes helemaal glad zijn.", color: "#dcfce7" },
+            { title: "Krokante Bewaarwafeltjes", tag: "Baking", desc: "1. 170g F1 Vanille<br>2. 80g PBM<br>3. 100g Zusto (of Stevia)<br>4. 1 ei & 75ml melk<br>5. 125g gesmolten kokosolie<br><br>Meng droog, meng nat, voeg samen. Bak 4-5 min in een niet te heet wafelijzer.", color: "#fee2e2" },
+            { title: "Chocopudding Delight", tag: "Dessert", desc: "1. 1L Sojamelk Choco (warmen)<br>2. 10 scheppen F1 Zachte Chocolade<br>3. 10 scheppen Rebuild Strength<br><br>Mix goed door. Giet in kommetjes. 1 uur in diepvries, dan 3 uur in koelkast.", color: "#e0e7ff" },
+            { title: "Frangipanetaart", tag: "Baking", desc: "1. Bladerdeeg & Abrikozenkonfituur (bodem)<br>2. 250ml water<br>3. 2 scheppen F1 Vanille & 2 scheppen PDM<br>4. 6 scheppen amandelmeel & 1 ei<br><br>Maak beslag, vul vorm. Bak 15 min op 180°C.", color: "#f3e8ff" },
+            { title: "Gezonde Cake", tag: "Baking", desc: "1. 160g boter (gesmolten)<br>2. 150g rietsuiker + 5 eieren<br>3. 250g amandelmeel & 2 schep PDM<br>4. Beetje bakpoeder<br><br>Meng eieren/suiker door boter, voeg meel toe. Bak 1 uur op 175°C.", color: "#ffedd5" }
         ];
 
         // =========================================================================
-        // FIREBASE LOGIC
+        // FIREBASE LOGIC (AUTH & DATA)
         // =========================================================================
         function loginUser() {
             const email = document.getElementById('login-email').value;
@@ -886,7 +1078,7 @@
                 div.innerHTML = `
                     <div>
                         <strong style="display:block; margin-bottom:4px;">${c.name || 'Onbekend'}</strong>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">${isActive ? 'Actief' : 'Inactief'}</span>
+                        <span class="text-muted" style="font-size:0.75rem;">${isActive ? 'Actief' : 'Inactief'}</span>
                     </div>
                 `;
                 div.onclick = () => selectClient(c.id);
@@ -920,7 +1112,17 @@
             document.getElementById('crm-eval-score').innerText = c.score || '?';
             document.getElementById('crm-eval-symptoms').innerHTML = (c.symptoms||[]).map(s=>`• ${s}`).join('<br>');
             document.getElementById('crm-eval-products').innerHTML = (c.advies||'').split(',').map(p=>`• <strong>${p}</strong>`).join('<br>');
+            document.getElementById('crm-eval-meds').innerText = c.medicatie || 'Geen';
             
+            // Eetgewoonten Read-Only
+            const eet = c.eetgewoonten || {};
+            document.getElementById('crm-eet-ontbijt').innerText = eet.ontbijt || '-';
+            document.getElementById('crm-eet-middag').innerText = eet.middag || '-';
+            document.getElementById('crm-eet-avond').innerText = eet.avond || '-';
+            document.getElementById('crm-eet-tussen').innerText = eet.tussen || '-';
+            document.getElementById('crm-eet-water').innerText = eet.water || '-';
+            document.getElementById('crm-eet-drank').innerText = eet.drank || '-';
+
             // Tanita Start
             if(c.tanita_start) {
                 ['gew','vet','spier','visc','lft'].forEach(t => document.getElementById(`fiche-t-${t}`).value = c.tanita_start[t]||'');
@@ -959,7 +1161,7 @@
             if(!currentClientId) return;
             const val = document.getElementById(`fiche-${field === 'medicatie' ? 'meds' : field}`).value;
             db.collection('coaches').doc(currentCoach).collection('clients').doc(currentClientId).update({ [field]: val });
-            if(field==='name') document.getElementById('header-client-name').innerText = val;
+            if(field==='name') { document.getElementById('header-client-name').innerText = val; renderClientList(); updateClientLinkDropdown(); }
         }
 
         function autoSaveDag(prefix, field) {
@@ -1011,7 +1213,7 @@
         // =========================================================================
         function updateClientLinkDropdown() {
             const sel = document.getElementById('link-client-select');
-            sel.innerHTML = '<option value="">Koppel aan klant...</option>';
+            sel.innerHTML = '<option value="">-- Koppel verkoop aan klant --</option>';
             Object.keys(clients).forEach(id => { 
                 if(clients[id].active !== false) sel.innerHTML += `<option value="${id}">${clients[id].name}</option>`; 
             });
@@ -1034,7 +1236,7 @@
                 if(count > 0) { tVP += (p.vp * count); tBuy += (buyP * count); tRet += (p.retail * count); tProf += (prof * count); }
                 
                 if (p.cat !== cCat) {
-                    tbody.innerHTML += `<tr><td colspan="5" style="background:#f1f5f9; font-weight:700; font-size:0.8rem; padding:10px 15px; color:var(--text-muted);">${p.cat}</td></tr>`;
+                    tbody.innerHTML += `<tr><td colspan="6" style="background:#f1f5f9; font-weight:700; font-size:0.8rem; padding:10px 15px; color:var(--text-muted);">${p.cat}</td></tr>`;
                     cCat = p.cat;
                 }
 
@@ -1045,18 +1247,18 @@
                         <td style="color:var(--secondary); font-weight:600;">+ ${formatMoney(prof)}</td>
                         <td>
                             <div style="display:flex; align-items:center; gap:8px;">
-                                <button class="btn btn-outline" style="padding:4px 10px;" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
+                                <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count - 1})">-</button>
                                 <span style="font-weight:700; width:20px; text-align:center; color:${count===0?'var(--text-muted)':(count<3?'var(--accent)':'var(--text-main)')};">${count}</span>
-                                <button class="btn btn-outline" style="padding:4px 10px;" onclick="updateStockCount('${p.sku}', ${count + 1})">+</button>
+                                <button class="btn-qty" onclick="updateStockCount('${p.sku}', ${count + 1})">+</button>
                             </div>
                         </td>
                         <td>
                             <div style="display:flex; gap:5px;">
-                                <select id="cdisc-${p.sku}" style="padding:5px; border-radius:4px; width:70px; font-size:0.8rem;">
+                                <select id="cdisc-${p.sku}" style="padding:5px; border-radius:4px; width:70px; font-size:0.8rem; border: 1px solid var(--border);">
                                     <option value="0">0%</option><option value="5">5%</option><option value="10">10%</option><option value="15">15%</option><option value="20">20%</option>
                                 </select>
                                 <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;" onclick="sellProduct('${p.sku}')" ${count===0?'disabled':''}>Verkoop</button>
-                                <button class="btn btn-outline" style="padding:5px 10px; font-size:0.8rem;" onclick="usePersonal('${p.sku}')" ${count===0?'disabled':''}>Zelf</button>
+                                <button class="btn btn-outline" style="padding:5px 10px; font-size:0.8rem;" onclick="usePersonal('${p.sku}')" ${count===0?'disabled':''}>Demo</button>
                             </div>
                         </td>
                     </tr>`;
@@ -1064,6 +1266,7 @@
 
             document.getElementById('dash-vp').innerText = tVP.toFixed(2);
             document.getElementById('dash-inkoop').innerText = formatMoney(tBuy);
+            document.getElementById('dash-verkoop').innerText = formatMoney(tRet);
             document.getElementById('dash-winst').innerText = formatMoney(tProf);
             
             // Stats op Home Dashboard
@@ -1126,12 +1329,21 @@
             if(hStatProf) hStatProf.innerText = formatMoney(mProfit);
 
             const sList = document.getElementById('sales-history-list');
-            sList.innerHTML = filteredSales.length ? '' : '<li style="padding:10px; color:var(--text-muted);">Geen verkopen.</li>';
+            sList.innerHTML = filteredSales.length ? '' : '<li style="padding:10px; color:var(--text-muted);">Geen verkopen in deze maand.</li>';
             filteredSales.slice(0, 15).forEach(s => {
-                sList.innerHTML += `<li style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                sList.innerHTML += `<li style="padding:12px; border-bottom:1px solid var(--bg-main); display:flex; justify-content:space-between; align-items:center;">
                     <div><strong>${s.name}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${new Date(s.date).toLocaleString()}</span></div>
                     <div style="text-align:right;"><span style="color:var(--secondary); font-weight:700;">+ ${formatMoney(s.profit)}</span><br>
-                    <button style="background:none; border:none; color:var(--danger); font-size:0.7rem; cursor:pointer;" onclick="undoSale(${s.id}, '${s.sku}')">Undo</button></div>
+                    <button style="background:none; border:none; color:var(--danger); font-size:0.7rem; cursor:pointer;" onclick="undoSale(${s.id}, '${s.sku}')">Undo verkoop</button></div>
+                </li>`;
+            });
+
+            const pList = document.getElementById('personal-use-list');
+            pList.innerHTML = personalUse.length ? '' : '<li style="padding:10px; color:var(--text-muted);">Geen actieve producten.</li>';
+            personalUse.forEach(p => {
+                pList.innerHTML += `<li style="padding:12px; border-bottom:1px solid var(--bg-main); display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>${p.name}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Sinds: ${p.date}</span></div>
+                    <button class="btn btn-outline" style="font-size:0.7rem;" onclick="finishPersonal(${p.id})">Is op!</button>
                 </li>`;
             });
         }
@@ -1141,6 +1353,12 @@
             myStock[sku] = (myStock[sku] || 0) + 1;
             db.collection('coaches').doc(currentCoach).collection('inventory').doc('data').set({ stock: myStock, sales: salesHistory }, { merge: true });
             showToast("Verkoop geannuleerd");
+        }
+
+        function finishPersonal(id) {
+            personalUse = personalUse.filter(p => p.id !== id);
+            db.collection('coaches').doc(currentCoach).collection('inventory').doc('data').set({ personal: personalUse }, { merge: true });
+            showToast("Verwijderd uit eigen gebruik");
         }
 
         // =========================================================================
@@ -1175,13 +1393,13 @@
 
             filtered.forEach(p => {
                 grid.innerHTML += `
-                    <div class="card" style="padding:20px; cursor:pointer; border-top: 4px solid var(--primary); margin-bottom:0;" onclick="openProductModal('${p.sku}')">
-                        <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">${p.cat}</span>
-                        <h4 style="margin:5px 0 10px 0;">${p.name}</h4>
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin:0 0 15px 0;">${p.desc}</p>
-                        <div style="display:flex; justify-content:space-between; align-items:end;">
+                    <div class="card" style="padding:25px; cursor:pointer; border-top: 4px solid var(--primary); margin-bottom:0;" onclick="openProductModal('${p.sku}')">
+                        <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform: uppercase;">${p.cat}</span>
+                        <h4 style="margin:5px 0 10px 0; font-size:1.1rem;">${p.name}</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 20px 0; line-height: 1.5;">${p.desc}</p>
+                        <div style="display:flex; justify-content:space-between; align-items:end; margin-top: auto;">
                             <span style="font-size:0.75rem; color:#888;">SKU: ${p.sku}</span>
-                            <span style="font-weight:700; color:var(--primary);">${formatMoney(p.retail)}</span>
+                            <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">${formatMoney(p.retail)}</span>
                         </div>
                     </div>
                 `;
@@ -1198,7 +1416,7 @@
             document.getElementById('modal-vp').innerText = p.vp.toFixed(2);
             document.getElementById('modal-price').innerText = formatMoney(p.retail);
             document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-benefits').innerHTML = p.benefits.map(b => `<li>${b}</li>`).join('');
+            document.getElementById('modal-benefits').innerHTML = p.benefits.map(b => `<li style="margin-bottom: 5px;">${b}</li>`).join('');
             document.getElementById('modal-usage').innerText = p.usage || "Lees verpakking.";
             document.getElementById('product-modal').classList.add('active');
         }
@@ -1208,15 +1426,15 @@
             grid.innerHTML = "";
             dbTestimonials.forEach(t => {
                 grid.innerHTML += `
-                    <div class="card" style="margin-bottom:0; padding:0; overflow:hidden;">
-                        <div style="background:var(--sidebar-bg); color:white; padding:15px; text-align:center;">
-                            <strong style="font-size:1.1rem;">${t.naam}</strong><br><span style="font-size:0.8rem; color:#94a3b8;">${t.label}</span>
+                    <div class="card" style="margin-bottom:0; padding:0; overflow:hidden; border: 1px solid var(--border);">
+                        <div style="background:var(--sidebar-bg); color:white; padding:20px; text-align:center;">
+                            <strong style="font-size:1.2rem;">${t.naam}</strong><br><span style="font-size:0.85rem; color:#94a3b8;">${t.label}</span>
                         </div>
-                        <div style="padding:20px;">
-                            <div style="background:#fef2f2; padding:12px; border-radius:8px; border-left:3px solid var(--danger); margin-bottom:10px; font-size:0.85rem;">
+                        <div style="padding:25px;">
+                            <div style="background:#fef2f2; padding:15px; border-radius:8px; border-left:4px solid var(--danger); margin-bottom:15px; font-size:0.9rem;">
                                 <strong style="color:var(--danger)">VOORHEEN:</strong><br>${t.fase}
                             </div>
-                            <div style="background:#ecfdf5; padding:12px; border-radius:8px; border-left:3px solid var(--secondary); font-size:0.85rem;">
+                            <div style="background:#ecfdf5; padding:15px; border-radius:8px; border-left:4px solid var(--secondary); font-size:0.9rem;">
                                 <strong style="color:var(--secondary)">NU:</strong><br>${t.nu}
                             </div>
                         </div>
@@ -1232,9 +1450,9 @@
                 grid.innerHTML += `
                     <div class="card recipe-card" style="background: ${r.color}; border:none; margin-bottom:0;">
                         <span class="recipe-tag">${r.tag}</span>
-                        <h3 style="margin-top: 0; color:var(--sidebar-bg);">${r.title}</h3>
-                        <p style="font-size: 0.85rem; color:var(--sidebar-bg); line-height:1.6;">${r.desc}</p>
-                        <button class="btn btn-outline" style="font-size: 0.75rem; width:100%; justify-content:center; background:rgba(255,255,255,0.6);" onclick="showToast('Recept gekopieerd om te delen!')">📋 Kopieer Recept</button>
+                        <h3 style="margin-top: 0; color:var(--sidebar-bg); font-size: 1.3rem;">${r.title}</h3>
+                        <p style="font-size: 0.9rem; color:var(--sidebar-bg); line-height:1.6; margin-bottom: 20px;">${r.desc}</p>
+                        <button class="btn btn-outline" style="font-size: 0.85rem; width:100%; justify-content:center; background:rgba(255,255,255,0.6);" onclick="showToast('Recept succesvol gekopieerd!')">📋 Kopieer Recept</button>
                     </div>
                 `;
             });
