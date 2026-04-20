@@ -48,7 +48,6 @@
         #main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .view { display: none; width: 100%; height: 100%; overflow-y: auto; }
         
-        /* FIX VOOR DESKTOP LAYOUTS */
         .view.active { display: flex; flex-direction: column; } 
         #view-eval.active { display: flex; flex-direction: row; } 
         #view-fu.active { display: flex; flex-direction: row; } 
@@ -218,9 +217,16 @@
                 <label>E-mailadres</label>
                 <input type="email" id="login-email" placeholder="jouw@email.com">
             </div>
-            <div class="form-group" style="text-align: left; margin-bottom: 25px;">
+            
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
                 <label>Wachtwoord</label>
                 <input type="password" id="login-password" placeholder="••••••••" onkeyup="if(event.key === 'Enter') loginUser()">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 25px;">
+                <label style="font-size: 0.85rem; color: #555; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="login-remember" checked> Onthoud mij op dit apparaat
+                </label>
             </div>
             
             <button class="btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;" onclick="loginUser()">Veilig Inloggen</button>
@@ -883,6 +889,7 @@
     function loginUser() {
         const email = document.getElementById('login-email').value;
         const pass = document.getElementById('login-password').value;
+        const remember = document.getElementById('login-remember').checked;
         const errDiv = document.getElementById('login-error');
         errDiv.style.display = 'none';
 
@@ -892,7 +899,16 @@
             return;
         }
 
-        auth.signInWithEmailAndPassword(email, pass)
+        // Bepaal hoelang we ingelogd moeten blijven
+        const persistenceType = remember 
+            ? firebase.auth.Auth.Persistence.LOCAL 
+            : firebase.auth.Auth.Persistence.SESSION;
+
+        // Pas de bewaartijd toe en log in
+        auth.setPersistence(persistenceType)
+            .then(() => {
+                return auth.signInWithEmailAndPassword(email, pass);
+            })
             .catch(error => {
                 console.error("Login error:", error);
                 errDiv.innerText = "Inloggen mislukt. Controleer je gegevens.";
