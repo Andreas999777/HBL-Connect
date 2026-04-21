@@ -492,11 +492,32 @@
                     <ul id="modal-benefits"></ul>
                 </div>
 
+                <div class="modal-section" id="modal-how-wrap" style="display:none;">
+                    <h4 style="color:var(--primary);">🧬 Hoe werkt het in het lichaam</h4>
+                    <p id="modal-how" style="margin:0; line-height:1.55;"></p>
+                </div>
+
+                <div class="modal-section" id="modal-helps-wrap" style="display:none;">
+                    <h4 style="color:var(--warn);">🎯 Helpt bij klachten</h4>
+                    <ul id="modal-helps"></ul>
+                </div>
+
+                <div class="modal-section" id="modal-conditions-wrap" style="display:none;">
+                    <h4 style="color:#7c3aed;">🩺 Bij aandoeningen / ziektebeelden</h4>
+                    <ul id="modal-conditions"></ul>
+                    <p style="margin:8px 0 0; font-size:0.75rem; color:var(--text-muted); font-style:italic;">Ondersteunend — geen vervanging voor medisch advies.</p>
+                </div>
+
+                <div class="modal-section" id="modal-caution-wrap" style="display:none; background:#fff7ed; border-left:3px solid #f97316; padding:12px 16px; border-radius:var(--radius-sm);">
+                    <h4 style="color:#c2410c; margin-top:0;">⚠️ Opletten</h4>
+                    <p id="modal-caution" style="margin:0; font-size:0.9rem; line-height:1.5;"></p>
+                </div>
+
                 <div class="modal-section" style="background:var(--bg-main); padding:16px 18px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <h4>🥄 Gebruiksadvies</h4>
                     <p id="modal-usage"></p>
                 </div>
-                
+
                 <button class="btn-primary" style="width:100%; margin-top: 10px; padding: 15px;" onclick="closeModal(event)">Sluiten</button>
             </div>
         </div>
@@ -526,11 +547,15 @@
             <li><button class="nav-btn" onclick="switchView('view-fu', this)"><span class="nav-icon">👥</span> Mijn Klanten <span id="nav-badge-fu" class="nav-badge">0</span></button></li>
             <li><button class="nav-btn" onclick="switchView('view-eval', this)"><span class="nav-icon">📝</span> Nieuwe Evaluatie</button></li>
             <li><button class="nav-btn" onclick="switchView('view-stock', this)"><span class="nav-icon">📦</span> Voorraad & Winst</button></li>
+            <li><button class="nav-btn" onclick="switchView('view-kalender', this); renderKalender();"><span class="nav-icon">📅</span> Kalender</button></li>
+            <li><button class="nav-btn" onclick="switchView('view-campagnes', this); renderCampagnes();"><span class="nav-icon">📢</span> Campagnes</button></li>
+            <li><button class="nav-btn" onclick="switchView('view-bi', this); renderBI();"><span class="nav-icon">📊</span> Mijn Business</button></li>
             <li><button class="nav-btn" onclick="switchView('view-catalog', this)"><span class="nav-icon">📗</span> Product Info</button></li>
             <li><button class="nav-btn" onclick="switchView('view-recepten', this)"><span class="nav-icon">🍳</span> Recepten</button></li>
             <li><button class="nav-btn" onclick="switchView('view-testimonials', this)"><span class="nav-icon">⭐</span> Testimonials</button></li>
         </ul>
         <div class="nav-footer">
+            <button class="nav-btn" onclick="openAiSettings()"><span class="nav-icon">⚙️</span> AI-instellingen</button>
             <button class="nav-btn logout-btn" onclick="logoutUser()"><span class="nav-icon">🚪</span> Veilig Uitloggen</button>
         </div>
     </div>
@@ -893,6 +918,31 @@
                     </div>
 
                     <div id="tab-fiche" class="tab-content">
+                        <div class="card" style="background:linear-gradient(135deg, #eef2ff, #faf5ff); border:1px solid #c7d2fe;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                <div>
+                                    <h3 style="margin:0; color:#4f46e5;">✨ AI-inzicht over deze klant</h3>
+                                    <div style="font-size:0.82rem; color:#64748b;">Samenvatting + next-best-action op basis van dossier</div>
+                                </div>
+                                <button class="btn-primary" onclick="runAiInsight()">Genereer inzicht</button>
+                            </div>
+                            <div id="ai-insight-output" style="display:none; margin-top:12px; padding:12px; background:white; border-radius:8px; border:1px solid #e2e8f0; font-size:0.9rem; line-height:1.5;"></div>
+                        </div>
+
+                        <div class="card" style="border-left:4px solid #10b981;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                <div>
+                                    <h3 style="margin:0;">🔗 Klant-portaal</h3>
+                                    <div style="font-size:0.82rem; color:var(--text-muted);">Deel een persoonlijke link: klant doet zelf check-in, uploadt foto's</div>
+                                </div>
+                                <div style="display:flex; gap:8px;">
+                                    <button class="btn-outline" onclick="copyPortalLink()">📋 Kopieer link</button>
+                                    <button class="btn-primary" onclick="sharePortalViaWhatsApp()">💬 Via WhatsApp</button>
+                                </div>
+                            </div>
+                            <div id="portal-checkin-feed" style="margin-top:12px; font-size:0.85rem;"></div>
+                        </div>
+
                         <div class="progress-card">
                             <h3>📈 Voortgang
                                 <div class="progress-tabs" id="progress-tabs">
@@ -1146,7 +1196,200 @@
             </div>
         </div>
 
+        <div id="view-kalender" class="view">
+            <div class="page-header">
+                <div>
+                    <h1>📅 Kalender &amp; Afspraken</h1>
+                    <div class="muted">Plan calls, afspraken en video-consults — met Zoom-link per afspraak</div>
+                </div>
+                <button class="btn-primary" onclick="openAppointmentModal()">＋ Nieuwe afspraak</button>
+            </div>
+            <div style="padding: 20px 28px 0; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <button class="btn-outline" onclick="kalenderShift(-7)">← Vorige week</button>
+                <div id="kalender-range" style="font-weight:700; min-width:220px; text-align:center;"></div>
+                <button class="btn-outline" onclick="kalenderShift(7)">Volgende week →</button>
+                <button class="btn-outline" onclick="kalenderToday()">Vandaag</button>
+            </div>
+            <div style="padding: 20px 28px 40px; overflow-y:auto;">
+                <div id="kalender-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:8px;"></div>
+                <h3 style="margin:28px 0 12px 0;">Komende afspraken</h3>
+                <div id="kalender-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
+
+        <div id="view-campagnes" class="view">
+            <div class="page-header">
+                <div>
+                    <h1>📢 Campagnes &amp; Segmentatie</h1>
+                    <div class="muted">Filter je klanten, bouw één bericht, open WhatsApp per klant</div>
+                </div>
+            </div>
+            <div style="padding: 20px 28px 40px; overflow-y:auto; display:grid; grid-template-columns: 360px 1fr; gap:20px;">
+                <div class="card" style="padding:18px;">
+                    <h3 style="margin-top:0;">1. Selecteer segment</h3>
+                    <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Status</label>
+                    <select id="camp-status" class="coach-select" onchange="renderCampagnes()">
+                        <option value="all">Alle klanten</option>
+                        <option value="active" selected>Actieve klanten</option>
+                        <option value="inactive">Inactieve klanten</option>
+                    </select>
+                    <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Fase in traject</label>
+                    <select id="camp-phase" class="coach-select" onchange="renderCampagnes()">
+                        <option value="all">Alle fasen</option>
+                        <option value="intake">Net gestart (≤ 7 dagen)</option>
+                        <option value="early">Week 1-3</option>
+                        <option value="mid">Week 3 - 12</option>
+                        <option value="longterm">Lange termijn (&gt; 12 weken)</option>
+                        <option value="overdue">Achterstallige opvolging</option>
+                        <option value="birthday">Jarig deze maand</option>
+                    </select>
+                    <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Zoek in WHY / klachten</label>
+                    <input type="text" id="camp-search" placeholder="bv. gewicht, energie, slaap" oninput="renderCampagnes()" style="width:100%; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);">
+                    <h3 style="margin:0 0 10px 0;">2. Bouw bericht</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 8px 0;">Gebruik <code>{naam}</code> en <code>{why}</code> als placeholder.</p>
+                    <textarea id="camp-message" rows="6" placeholder="Hé {naam}! Ik denk aan je doel ({why}). Zin in een korte check-in?" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:inherit; resize:vertical;"></textarea>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+                        <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('checkin')">Check-in</button>
+                        <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('challenge')">Challenge</button>
+                        <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('actie')">Actie/korting</button>
+                        <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('verjaardag')">Verjaardag</button>
+                    </div>
+                </div>
+                <div class="card" style="padding:18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <h3 style="margin:0;">Doelgroep (<span id="camp-count">0</span>)</h3>
+                        <button class="btn-primary" onclick="campSendAll()">Open WhatsApp voor allemaal →</button>
+                    </div>
+                    <div id="camp-list" style="display:flex; flex-direction:column; gap:8px; max-height:70vh; overflow-y:auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-bi" class="view">
+            <div class="page-header">
+                <div>
+                    <h1>📊 Mijn Business</h1>
+                    <div class="muted">Cohort-retentie, herbestel-voorspelling, Volume Points en trends</div>
+                </div>
+            </div>
+            <div style="padding: 20px 28px 40px; overflow-y:auto;">
+                <div class="stat-grid">
+                    <div class="stat-card"><div class="stat-label">Actieve klanten</div><div class="stat-value" id="bi-stat-active">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Volume Points (dit jaar)</div><div class="stat-value" id="bi-stat-vp">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Winst dit jaar</div><div class="stat-value" id="bi-stat-profit">€ 0</div></div>
+                    <div class="stat-card"><div class="stat-label">Retentie 90 dagen</div><div class="stat-value" id="bi-stat-retention">-</div></div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:20px;">
+                    <div class="card" style="padding:18px;">
+                        <h3 style="margin-top:0;">📈 Winst per maand (12 maanden)</h3>
+                        <div id="bi-profit-chart" style="min-height:220px;"></div>
+                    </div>
+                    <div class="card" style="padding:18px;">
+                        <h3 style="margin-top:0;">👥 Cohort-analyse</h3>
+                        <p style="font-size:0.82rem; color:var(--text-muted); margin:0 0 10px 0;">Per intake-maand: hoeveel klanten startten en hoeveel zijn er nu nog actief.</p>
+                        <div id="bi-cohort-table" style="font-size:0.85rem;"></div>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:16px;">
+                    <div class="card" style="padding:18px;">
+                        <h3 style="margin-top:0;">🏆 Top 5 producten</h3>
+                        <div id="bi-top-products" style="font-size:0.9rem;"></div>
+                    </div>
+                    <div class="card" style="padding:18px;">
+                        <h3 style="margin-top:0;">🔁 Herbestel-voorspelling</h3>
+                        <p style="font-size:0.82rem; color:var(--text-muted); margin:0 0 10px 0;">Klanten waarvan we inschatten dat hun producten binnen 2 weken op zijn op basis van hun aankoopgedrag.</p>
+                        <div id="bi-reorder" style="font-size:0.9rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- AI-instellingen modal -->
+    <div id="ai-settings-modal" class="modal-overlay" onclick="if(event.target===this) closeAiSettings()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:520px;">
+            <button class="modal-close" onclick="closeAiSettings()">×</button>
+            <div class="modal-body">
+                <h2>⚙️ AI-instellingen</h2>
+                <p style="font-size:0.88rem; color:var(--text-muted); margin-top:4px;">Plak je OpenAI API key om de AI-assistent te activeren. De key wordt enkel in jouw browser opgeslagen (localStorage).</p>
+                <label style="display:block; margin-top:12px; font-size:0.85rem; color:var(--text-muted);">OpenAI API key</label>
+                <input type="password" id="ai-key-input" placeholder="sk-..." style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:monospace; font-size:0.8rem;">
+                <div style="display:flex; gap:8px; margin-top:14px;">
+                    <button class="btn-primary" onclick="saveAiKey()">Opslaan</button>
+                    <button class="btn-outline" onclick="clearAiKey()">Wissen</button>
+                </div>
+                <p id="ai-key-status" style="margin-top:14px; font-size:0.85rem;"></p>
+                <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);">
+                <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Een key aanmaken? Ga naar <a href="https://platform.openai.com/api-keys" target="_blank" style="color:var(--primary);">platform.openai.com/api-keys</a>. Model: <code>gpt-4o-mini</code> (~$0,001 per vraag).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI vraag-balk (floating button + chat) -->
+    <button id="ai-float-btn" title="Vraag AI" onclick="openAiChat()" style="position:fixed; bottom:24px; right:24px; background:linear-gradient(135deg, #6366f1, #8b5cf6); color:white; border:none; width:56px; height:56px; border-radius:50%; font-size:1.5rem; cursor:pointer; box-shadow:0 10px 30px rgba(99,102,241,0.35); z-index:900;">✨</button>
+
+    <div id="ai-chat-modal" class="modal-overlay" onclick="if(event.target===this) closeAiChat()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:640px; max-height:85vh; display:flex; flex-direction:column;">
+            <button class="modal-close" onclick="closeAiChat()">×</button>
+            <div class="modal-body" style="display:flex; flex-direction:column; padding-bottom:0; flex:1; min-height:0;">
+                <h2 style="margin:0 0 4px 0;">✨ HBL AI-assistent</h2>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin:0 0 12px 0;">Vraag iets over klanten, producten, symptomen of coaching-aanpak.</p>
+                <div id="ai-chat-log" style="flex:1; min-height:280px; max-height:50vh; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; background:var(--bg-main); font-size:0.9rem; line-height:1.5;"></div>
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                    <textarea id="ai-chat-input" rows="2" placeholder="bv. Welk product past bij iemand met reflux en hoge bloeddruk?" style="flex:1; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:inherit; resize:none;"></textarea>
+                    <button class="btn-primary" onclick="aiChatSend()" style="padding:10px 18px;">Stuur</button>
+                </div>
+                <div style="display:flex; gap:6px; margin:8px 0 14px 0; flex-wrap:wrap;">
+                    <button class="btn-outline" style="font-size:0.72rem; padding:4px 10px;" onclick="aiQuickAsk('Geef me 3 praktische tips om mijn follow-up conversie te verhogen.')">Tips conversie</button>
+                    <button class="btn-outline" style="font-size:0.72rem; padding:4px 10px;" onclick="aiQuickAsk('Welke producten raad ik aan voor iemand met reflux én opgeblazen gevoel?')">Advies reflux</button>
+                    <button class="btn-outline" style="font-size:0.72rem; padding:4px 10px;" onclick="aiQuickAsk('Schrijf een motiverend WhatsApp-bericht voor een klant die stagneert in week 4.')">WA-bericht</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Afspraak-modal -->
+    <div id="appt-modal" class="modal-overlay" onclick="if(event.target===this) closeApptModal()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:520px;">
+            <button class="modal-close" onclick="closeApptModal()">×</button>
+            <div class="modal-body">
+                <h2 id="appt-modal-title">Nieuwe afspraak</h2>
+                <input type="hidden" id="appt-id">
+                <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Klant</label>
+                <select id="appt-client" class="coach-select" style="width:100%;"></select>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                    <div>
+                        <label style="font-size:0.85rem; color:var(--text-muted);">Datum</label>
+                        <input type="date" id="appt-date" style="width:100%; padding:9px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    </div>
+                    <div>
+                        <label style="font-size:0.85rem; color:var(--text-muted);">Tijd</label>
+                        <input type="time" id="appt-time" style="width:100%; padding:9px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    </div>
+                </div>
+                <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Type</label>
+                <select id="appt-type" class="coach-select" style="width:100%;">
+                    <option value="call">📞 Telefoon-afspraak</option>
+                    <option value="video">🎥 Video-consult</option>
+                    <option value="meeting">🤝 Fysieke afspraak</option>
+                </select>
+                <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Zoom / Meet / Teams-link (optioneel)</label>
+                <input type="url" id="appt-zoom" placeholder="https://zoom.us/j/..." style="width:100%; padding:9px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:monospace; font-size:0.8rem;">
+                <label style="display:block; margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Notitie</label>
+                <textarea id="appt-note" rows="3" style="width:100%; padding:9px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:inherit; resize:vertical;"></textarea>
+                <div style="display:flex; gap:8px; margin-top:14px;">
+                    <button class="btn-primary" onclick="saveAppointment()">Opslaan</button>
+                    <button class="btn-outline" onclick="closeApptModal()">Annuleren</button>
+                    <button class="btn-danger" id="appt-delete-btn" style="margin-left:auto; display:none;" onclick="deleteAppointment()">Verwijderen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Klant-portaal (volledig ander scherm, zonder sidebar) -->
+    <div id="portal-app" style="display:none; max-width:720px; margin:0 auto; padding:20px 16px;"></div>
 
 <script>
     // =========================================================================
@@ -1288,6 +1531,175 @@
         { naam: "Sam", fase: "Weinig zelfvertrouwen", nu: "Persoonlijke ontwikkeling, bewust lichaam", label: "Mindset & Spieren" },
         { naam: "Martine", fase: "Vermoeide 50'er", nu: "Fitte 60'er, meer spiermassa", label: "Energie & Fit ouder worden" }
     ];
+
+    // =========================================================================
+    // 1b. VERDIEPENDE PRODUCT-INFORMATIE (HEALTHCOACH-NIVEAU)
+    //   - Aanvullend op dbProducts; keyed op SKU. Niet-medisch advies.
+    // =========================================================================
+    const PRODUCT_DETAILS = {
+        "0141": { // Formula 1 Vanille
+            how: "Gebalanceerde maaltijdshake met hoogwaardige soja-eiwitten, trage koolhydraten, 25 vitaminen/mineralen en vezels. Stabiliseert bloedsuiker en geeft langdurige verzadiging.",
+            helpsWith: ["Sterke hongergevoelens of snaaibuien", "Onregelmatig eten / overslaan ontbijt", "Lage energie in de voormiddag", "Gewichtsverlies of -controle"],
+            conditions: ["Prediabetes / insulineresistentie (trage koolhydraten)", "Menopauzeklachten met gewichtstoename", "Stress-eten"],
+            caution: "Bevat soja en melk. Niet geschikt voor wie eiwitten beperkt moet houden (ernstige nierinsufficiëntie — overleg met arts)."
+        },
+        "3138": { // Formula 1 Cookie Crunch
+            how: "Zelfde basis als klassieke F1, met koekjes-smaakbeleving. Ideaal voor mensen die 'iets zoets' missen tijdens een shake-dieet.",
+            helpsWith: ["Zin in zoet / snaaigedrag 's avonds", "Motivatie-dip rond dag 7-14", "Structuur in ontbijt houden"],
+            conditions: ["Emotie-eten", "Suikerverslaving (als vervanger)"],
+            caution: "Bevat soja en melk."
+        },
+        "0143": { // PDM Vanille
+            how: "Eiwitpoeder op basis van wei + soja dat je mengt in je F1. Verhoogt eiwitgehalte van de shake tot ~24g en stimuleert spierbehoud.",
+            helpsWith: ["Verlies van spiermassa bij afvallen", "Hersteltijd na sport", "Vetverbranding ondersteunen (eiwit = thermogeen)", "Verzadigingsgevoel verlengen"],
+            conditions: ["Sarcopenie (spiermassaverlies bij 50+)", "Aankomen van spiermassa", "Herstel na ziekte / operatie"],
+            caution: "Bevat wei (melk) en soja."
+        },
+        "3086": { // Vegan PDM Vanille
+            how: "Plantaardig eiwitcomplex (erwt + rijst + quinoa) zonder wei. Gelijkwaardig aminozuurprofiel voor veganisten of lactose-intolerante klanten.",
+            helpsWith: ["Spierherstel bij veganisten", "Lactose-intolerantie / koemelkallergie", "Verzadiging op plantaardig dieet"],
+            conditions: ["Lactose-intolerantie", "Koemelkeiwit-allergie", "Vegetarisch / veganistisch dieet"],
+            caution: "Bevat soja in sommige varianten — check label voor wie streng sojavrij moet zijn."
+        },
+        "1188": { // Aloë 1.9L
+            how: "Bladgel-sap van de Aloë Barbadensis Miller plant. Bevat polysachariden die irritatie in het maag-darmstelsel kalmeren en de darmbarrière ondersteunen.",
+            helpsWith: ["Brandend maagzuur / reflux", "Opgeblazen gevoel na maaltijden", "Trage spijsvertering / constipatie", "Slechte opname van voedingsstoffen"],
+            conditions: ["Prikkelbare darm (IBS)", "Gastritis", "Helicobacter-klachten (ondersteunend)", "Ouderdoms-reflux"],
+            caution: "Niet tijdens zwangerschap/borstvoeding zonder overleg. Bij inname van diabetesmedicatie of bloedverdunners: overleg met arts."
+        },
+        "0006": { // Aloë 473ml
+            how: "Zelfde Aloë-formule als de 1,9L fles maar compacter voor onderweg.",
+            helpsWith: ["Brandend maagzuur", "Opgeblazen buik", "Hydratatie met functioneel extra"],
+            conditions: ["Reflux", "Gevoelige darm"],
+            caution: "Zelfde voorzorgen als de grote fles."
+        },
+        "4360": { // Thermo Complete
+            how: "Groene-thee-extract + cafeïne + chroom. Verhoogt thermogenese (energie-verbruik in rust) en ondersteunt bloedsuikerbalans via chroom.",
+            helpsWith: ["Trage stofwisseling", "Middagdip", "Behoefte aan extra fat-burn-stimulans", "Vochtretentie"],
+            conditions: ["Hypothyreose in overleg", "Stagnatie tijdens afvallen (plateau)"],
+            caution: "Bevat cafeïne. Niet bij hoge bloeddruk, hartkloppingen, zwangerschap, angststoornissen, of in combinatie met andere stimulantia."
+        },
+        "0006C": { // Total Control
+            how: "Combinatie van groene thee, yerba maté, guarana, gember en Panax ginseng. Sterker vetverbranding-boostend dan Thermo Complete.",
+            helpsWith: ["Energietekort tijdens dieet", "Extra focus overdag", "Vetverbranding opkrikken"],
+            conditions: ["Plateau bij gewichtsverlies"],
+            caution: "Bevat cafeïne. Zelfde voorzorgen als Thermo Complete. Niet na 16u innemen."
+        },
+        "0067": { // Cell Activator
+            how: "Aloë + alfa-liponzuur + pompoen-extract + B-vitaminen. Ondersteunt de cellulaire opname van voedingsstoffen.",
+            helpsWith: ["Vermoeidheid ondanks goede voeding", "Slechte opname van supplementen", "Laag energieniveau"],
+            conditions: ["Chronische vermoeidheid (ondersteunend)", "Bij mensen die veel voedingssupplementen gebruiken"],
+            caution: "Combineert goed met Formula 2 Multivitamine."
+        },
+        "0039": { // Formula 2 Multivitamine Vrouw
+            how: "25+ vitaminen en mineralen specifiek gedoseerd voor vrouwen: extra ijzer, foliumzuur, calcium.",
+            helpsWith: ["Vermoeidheid / bleekheid (ijzertekort)", "Haaruitval", "Menstruatieklachten", "Brozere nagels / haar"],
+            conditions: ["Bloedarmoede", "Zwangerschapswens (met foliumzuur)", "Menopauze"],
+            caution: "Bij zwangerschap: overleg met arts / vroedvrouw i.v.m. exact vitamine-regime."
+        },
+        "0040": { // Formula 2 Multivitamine Man
+            how: "Volledige multivitamine voor mannen met extra zink en selenium. Geen ijzer (mannen hebben dat zelden nodig).",
+            helpsWith: ["Vermoeidheid", "Lage weerstand", "Testosteron-ondersteuning (zink)"],
+            conditions: ["Drukke job + weinig groenten", "Sporters met verhoogde behoefte"],
+            caution: "Niet combineren met andere ijzer-supplementen zonder overleg."
+        },
+        "1434": { // Herbalifeline Max (omega)
+            how: "Visolie met hoge dosering EPA + DHA (omega-3) en gember-extract. Ontstekingsremmend en hart/hersen-ondersteunend.",
+            helpsWith: ["Droge huid / droge ogen", "Stijve gewrichten", "Stemmings-dipjes", "Concentratieproblemen"],
+            conditions: ["Reumatische aandoeningen (ondersteunend)", "Hoge cholesterol/triglyceriden", "Menopauze-stemming"],
+            caution: "Bij bloedverdunners: overleg met arts. Bevat vis."
+        },
+        "0020": { // Herbal Tea Concentraat
+            how: "Zwarte thee-extract met hibiscus, cardamon en kruiden. Bevat natuurlijke cafeïne maar veel minder dan koffie; stimuleert licht de verbranding.",
+            helpsWith: ["Water niet lekker vinden (hydratatie verhogen)", "Lichte middagdip", "Vocht vasthouden"],
+            conditions: ["Bij wie moeite heeft met 2L water halen per dag"],
+            caution: "Bevat cafeïne. Max 2-3 porties per dag. Niet na 17u."
+        },
+        "1433": { // H3O Pro
+            how: "Sport-hydratatie met elektrolyten en B-vitaminen. Geen suiker, geen cafeïne. Vervangt verloren mineralen bij transpiratie.",
+            helpsWith: ["Kramp tijdens sport", "Dehydratatie in de zomer", "Hoofdpijn na training"],
+            conditions: ["Sporters met lange duurinspanning", "Bij hitte / koorts"],
+            caution: "Niet nodig bij sedentaire levensstijl (gewoon water volstaat)."
+        },
+        "0113": { // Cr7 Drive
+            how: "Sport-drink met koolhydraten + elektrolyten voor tijdens of vlak vóór training. Ontworpen met Cristiano Ronaldo voor duursport.",
+            helpsWith: ["Energie tijdens lange trainingen (>60 min)", "Recupereren tijdens wedstrijden"],
+            conditions: ["Duur-atleten", "Teamsport met lange wedstrijden"],
+            caution: "Bevat suikers — niet geschikt als afslankshake, wel als performance-drink."
+        },
+        "0050": { // Iced Coffee
+            how: "Instant ijskoffie met 15g plantaardige eiwit per portie. Caloriearme alternatief voor frappuccino/cappuccino met suiker.",
+            helpsWith: ["Koffie-liefhebbers die willen afvallen", "Snelle eiwitboost tussendoor", "Energie zonder suiker-crash"],
+            conditions: ["Suikerverslaving overdag"],
+            caution: "Bevat cafeïne."
+        },
+        "0068": { // Beta Heart
+            how: "Bevat OatWell beta-glucan (hartvriendelijk) + ijzer. Verlaagt LDL-cholesterol en draagt bij aan een gezonde bloedsomloop.",
+            helpsWith: ["Hoog cholesterol", "Hartgezondheid-preventie", "Constipatie (vezelrijk)"],
+            conditions: ["Familiegeschiedenis hart- en vaatziekten", "Prediabetes"],
+            caution: "Bevat haver (gluten-kruiscontaminatie mogelijk)."
+        },
+        "2633": { // Niteworks
+            how: "L-Arginine + L-Citrulline die stikstofmonoxide (NO) in het lichaam verhogen. NO verwijdt bloedvaten en ondersteunt nachtelijk herstel.",
+            helpsWith: ["Slecht doorbloede handen/voeten", "Vermoeidheid bij 50+", "Hart-vasculair welzijn"],
+            conditions: ["Hoge bloeddruk (ondersteunend, met arts)", "Erectieproblemen (licht ondersteunend)"],
+            caution: "Niet gelijktijdig met bloeddrukmedicatie zonder overleg. Innemen 30 min voor het slapengaan."
+        },
+        "1465": { // Xtra-cal
+            how: "Calcium + vitamine D + magnesium + koper. Ondersteunt botten, tanden en spierfunctie.",
+            helpsWith: ["Krampen in kuiten 's nachts", "Zwakke nagels/haar", "Bot-densiteit bij vrouwen 50+"],
+            conditions: ["Osteoporose-preventie", "Menopauze", "Lactose-intolerantie (geen zuivel → calciumtekort)"],
+            caution: "Niet samen met ijzer-supplement — 2u tussen houden voor optimale opname."
+        },
+        "3296": { // Collagen Skin Booster
+            how: "Verisol® hydrolysed collageen peptiden met biotine, zink en vitamine C. Klinisch getest voor huidelasticiteit.",
+            helpsWith: ["Rimpels / huidveroudering", "Brokkelige nagels", "Haaruitval", "Droge huid"],
+            conditions: ["Vrouwen 35+ (natuurlijke collageenproductie daalt)", "Na lange periode van afvallen (huid herstel)"],
+            caution: "Bevat vis-collageen."
+        },
+        "0035": { // Fiber Complex
+            how: "6 gecombineerde vezels (haver, appel, maïs, citrus, soja, cellulose). Voedt goede darmflora en verbetert stoelgang.",
+            helpsWith: ["Constipatie", "Onregelmatige stoelgang", "Opgeblazen gevoel", "Hongergevoel tussen maaltijden"],
+            conditions: ["IBS met constipatie", "Lage vezelinname (<25g/dag)"],
+            caution: "Start met halve portie en bouw op — anders kan je eerst meer winderigheid ervaren. Drink voldoende water erbij."
+        },
+        "3146": { // Prelox
+            how: "Franse pijnschors-extract (Pycnogenol) + L-arginine. Ondersteunt vasculaire gezondheid en erectiele functie bij mannen.",
+            helpsWith: ["Erectiele dysfunctie (licht tot matig)", "Vermoeidheid 50+", "Bloedsomloop"],
+            conditions: ["Vasculaire stoornissen", "Mannen 40+"],
+            caution: "Niet combineren met bloedverdunners zonder overleg."
+        },
+        "0292": { // Skin Booster (drink)
+            how: "Drink met collageen + vit A/C/E + biotine + zink. Dubbele werking: hydrateert en stimuleert huideigen collageen.",
+            helpsWith: ["Doffe huid", "Eerste rimpels", "Verzwakte nagels"],
+            conditions: ["Vroegtijdige huidveroudering (zon / stress)"],
+            caution: "Bevat visgelatine."
+        },
+        "2561": { // Aloë Body Wash
+            how: "Milde zeep met 40% Aloë. Sulfaatvrij — beschadigt de huidbarrière niet.",
+            helpsWith: ["Droge huid na douchen", "Gevoelige huid"],
+            conditions: ["Eczeem / droge huid (onderhoud)"],
+            caution: "Extern gebruik — niet inslikken."
+        },
+        "2562": { // Aloë Soothing Gel
+            how: "Pure Aloë-gel zonder alcohol. Koelend effect op geïrriteerde huid.",
+            helpsWith: ["Zonnebrand", "Insectenbeten", "Irritatie na scheren", "Lichte huiduitslag"],
+            conditions: ["Lichte zonnebrand", "Geïrriteerde huid"],
+            caution: "Bij ernstige brandwonden: naar de arts."
+        },
+        "2564": { // Aloë Shampoo
+            how: "Reinigende shampoo met Aloë en tarwe-eiwit.",
+            helpsWith: ["Droge hoofdhuid", "Broos haar", "Haarbreuk"],
+            conditions: ["Na chemische haarbehandelingen (verven/ontkleuren)"],
+            caution: "Vermijd ogen."
+        },
+        "2565": { // Aloë Conditioner
+            how: "Voedende crèmespoeling voor beschadigd haar.",
+            helpsWith: ["Pluizig haar", "Droge punten", "Onhandelbaar haar"],
+            conditions: ["Gekleurd haar", "Zonbeschadigd haar"],
+            caution: "Extern gebruik."
+        }
+    };
 
     // =========================================================================
     // 2. FIREBASE & GLOBALS & AUTHENTICATIE (NIEUW)
@@ -1439,6 +1851,7 @@
         document.getElementById('fu-content').style.display = 'none';
         document.getElementById('fu-empty').style.display = 'flex';
         loadFirebaseData();
+        subscribeAppointments();
         renderDashboard();
     }
 
@@ -1771,6 +2184,11 @@
 
         // Voortgang-grafiek renderen
         renderProgressChart(c);
+
+        // Portal check-in feed + AI-insight reset
+        renderPortalFeed(c);
+        const aiOut = document.getElementById('ai-insight-output');
+        if(aiOut) { aiOut.style.display = 'none'; aiOut.innerHTML = ''; }
 
         // Alleen tab resetten bij wissel van klant — niet bij elke Firestore-snapshot.
         // Anders springt de gebruiker bij elke auto-save terug naar Evaluatie.
@@ -2249,6 +2667,29 @@
 
         // Vul gebruiksaanwijzing
         document.getElementById('modal-usage').innerText = p.usage || "Lees de instructies op de verpakking.";
+
+        // Verdiepende info (optioneel — alleen tonen als aanwezig in PRODUCT_DETAILS)
+        const extra = PRODUCT_DETAILS[sku];
+        const howWrap = document.getElementById('modal-how-wrap');
+        const helpsWrap = document.getElementById('modal-helps-wrap');
+        const condWrap = document.getElementById('modal-conditions-wrap');
+        const cautWrap = document.getElementById('modal-caution-wrap');
+        if(extra && extra.how) {
+            document.getElementById('modal-how').innerText = extra.how;
+            howWrap.style.display = '';
+        } else howWrap.style.display = 'none';
+        if(extra && extra.helpsWith && extra.helpsWith.length) {
+            document.getElementById('modal-helps').innerHTML = extra.helpsWith.map(x => `<li>${x}</li>`).join('');
+            helpsWrap.style.display = '';
+        } else helpsWrap.style.display = 'none';
+        if(extra && extra.conditions && extra.conditions.length) {
+            document.getElementById('modal-conditions').innerHTML = extra.conditions.map(x => `<li>${x}</li>`).join('');
+            condWrap.style.display = '';
+        } else condWrap.style.display = 'none';
+        if(extra && extra.caution) {
+            document.getElementById('modal-caution').innerText = extra.caution;
+            cautWrap.style.display = '';
+        } else cautWrap.style.display = 'none';
 
         // Toon de modal
         document.getElementById('product-modal').classList.add('active');
@@ -2778,6 +3219,789 @@
             navigator.serviceWorker.register('sw.js').catch(() => { /* dev/file:// niet fataal */ });
         });
     }
+
+    // =========================================================================
+    // 7b. TOAST HELPER
+    // =========================================================================
+    function showToast(msg) {
+        let t = document.getElementById('hbl-toast');
+        if(!t) {
+            t = document.createElement('div');
+            t.id = 'hbl-toast';
+            t.style.cssText = 'position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#0f172a; color:white; padding:10px 16px; border-radius:10px; font-size:0.88rem; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.2); opacity:0; transition:opacity 200ms; pointer-events:none;';
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.style.opacity = '1';
+        clearTimeout(t._hide);
+        t._hide = setTimeout(() => { t.style.opacity = '0'; }, 2400);
+    }
+
+    function renderPortalFeed(c) {
+        const el = document.getElementById('portal-checkin-feed');
+        if(!el) return;
+        const ck = (c.checkins || []).slice().reverse().slice(0, 5);
+        const photos = (c.portalPhotos || []).slice(-3);
+        let html = '';
+        if(ck.length) {
+            html += '<div style="font-weight:700; margin-top:8px; font-size:0.82rem; color:var(--text-muted);">Laatste check-ins</div>';
+            html += ck.map(x => {
+                const mood = ['😣','😕','😐','🙂','🤩'][((x.mood||3)-1)] || '—';
+                return `<div style="padding:6px 8px; background:var(--bg-main); border-radius:6px; margin-top:4px; display:flex; justify-content:space-between; gap:8px;">
+                    <span><strong>${x.date}</strong> · 💧${x.water||0} · 🥤${x.shakes||0} · ${mood}</span>
+                    <span style="color:var(--text-muted); font-size:0.8rem; text-align:right; max-width:60%;">${escapeHtml(x.note||'')}</span>
+                </div>`;
+            }).join('');
+        }
+        if(photos.length) {
+            html += '<div style="font-weight:700; margin-top:10px; font-size:0.82rem; color:var(--text-muted);">Laatste foto\'s</div>';
+            html += `<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px;">${photos.map(p => `<img src="${p.dataUrl}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px;">`).join('')}</div>`;
+        }
+        if(!ck.length && !photos.length) html = '<div style="color:var(--text-muted); font-size:0.82rem;">Nog geen check-ins vanuit portaal.</div>';
+        el.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 8. TELEFOON-NORMALISATIE (BE-nummers)
+    //    0xx → 32xx ; 9 cijfers beginnend met 4 of 8 → 32xxx ; al met + → strip +
+    // =========================================================================
+    function normalizeBePhone(raw) {
+        let p = (raw || '').replace(/\D/g, '');
+        if(!p) return '';
+        if(p.startsWith('00')) p = p.substring(2);
+        if(p.startsWith('32')) return p;
+        if(p.startsWith('0')) return '32' + p.substring(1);
+        if(p.length === 9 && (p.startsWith('4') || p.startsWith('8') || p.startsWith('2') || p.startsWith('3') || p.startsWith('9'))) return '32' + p;
+        return p;
+    }
+
+    function buildWhatsAppUrl(phoneRaw, text) {
+        const p = normalizeBePhone(phoneRaw);
+        if(!p) return null;
+        return `https://wa.me/${p}` + (text ? `?text=${encodeURIComponent(text)}` : '');
+    }
+
+    // =========================================================================
+    // 9. AI-ASSISTENT (OpenAI via browser — key in localStorage)
+    // =========================================================================
+    const AI_KEY_STORAGE = 'hbl_openai_key';
+    const AI_MODEL = 'gpt-4o-mini';
+
+    function getAiKey() { try { return localStorage.getItem(AI_KEY_STORAGE) || ''; } catch(e) { return ''; } }
+    function setAiKey(k) { try { localStorage.setItem(AI_KEY_STORAGE, k || ''); } catch(e) {} }
+
+    function openAiSettings() {
+        const m = document.getElementById('ai-settings-modal'); if(!m) return;
+        const input = document.getElementById('ai-key-input');
+        input.value = getAiKey();
+        updateAiKeyStatus();
+        m.classList.add('active');
+    }
+    function closeAiSettings() { document.getElementById('ai-settings-modal').classList.remove('active'); }
+    function saveAiKey() {
+        const v = (document.getElementById('ai-key-input').value || '').trim();
+        setAiKey(v);
+        updateAiKeyStatus();
+        showToast(v ? 'AI-key opgeslagen' : 'AI-key gewist');
+    }
+    function clearAiKey() {
+        document.getElementById('ai-key-input').value = '';
+        setAiKey('');
+        updateAiKeyStatus();
+    }
+    function updateAiKeyStatus() {
+        const st = document.getElementById('ai-key-status');
+        if(!st) return;
+        const has = !!getAiKey();
+        st.innerHTML = has
+            ? '<span style="color:var(--success); font-weight:600;">✓ AI is actief</span>'
+            : '<span style="color:var(--warn); font-weight:600;">⚠ Nog geen key — AI werkt nu niet</span>';
+    }
+
+    async function callOpenAI(messages, maxTokens) {
+        const key = getAiKey();
+        if(!key) throw new Error('NO_KEY');
+        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+            body: JSON.stringify({ model: AI_MODEL, messages: messages, temperature: 0.5, max_tokens: maxTokens || 500 })
+        });
+        if(!resp.ok) {
+            const err = await resp.text();
+            throw new Error(`OpenAI ${resp.status}: ${err.substring(0, 200)}`);
+        }
+        const j = await resp.json();
+        return (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
+    }
+
+    function openAiChat() {
+        if(!getAiKey()) { openAiSettings(); return; }
+        const m = document.getElementById('ai-chat-modal'); if(!m) return;
+        m.classList.add('active');
+        document.getElementById('ai-chat-input').focus();
+    }
+    function closeAiChat() { document.getElementById('ai-chat-modal').classList.remove('active'); }
+
+    function appendChatBubble(role, text) {
+        const log = document.getElementById('ai-chat-log');
+        const who = role === 'user' ? 'Jij' : '✨ AI';
+        const bg = role === 'user' ? 'var(--primary-soft)' : '#f3e8ff';
+        const div = document.createElement('div');
+        div.style.cssText = `margin:6px 0; padding:10px 12px; border-radius:10px; background:${bg};`;
+        div.innerHTML = `<div style="font-weight:700; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">${who}</div><div style="white-space:pre-wrap;">${escapeHtml(text)}</div>`;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    async function aiChatSend() {
+        const input = document.getElementById('ai-chat-input');
+        const msg = (input.value || '').trim();
+        if(!msg) return;
+        input.value = '';
+        appendChatBubble('user', msg);
+        appendChatBubble('ai', '…bezig met denken…');
+        try {
+            const ans = await callOpenAI([
+                { role: 'system', content: 'Je bent een ervaren Herbalife-healthcoach assistent voor het HBL-Connect CRM in België. Antwoord altijd in het Nederlands, beknopt en praktisch. Geef nooit medisch advies dat een arts vervangt. Gebruik Herbalife-producten uit de Belgische catalogus waar relevant.' },
+                { role: 'user', content: msg }
+            ], 500);
+            const log = document.getElementById('ai-chat-log');
+            log.lastChild.remove();
+            appendChatBubble('ai', ans);
+        } catch(e) {
+            const log = document.getElementById('ai-chat-log');
+            log.lastChild.remove();
+            appendChatBubble('ai', 'Fout: ' + e.message);
+        }
+    }
+    function aiQuickAsk(q) {
+        if(!getAiKey()) { openAiSettings(); return; }
+        openAiChat();
+        document.getElementById('ai-chat-input').value = q;
+        aiChatSend();
+    }
+
+    async function runAiInsight() {
+        const c = clients[currentClientId];
+        if(!c) { showToast('Selecteer eerst een klant'); return; }
+        if(!getAiKey()) { openAiSettings(); return; }
+        const wrap = document.getElementById('ai-insight-output');
+        if(wrap) { wrap.style.display = 'block'; wrap.innerHTML = '<em>…bezig met analyseren…</em>'; }
+
+        const start = clientStart(c);
+        const days = daysBetween(start);
+        const symptoms = [];
+        ['energie','stress','vocht','obstipatie','gewrichten','reflux','slaap','hormonaal'].forEach(k => {
+            if(c[k] || (c.fiche && c.fiche[k])) symptoms.push(k + ':' + (c[k] || c.fiche[k]));
+        });
+        const context = {
+            naam: clientName(c),
+            why: c.why || (c.fiche && c.fiche.why) || '',
+            start: start,
+            dagenSindsStart: days,
+            gewichtStart: (c.tanita_start && c.tanita_start.gew) || '',
+            gewichtLaatst: (c.tanita_w3 && c.tanita_w3.gew) || (c.tanita_w2 && c.tanita_w2.gew) || (c.tanita_d7 && c.tanita_d7.gew) || '',
+            notities: (c.notes || '').slice(0, 400),
+            symptomen: symptoms.join(', ')
+        };
+        try {
+            const ans = await callOpenAI([
+                { role: 'system', content: 'Je bent Herbalife-healthcoach expert. Antwoord in het Nederlands, beknopt (max 180 woorden). Gebruik bullets. Geef concrete next-best-actions.' },
+                { role: 'user', content: `Klant-context:\n${JSON.stringify(context, null, 2)}\n\nGeef:\n1) Korte samenvatting (1 zin)\n2) Top-3 aandachtspunten\n3) Voorstel next-best-action (1 actie)\n4) Suggestie voor persoonlijk WhatsApp-bericht (max 2 zinnen).` }
+            ], 600);
+            if(wrap) wrap.innerHTML = `<div style="white-space:pre-wrap;">${escapeHtml(ans)}</div>`;
+        } catch(e) {
+            if(wrap) wrap.innerHTML = `<span style="color:var(--danger);">Fout: ${escapeHtml(e.message)}</span>`;
+        }
+    }
+
+    // =========================================================================
+    // 10. CAMPAGNES & SEGMENTATIE
+    // =========================================================================
+    function campInsertTemplate(kind) {
+        const ta = document.getElementById('camp-message');
+        const tpl = {
+            checkin: 'Hé {naam}! Even een korte check-in. Hoe gaat het met je doel ({why})? Laat maar weten als ik ergens mee kan helpen 💪',
+            challenge: 'Hé {naam}! We starten een nieuwe 21-dagen challenge — zin om mee te doen? Perfect om je doel ({why}) een boost te geven 🚀',
+            actie: 'Hé {naam}! Deze week een mooie actie op {product}. Laat weten als ik er een voor jou klaarzet.',
+            verjaardag: 'Gefeliciteerd {naam}! 🎉 Veel gezondheid en blijf mooi op koers met je doel ({why}).'
+        };
+        ta.value = tpl[kind] || '';
+    }
+
+    function campFilteredClients() {
+        const arr = Object.entries(clients || {}).map(([id, c]) => ({ id, ...c }));
+        const status = document.getElementById('camp-status').value;
+        const phase = document.getElementById('camp-phase').value;
+        const search = (document.getElementById('camp-search').value || '').toLowerCase();
+        const now = new Date();
+
+        return arr.filter(c => {
+            if(status === 'active' && c.active === false) return false;
+            if(status === 'inactive' && c.active !== false) return false;
+            const d = daysBetween(clientStart(c));
+            if(phase === 'intake' && !(d !== null && d >= 0 && d <= 7)) return false;
+            if(phase === 'early' && !(d !== null && d > 7 && d <= 21)) return false;
+            if(phase === 'mid' && !(d !== null && d > 21 && d <= 84)) return false;
+            if(phase === 'longterm' && !(d !== null && d > 84)) return false;
+            if(phase === 'overdue') {
+                const info = getDueInfo(c);
+                if(!info || info.when !== 'overdue') return false;
+            }
+            if(phase === 'birthday') {
+                const bd = c.birthday || (c.fiche && c.fiche.birthday) || '';
+                if(!bd) return false;
+                const bm = bd.substring(5,7);
+                if(parseInt(bm,10) !== now.getMonth()+1) return false;
+            }
+            if(search) {
+                const hay = [(c.why || (c.fiche && c.fiche.why) || ''), (c.notes || ''), clientName(c)].join(' ').toLowerCase();
+                if(!hay.includes(search)) return false;
+            }
+            return true;
+        });
+    }
+
+    function campBuildText(tpl, c) {
+        const nm = (clientName(c) || '').split(' ')[0] || 'daar';
+        const why = (c.why || (c.fiche && c.fiche.why) || '').trim();
+        return (tpl || '').replaceAll('{naam}', nm).replaceAll('{why}', why).replaceAll('{product}', 'F1 shake');
+    }
+
+    function renderCampagnes() {
+        const view = document.getElementById('view-campagnes');
+        if(!view) return;
+        const list = document.getElementById('camp-list');
+        const countEl = document.getElementById('camp-count');
+        if(!list) return;
+        const filtered = campFilteredClients();
+        countEl.textContent = filtered.length;
+        if(!filtered.length) {
+            list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted);">Geen klanten in dit segment.</div>';
+            return;
+        }
+        const tpl = document.getElementById('camp-message').value;
+        list.innerHTML = filtered.map(c => {
+            const nm = clientName(c);
+            const why = (c.why || (c.fiche && c.fiche.why) || '').trim();
+            const preview = campBuildText(tpl, c) || '(leeg bericht)';
+            const phoneRaw = c.phone || (c.fiche && c.fiche.phone) || '';
+            const normPhone = normalizeBePhone(phoneRaw);
+            const hasPhone = !!normPhone;
+            return `<div style="border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; background:white;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <div>
+                        <div style="font-weight:700;">${escapeHtml(nm)}</div>
+                        <div style="font-size:0.78rem; color:var(--text-muted);">${why ? 'WHY: ' + escapeHtml(why) : '(geen WHY)'} · ${hasPhone ? '+' + normPhone : '⚠ geen telefoon'}</div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn-primary" style="font-size:0.78rem; padding:6px 10px;" onclick="campSendOne('${c.id}')" ${hasPhone ? '' : 'disabled'}>WA →</button>
+                    </div>
+                </div>
+                <div style="margin-top:6px; font-size:0.82rem; color:#475569; padding:6px 8px; background:var(--bg-main); border-radius:6px; white-space:pre-wrap;">${escapeHtml(preview)}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function campSendOne(clientId) {
+        const c = clients[clientId]; if(!c) return;
+        const tpl = document.getElementById('camp-message').value;
+        const text = campBuildText(tpl, c);
+        const url = buildWhatsAppUrl(c.phone || (c.fiche && c.fiche.phone) || '', text);
+        if(!url) { showToast('Geen geldig telefoonnummer'); return; }
+        window.open(url, '_blank');
+    }
+
+    async function campSendAll() {
+        const filtered = campFilteredClients();
+        if(!filtered.length) return;
+        if(!confirm(`WhatsApp openen voor ${filtered.length} klanten? Er opent één tabblad per klant (met 800ms tussenpauze).`)) return;
+        const tpl = document.getElementById('camp-message').value;
+        for(const c of filtered) {
+            const url = buildWhatsAppUrl(c.phone || (c.fiche && c.fiche.phone) || '', campBuildText(tpl, c));
+            if(url) { window.open(url, '_blank'); await new Promise(r => setTimeout(r, 800)); }
+        }
+    }
+
+    // =========================================================================
+    // 11. MIJN BUSINESS (BI DASHBOARD)
+    // =========================================================================
+    function renderBI() {
+        const view = document.getElementById('view-bi');
+        if(!view) return;
+        const arr = Object.entries(clients || {}).map(([id, c]) => ({ id, ...c }));
+        const active = arr.filter(c => c.active !== false);
+        document.getElementById('bi-stat-active').textContent = active.length;
+
+        // VP & winst huidig jaar
+        const year = new Date().getFullYear().toString();
+        let totalVP = 0, totalProfit = 0;
+        const productCount = {};
+        (salesHistory || []).forEach(s => {
+            if(s.date && s.date.startsWith(year)) {
+                totalProfit += parseFloat(s.profit) || 0;
+                const p = dbProducts.find(x => x.sku === s.sku);
+                if(p) totalVP += parseFloat(p.vp) || 0;
+                productCount[s.sku] = (productCount[s.sku] || 0) + 1;
+            }
+        });
+        document.getElementById('bi-stat-vp').textContent = totalVP.toFixed(0);
+        document.getElementById('bi-stat-profit').textContent = formatMoney(totalProfit);
+
+        // Retentie 90 dagen: van klanten die 90+ dagen geleden startten, hoeveel zijn nog actief?
+        const now = new Date();
+        const eligibleForRetention = arr.filter(c => {
+            const s = clientStart(c); if(!s) return false;
+            const d = Math.floor((now - new Date(s)) / (1000*60*60*24));
+            return d >= 90;
+        });
+        const stillActive = eligibleForRetention.filter(c => c.active !== false).length;
+        const retention = eligibleForRetention.length ? Math.round(100 * stillActive / eligibleForRetention.length) : null;
+        document.getElementById('bi-stat-retention').textContent = retention === null ? '—' : (retention + '%');
+
+        // Winst-chart per maand (laatste 12)
+        buildBiProfitChart();
+
+        // Cohort-tabel
+        buildBiCohort(arr);
+
+        // Top 5 producten (dit jaar)
+        const topSKUs = Object.entries(productCount).sort((a,b) => b[1]-a[1]).slice(0,5);
+        document.getElementById('bi-top-products').innerHTML = topSKUs.length ?
+            topSKUs.map(([sku, count]) => {
+                const p = dbProducts.find(x => x.sku === sku);
+                return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                    <span>${p ? escapeHtml(p.name) : sku}</span>
+                    <strong>${count}×</strong>
+                </div>`;
+            }).join('') : '<p style="color:var(--text-muted); font-size:0.85rem;">Nog geen verkopen dit jaar.</p>';
+
+        // Herbestel-voorspelling: klanten met een aankoop ≥ 25 dagen geleden en geen herhaal-aankoop sinds
+        buildBiReorder();
+    }
+
+    function buildBiProfitChart() {
+        const container = document.getElementById('bi-profit-chart');
+        if(!container) return;
+        const now = new Date();
+        const months = [];
+        for(let i = 11; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`, label: d.toLocaleString('nl-NL', { month: 'short' }), profit: 0 });
+        }
+        (salesHistory || []).forEach(s => {
+            if(!s.date) return;
+            const m = months.find(x => s.date.startsWith(x.key));
+            if(m) m.profit += parseFloat(s.profit) || 0;
+        });
+        const maxP = Math.max(1, ...months.map(m => m.profit));
+        const w = 600, h = 180, pad = 30;
+        const barW = (w - 2*pad) / months.length;
+        let bars = '';
+        months.forEach((m, i) => {
+            const bh = ((h - 2*pad) * m.profit) / maxP;
+            const x = pad + i*barW + 4;
+            const y = h - pad - bh;
+            const color = m.profit > 0 ? '#10b981' : '#e5e7eb';
+            bars += `<rect x="${x}" y="${y}" width="${barW-8}" height="${bh}" fill="${color}" rx="3"></rect>`;
+            bars += `<text x="${x + (barW-8)/2}" y="${h - pad + 14}" text-anchor="middle" font-size="10" fill="#64748b">${m.label}</text>`;
+            if(m.profit > 0) bars += `<text x="${x + (barW-8)/2}" y="${y - 4}" text-anchor="middle" font-size="9" fill="#475569">€${Math.round(m.profit)}</text>`;
+        });
+        container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" style="width:100%; height:auto;">${bars}</svg>`;
+    }
+
+    function buildBiCohort(arr) {
+        const cohorts = {};
+        arr.forEach(c => {
+            const s = clientStart(c); if(!s) return;
+            const key = s.substring(0,7); // YYYY-MM
+            if(!cohorts[key]) cohorts[key] = { total: 0, active: 0 };
+            cohorts[key].total += 1;
+            if(c.active !== false) cohorts[key].active += 1;
+        });
+        const keys = Object.keys(cohorts).sort().reverse().slice(0, 12);
+        const el = document.getElementById('bi-cohort-table');
+        if(!keys.length) { el.innerHTML = '<p style="color:var(--text-muted);">Nog geen intake-data.</p>'; return; }
+        el.innerHTML = `<table style="width:100%; border-collapse:collapse;">
+            <thead><tr style="text-align:left; border-bottom:1px solid var(--border); font-size:0.78rem; color:var(--text-muted);">
+                <th style="padding:6px 4px;">Intake-maand</th><th>Gestart</th><th>Nog actief</th><th>Retentie</th>
+            </tr></thead>
+            <tbody>${keys.map(k => {
+                const co = cohorts[k];
+                const pct = co.total ? Math.round(100*co.active/co.total) : 0;
+                const barColor = pct >= 70 ? '#10b981' : pct >= 40 ? '#f59e0b' : '#ef4444';
+                return `<tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:6px 4px;">${k}</td>
+                    <td>${co.total}</td>
+                    <td>${co.active}</td>
+                    <td><div style="display:flex; align-items:center; gap:6px;"><div style="flex:1; height:6px; background:#e5e7eb; border-radius:3px; overflow:hidden;"><div style="width:${pct}%; height:100%; background:${barColor};"></div></div><span style="font-size:0.78rem;">${pct}%</span></div></td>
+                </tr>`;
+            }).join('')}</tbody></table>`;
+    }
+
+    function buildBiReorder() {
+        const el = document.getElementById('bi-reorder');
+        if(!el) return;
+        // Heuristiek: voor elke klant de laatste aankoop zoeken in verkoop-notities (door sellProduct opgeslagen)
+        // en matchen met de klant via linkedId in salesHistory? sellProduct slaat dat niet op — gebruiken notities als fallback.
+        // We tonen klanten die ≥ 25 dagen geleden laatste aankoop hadden in notities.
+        const arr = Object.entries(clients || {}).map(([id, c]) => ({ id, ...c }));
+        const now = new Date();
+        const candidates = [];
+        arr.forEach(c => {
+            if(c.active === false) return;
+            const notes = c.notes || '';
+            // Zoek meest recente regel met "Gekocht:"
+            const matches = [...notes.matchAll(/\[(\d{1,2}\/\d{1,2}\/\d{4})\]\s*Gekocht:/g)];
+            if(!matches.length) return;
+            const last = matches[0][1]; // eerste regel is meest recent (unshift)
+            const [dd, mm, yyyy] = last.split('/').map(n => parseInt(n,10));
+            const lastDate = new Date(yyyy, mm-1, dd);
+            const days = Math.floor((now - lastDate) / (1000*60*60*24));
+            if(days >= 25 && days <= 45) candidates.push({ c, days });
+        });
+        candidates.sort((a,b) => b.days - a.days);
+        if(!candidates.length) {
+            el.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">Nog geen herbestel-signalen (we kijken naar aankopen 25-45 dagen geleden).</p>';
+            return;
+        }
+        el.innerHTML = candidates.slice(0,8).map(({c, days}) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+                <div>
+                    <div style="font-weight:600;">${escapeHtml(clientName(c))}</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Laatste aankoop ~${days} dagen geleden</div>
+                </div>
+                <button class="btn-outline" style="font-size:0.75rem; padding:4px 10px;" onclick="currentClientId='${c.id}'; loadClientFiche(); switchView('view-fu', document.querySelectorAll('.nav-btn')[1]);">Open →</button>
+            </div>
+        `).join('');
+    }
+
+    // =========================================================================
+    // 12. KALENDER & AFSPRAKEN
+    // =========================================================================
+    let appointments = {}; // id -> doc
+    let unsubAppointments = null;
+    let kalenderWeekStart = startOfWeek(new Date());
+
+    function startOfWeek(d) {
+        const nd = new Date(d);
+        const day = nd.getDay() || 7; // ma=1 .. zo=7
+        if(day !== 1) nd.setDate(nd.getDate() - (day - 1));
+        nd.setHours(0,0,0,0);
+        return nd;
+    }
+
+    function subscribeAppointments() {
+        if(unsubAppointments) unsubAppointments();
+        if(!currentCoach) return;
+        const ref = db.collection('coaches').doc(currentCoach).collection('appointments');
+        unsubAppointments = ref.onSnapshot(snap => {
+            appointments = {};
+            snap.forEach(d => { appointments[d.id] = { id: d.id, ...d.data() }; });
+            renderKalender();
+        }, err => console.warn('appointments fout:', err));
+    }
+
+    function kalenderShift(delta) {
+        kalenderWeekStart.setDate(kalenderWeekStart.getDate() + delta);
+        renderKalender();
+    }
+    function kalenderToday() {
+        kalenderWeekStart = startOfWeek(new Date());
+        renderKalender();
+    }
+
+    function renderKalender() {
+        const grid = document.getElementById('kalender-grid');
+        const list = document.getElementById('kalender-list');
+        const range = document.getElementById('kalender-range');
+        if(!grid) return;
+        const start = new Date(kalenderWeekStart);
+        const end = new Date(start); end.setDate(end.getDate() + 6);
+        const fmt = d => d.toLocaleDateString('nl-NL', { day:'numeric', month:'short' });
+        range.textContent = `${fmt(start)} — ${fmt(end)}`;
+
+        const days = [];
+        for(let i = 0; i < 7; i++) {
+            const d = new Date(start); d.setDate(start.getDate() + i);
+            days.push(d);
+        }
+        const today = new Date(); today.setHours(0,0,0,0);
+        grid.innerHTML = days.map(d => {
+            const key = d.toISOString().substring(0,10);
+            const isToday = d.getTime() === today.getTime();
+            const appts = Object.values(appointments).filter(a => (a.date || '').startsWith(key)).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+            const labels = ['ma','di','wo','do','vr','za','zo'];
+            return `<div style="min-height:120px; background:${isToday ? 'var(--primary-soft)' : 'white'}; border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px; cursor:pointer;" onclick="openAppointmentModal(null, '${key}')">
+                <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">${labels[(d.getDay()+6)%7].toUpperCase()} ${d.getDate()}</div>
+                ${appts.map(a => {
+                    const c = clients[a.clientId];
+                    const nm = c ? (clientName(c).split(' ')[0]) : '—';
+                    const ic = a.type === 'video' ? '🎥' : a.type === 'meeting' ? '🤝' : '📞';
+                    return `<div onclick="event.stopPropagation(); openAppointmentModal('${a.id}')" style="margin-top:4px; font-size:0.72rem; background:white; border-left:3px solid var(--primary); padding:3px 6px; border-radius:4px; cursor:pointer;" title="${escapeHtml(a.note||'')}">${ic} ${a.time || ''} ${escapeHtml(nm)}</div>`;
+                }).join('')}
+            </div>`;
+        }).join('');
+
+        // Komende 5 afspraken in lijst
+        const upcoming = Object.values(appointments)
+            .filter(a => a.date && new Date(a.date + 'T' + (a.time || '23:59')) >= new Date())
+            .sort((a,b) => ((a.date||'') + (a.time||'')).localeCompare((b.date||'') + (b.time||'')))
+            .slice(0, 8);
+        list.innerHTML = upcoming.length ? upcoming.map(a => {
+            const c = clients[a.clientId];
+            const nm = c ? clientName(c) : '—';
+            const ic = a.type === 'video' ? '🎥' : a.type === 'meeting' ? '🤝' : '📞';
+            return `<div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; background:white;">
+                <div>
+                    <div style="font-weight:700;">${ic} ${escapeHtml(nm)} <span style="color:var(--text-muted); font-weight:400;">· ${a.date || ''} ${a.time || ''}</span></div>
+                    ${a.note ? `<div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(a.note)}</div>` : ''}
+                </div>
+                <div style="display:flex; gap:6px;">
+                    ${a.zoomLink ? `<a href="${escapeHtml(a.zoomLink)}" target="_blank" class="btn-primary" style="font-size:0.78rem; padding:6px 10px; text-decoration:none;">Join</a>` : ''}
+                    <button class="btn-outline" style="font-size:0.78rem; padding:6px 10px;" onclick="openAppointmentModal('${a.id}')">Bewerk</button>
+                </div>
+            </div>`;
+        }).join('') : '<p style="color:var(--text-muted); font-size:0.85rem;">Geen geplande afspraken.</p>';
+    }
+
+    function openAppointmentModal(id, presetDate) {
+        const m = document.getElementById('appt-modal'); if(!m) return;
+        const sel = document.getElementById('appt-client');
+        sel.innerHTML = Object.entries(clients || {}).map(([cid, c]) => `<option value="${cid}">${escapeHtml(clientName(c))}</option>`).join('');
+        const delBtn = document.getElementById('appt-delete-btn');
+        if(id && appointments[id]) {
+            const a = appointments[id];
+            document.getElementById('appt-modal-title').textContent = 'Afspraak bewerken';
+            document.getElementById('appt-id').value = id;
+            sel.value = a.clientId || '';
+            document.getElementById('appt-date').value = a.date || '';
+            document.getElementById('appt-time').value = a.time || '';
+            document.getElementById('appt-type').value = a.type || 'call';
+            document.getElementById('appt-zoom').value = a.zoomLink || '';
+            document.getElementById('appt-note').value = a.note || '';
+            delBtn.style.display = '';
+        } else {
+            document.getElementById('appt-modal-title').textContent = 'Nieuwe afspraak';
+            document.getElementById('appt-id').value = '';
+            document.getElementById('appt-date').value = presetDate || new Date().toISOString().substring(0,10);
+            document.getElementById('appt-time').value = '';
+            document.getElementById('appt-type').value = 'call';
+            document.getElementById('appt-zoom').value = '';
+            document.getElementById('appt-note').value = '';
+            delBtn.style.display = 'none';
+        }
+        m.classList.add('active');
+    }
+    function closeApptModal() { document.getElementById('appt-modal').classList.remove('active'); }
+
+    function saveAppointment() {
+        const id = document.getElementById('appt-id').value || ('appt-' + Date.now());
+        const data = {
+            clientId: document.getElementById('appt-client').value,
+            date: document.getElementById('appt-date').value,
+            time: document.getElementById('appt-time').value,
+            type: document.getElementById('appt-type').value,
+            zoomLink: document.getElementById('appt-zoom').value.trim(),
+            note: document.getElementById('appt-note').value.trim(),
+            updatedAt: new Date().toISOString()
+        };
+        if(!data.clientId || !data.date) { showToast('Klant + datum zijn verplicht'); return; }
+        db.collection('coaches').doc(currentCoach).collection('appointments').doc(id).set(data, { merge: true })
+            .then(() => { showToast('Afspraak opgeslagen'); closeApptModal(); })
+            .catch(e => showToast('Fout: ' + e.message));
+    }
+    function deleteAppointment() {
+        const id = document.getElementById('appt-id').value;
+        if(!id) return;
+        if(!confirm('Afspraak verwijderen?')) return;
+        db.collection('coaches').doc(currentCoach).collection('appointments').doc(id).delete()
+            .then(() => { showToast('Verwijderd'); closeApptModal(); })
+            .catch(e => showToast('Fout: ' + e.message));
+    }
+
+    // =========================================================================
+    // 13. KLANT-PORTAAL (share-link per klant)
+    // =========================================================================
+    function randomToken(n) {
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let s = ''; for(let i = 0; i < (n || 12); i++) s += chars.charAt(Math.floor(Math.random()*chars.length));
+        return s;
+    }
+
+    function ensurePortalToken(clientId) {
+        const c = clients[clientId]; if(!c) return null;
+        if(c.portalToken && c.portalCoach) return c.portalToken;
+        const token = randomToken(16);
+        db.collection('coaches').doc(currentCoach).collection('clients').doc(clientId).set({
+            portalToken: token, portalCoach: currentCoach
+        }, { merge: true });
+        return token;
+    }
+
+    function getPortalShareUrl(clientId) {
+        const token = ensurePortalToken(clientId);
+        if(!token) return '';
+        const base = location.origin + location.pathname;
+        return `${base}?portal=${clientId}&coach=${encodeURIComponent(currentCoach)}&t=${token}`;
+    }
+
+    function copyPortalLink() {
+        if(!currentClientId) return;
+        const url = getPortalShareUrl(currentClientId);
+        if(!url) return;
+        navigator.clipboard.writeText(url).then(() => showToast('Portaal-link gekopieerd 📋'));
+    }
+
+    function sharePortalViaWhatsApp() {
+        if(!currentClientId) return;
+        const url = getPortalShareUrl(currentClientId);
+        const c = clients[currentClientId];
+        const nm = (clientName(c) || '').split(' ')[0] || 'daar';
+        const text = `Hé ${nm}! Hier is je persoonlijke HBL-portaal — daar kan je je dagelijkse check-in doen en foto's / metingen delen:\n${url}`;
+        const wa = buildWhatsAppUrl(c.phone || (c.fiche && c.fiche.phone) || '', text);
+        if(!wa) { showToast('Geen telefoonnummer'); return; }
+        window.open(wa, '_blank');
+    }
+
+    // Portaal wordt geactiveerd als URL ?portal=<clientId>&coach=<name>&t=<token> aanwezig is
+    async function maybeEnterPortalMode() {
+        const params = new URLSearchParams(location.search);
+        const clientId = params.get('portal');
+        const coach = params.get('coach');
+        const token = params.get('t');
+        if(!clientId || !coach || !token) return false;
+        try {
+            const doc = await db.collection('coaches').doc(coach).collection('clients').doc(clientId).get();
+            if(!doc.exists) throw new Error('Klant niet gevonden');
+            const data = doc.data();
+            if(!data.portalToken || data.portalToken !== token) throw new Error('Ongeldige link');
+            document.getElementById('app-sidebar').style.display = 'none';
+            document.getElementById('main-container').style.display = 'none';
+            document.querySelector('.mobile-header').style.display = 'none';
+            document.getElementById('ai-float-btn').style.display = 'none';
+            renderPortal(coach, clientId, data);
+            return true;
+        } catch(e) {
+            alert('Portaal-link werkt niet: ' + e.message);
+            return false;
+        }
+    }
+
+    function renderPortal(coach, clientId, c) {
+        const el = document.getElementById('portal-app');
+        el.style.display = 'block';
+        const nm = (c.name || (c.fiche && c.fiche.name) || 'daar').split(' ')[0];
+        const start = c.startdate || (c.fiche && c.fiche.startdate) || '';
+        const days = start ? Math.floor((Date.now() - new Date(start)) / (1000*60*60*24)) : 0;
+        const checkins = c.checkins || [];
+        const todayKey = new Date().toISOString().substring(0,10);
+        const todayCheckin = checkins.find(x => x.date === todayKey) || {};
+
+        el.innerHTML = `
+            <div style="text-align:center; margin:20px 0;">
+                <div style="width:64px; height:64px; margin:0 auto; background:linear-gradient(135deg, #2563eb, #6366f1); border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.5rem;">HBL</div>
+                <h1 style="margin:10px 0 4px 0;">Hé ${escapeHtml(nm)}! 👋</h1>
+                <div style="color:#64748b;">Je bent nu <strong>dag ${days}</strong> van je traject.</div>
+            </div>
+            <div class="card" style="padding:20px;">
+                <h3 style="margin-top:0;">✅ Dagelijkse check-in <span style="font-weight:400; font-size:0.82rem; color:#64748b;">(${todayKey})</span></h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div><label style="font-size:0.8rem; color:#64748b;">Glazen water</label><input type="number" id="pt-water" min="0" max="15" value="${todayCheckin.water || ''}" style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></div>
+                    <div><label style="font-size:0.8rem; color:#64748b;">Aantal shakes</label><input type="number" id="pt-shakes" min="0" max="5" value="${todayCheckin.shakes || ''}" style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></div>
+                </div>
+                <label style="display:block; margin-top:10px; font-size:0.8rem; color:#64748b;">Stemming (1 = slecht, 5 = top)</label>
+                <div style="display:flex; gap:8px; margin-top:6px;">
+                    ${[1,2,3,4,5].map(n => `<button onclick="document.getElementById('pt-mood').value=${n}; document.querySelectorAll('.pt-mood-btn').forEach(b=>b.style.background='white'); this.style.background='var(--primary-soft)';" class="pt-mood-btn" style="flex:1; padding:10px; border:1px solid #e2e8f0; border-radius:8px; background:${todayCheckin.mood === n ? 'var(--primary-soft)' : 'white'}; cursor:pointer; font-size:1.2rem;">${['😣','😕','😐','🙂','🤩'][n-1]}</button>`).join('')}
+                </div>
+                <input type="hidden" id="pt-mood" value="${todayCheckin.mood || ''}">
+                <label style="display:block; margin-top:12px; font-size:0.8rem; color:#64748b;">Notitie voor je coach (optioneel)</label>
+                <textarea id="pt-note" rows="3" placeholder="Hoe voel je je vandaag? Iets wat opvalt?" style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">${escapeHtml(todayCheckin.note || '')}</textarea>
+                <button onclick="savePortalCheckin('${coach}','${clientId}')" style="margin-top:14px; width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:1rem;">Opslaan</button>
+                <div id="pt-save-status" style="margin-top:10px; text-align:center; font-size:0.85rem;"></div>
+            </div>
+
+            <div class="card" style="padding:20px; margin-top:14px;">
+                <h3 style="margin-top:0;">📸 Foto uploaden (voor/na)</h3>
+                <input type="file" id="pt-photo" accept="image/*" style="margin-top:6px;">
+                <button onclick="savePortalPhoto('${coach}','${clientId}')" style="margin-top:10px; padding:10px 16px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Foto versturen</button>
+                <div id="pt-photo-status" style="margin-top:8px; font-size:0.85rem;"></div>
+                <div id="pt-photo-list" style="margin-top:12px; display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+                    ${(c.portalPhotos || []).slice(-6).map(ph => `<img src="${ph.dataUrl}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px;">`).join('')}
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:24px; color:#94a3b8; font-size:0.75rem;">HBL-Connect · ${escapeHtml(coach)}</div>
+        `;
+    }
+
+    async function savePortalCheckin(coach, clientId) {
+        const status = document.getElementById('pt-save-status');
+        status.textContent = 'Bezig met opslaan...';
+        const entry = {
+            date: new Date().toISOString().substring(0,10),
+            water: parseInt(document.getElementById('pt-water').value) || 0,
+            shakes: parseInt(document.getElementById('pt-shakes').value) || 0,
+            mood: parseInt(document.getElementById('pt-mood').value) || 0,
+            note: (document.getElementById('pt-note').value || '').trim(),
+            ts: new Date().toISOString()
+        };
+        try {
+            const ref = db.collection('coaches').doc(coach).collection('clients').doc(clientId);
+            const doc = await ref.get();
+            const existing = (doc.data() && doc.data().checkins) || [];
+            const filtered = existing.filter(x => x.date !== entry.date);
+            filtered.push(entry);
+            filtered.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+            await ref.set({ checkins: filtered }, { merge: true });
+            status.innerHTML = '<span style="color:#10b981;">✓ Opgeslagen!</span>';
+        } catch(e) {
+            status.innerHTML = '<span style="color:#ef4444;">Fout: ' + escapeHtml(e.message) + '</span>';
+        }
+    }
+
+    async function savePortalPhoto(coach, clientId) {
+        const input = document.getElementById('pt-photo');
+        const status = document.getElementById('pt-photo-status');
+        if(!input.files || !input.files[0]) { status.textContent = 'Kies eerst een foto.'; return; }
+        const f = input.files[0];
+        if(f.size > 800*1024) { status.textContent = 'Foto is te groot (max 800KB voor nu).'; return; }
+        status.textContent = 'Bezig met uploaden...';
+        const reader = new FileReader();
+        reader.onload = async e => {
+            try {
+                const ref = db.collection('coaches').doc(coach).collection('clients').doc(clientId);
+                const doc = await ref.get();
+                const existing = (doc.data() && doc.data().portalPhotos) || [];
+                existing.push({ date: new Date().toISOString(), dataUrl: e.target.result });
+                while(existing.length > 20) existing.shift();
+                await ref.set({ portalPhotos: existing }, { merge: true });
+                status.innerHTML = '<span style="color:#10b981;">✓ Foto verstuurd!</span>';
+                setTimeout(() => location.reload(), 900);
+            } catch(err) {
+                status.innerHTML = '<span style="color:#ef4444;">Fout: ' + escapeHtml(err.message) + '</span>';
+            }
+        };
+        reader.readAsDataURL(f);
+    }
+
+    // Hook portal-mode bij page load VOOR de normale login-flow
+    (async function initPortalEarly() {
+        // Wachten tot Firebase klaar staat
+        const tryInit = async () => {
+            if(typeof db === 'undefined') { setTimeout(tryInit, 100); return; }
+            const params = new URLSearchParams(location.search);
+            if(params.get('portal')) {
+                // Onderdruk login-UI
+                setTimeout(() => {
+                    const login = document.getElementById('login-screen');
+                    if(login) login.style.display = 'none';
+                }, 50);
+                await maybeEnterPortalMode();
+            }
+        };
+        tryInit();
+    })();
 </script>
 </body>
 </html>
