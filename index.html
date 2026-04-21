@@ -555,7 +555,6 @@
             <li><button class="nav-btn" onclick="switchView('view-testimonials', this)"><span class="nav-icon">⭐</span> Testimonials</button></li>
         </ul>
         <div class="nav-footer">
-            <button class="nav-btn" onclick="openAiSettings()"><span class="nav-icon">⚙️</span> AI-instellingen</button>
             <button class="nav-btn logout-btn" onclick="logoutUser()"><span class="nav-icon">🚪</span> Veilig Uitloggen</button>
         </div>
     </div>
@@ -918,17 +917,6 @@
                     </div>
 
                     <div id="tab-fiche" class="tab-content">
-                        <div class="card" style="background:linear-gradient(135deg, #eef2ff, #faf5ff); border:1px solid #c7d2fe;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                <div>
-                                    <h3 style="margin:0; color:#4f46e5;">✨ AI-inzicht over deze klant</h3>
-                                    <div style="font-size:0.82rem; color:#64748b;">Samenvatting + next-best-action op basis van dossier</div>
-                                </div>
-                                <button class="btn-primary" onclick="runAiInsight()">Genereer inzicht</button>
-                            </div>
-                            <div id="ai-insight-output" style="display:none; margin-top:12px; padding:12px; background:white; border-radius:8px; border:1px solid #e2e8f0; font-size:0.9rem; line-height:1.5;"></div>
-                        </div>
-
                         <div class="card" style="border-left:4px solid #10b981;">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                                 <div>
@@ -1327,8 +1315,7 @@
         </div>
     </div>
 
-    <!-- AI vraag-balk (floating button + chat) -->
-    <button id="ai-float-btn" title="Vraag AI" onclick="openAiChat()" style="position:fixed; bottom:24px; right:24px; background:linear-gradient(135deg, #6366f1, #8b5cf6); color:white; border:none; width:56px; height:56px; border-radius:50%; font-size:1.5rem; cursor:pointer; box-shadow:0 10px 30px rgba(99,102,241,0.35); z-index:900;">✨</button>
+
 
     <div id="ai-chat-modal" class="modal-overlay" onclick="if(event.target===this) closeAiChat()">
         <div class="modal-content" onclick="event.stopPropagation()" style="max-width:640px; max-height:85vh; display:flex; flex-direction:column;">
