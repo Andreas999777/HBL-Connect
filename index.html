@@ -1236,7 +1236,7 @@
                     <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);">
                     <h3 style="margin:0 0 10px 0;">2. Bouw bericht</h3>
                     <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 8px 0;">Gebruik <code>{naam}</code> en <code>{why}</code> als placeholder.</p>
-                    <textarea id="camp-message" rows="6" placeholder="Hé {naam}! Ik denk aan je doel ({why}). Zin in een korte check-in?" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:inherit; resize:vertical;"></textarea>
+                    <textarea id="camp-message" rows="6" oninput="renderCampagnes()" placeholder="Hé {naam}! Ik denk aan je doel ({why}). Zin in een korte check-in?" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:inherit; resize:vertical;"></textarea>
                     <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
                         <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('checkin')">Check-in</button>
                         <button class="btn-outline" style="font-size:0.75rem;" onclick="campInsertTemplate('challenge')">Challenge</button>
@@ -3414,6 +3414,7 @@
             verjaardag: 'Gefeliciteerd {naam}! 🎉 Veel gezondheid en blijf mooi op koers met je doel ({why}).'
         };
         ta.value = tpl[kind] || '';
+        renderCampagnes();
     }
 
     function campFilteredClients() {
@@ -3863,10 +3864,14 @@
             if(!doc.exists) throw new Error('Klant niet gevonden');
             const data = doc.data();
             if(!data.portalToken || data.portalToken !== token) throw new Error('Ongeldige link');
-            document.getElementById('app-sidebar').style.display = 'none';
-            document.getElementById('main-container').style.display = 'none';
-            document.querySelector('.mobile-header').style.display = 'none';
-            document.getElementById('ai-float-btn').style.display = 'none';
+            const sidebar = document.getElementById('app-sidebar');
+            const main = document.getElementById('main-container');
+            const mobHdr = document.querySelector('.mobile-header');
+            const aiBtn = document.getElementById('ai-float-btn');
+            if(sidebar) sidebar.style.display = 'none';
+            if(main) main.style.display = 'none';
+            if(mobHdr) mobHdr.style.display = 'none';
+            if(aiBtn) aiBtn.style.display = 'none';
             renderPortal(coach, clientId, data);
             return true;
         } catch(e) {
