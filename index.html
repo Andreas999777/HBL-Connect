@@ -2424,8 +2424,8 @@
     // zodat de HTML-parser de string niet voortijdig sluit.
     function escapeJsAttr(s) {
         return String(s == null ? '' : s)
-            .replace(/&/g,  '\\x26')
             .replace(/\\/g, '\\\\')
+            .replace(/&/g,  '\\x26')
             .replace(/'/g,  "\\'")
             .replace(/"/g,  '\\x22')
             .replace(/\r/g, '\\r')
