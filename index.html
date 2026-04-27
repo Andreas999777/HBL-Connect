@@ -1521,170 +1521,488 @@
 
     // =========================================================================
     // 1b. VERDIEPENDE PRODUCT-INFORMATIE (HEALTHCOACH-NIVEAU)
-    //   - Aanvullend op dbProducts; keyed op SKU. Niet-medisch advies.
+    //   - Aanvullend op dbProducts; keyed op SKU (BE-catalogus).
+    //   - Niet-medisch advies; altijd arts raadplegen bij aandoeningen/medicatie.
     // =========================================================================
     const PRODUCT_DETAILS = {
-        "0141": { // Formula 1 Vanille
-            how: "Gebalanceerde maaltijdshake met hoogwaardige soja-eiwitten, trage koolhydraten, 25 vitaminen/mineralen en vezels. Stabiliseert bloedsuiker en geeft langdurige verzadiging.",
-            helpsWith: ["Sterke hongergevoelens of snaaibuien", "Onregelmatig eten / overslaan ontbijt", "Lage energie in de voormiddag", "Gewichtsverlies of -controle"],
-            conditions: ["Prediabetes / insulineresistentie (trage koolhydraten)", "Menopauzeklachten met gewichtstoename", "Stress-eten"],
-            caution: "Bevat soja en melk. Niet geschikt voor wie eiwitten beperkt moet houden (ernstige nierinsufficiëntie — overleg met arts)."
+        // ================= ONTBIJT & DRANKEN =================
+        "1188": { // Herbal Aloë Drank Original 1,9L
+            how: "Bladgel-sap van de Aloë Barbadensis Miller plant. Polysachariden kalmeren irritatie in maag-darmstelsel en ondersteunen de darmbarrière. Stimuleert opname van voedingsstoffen uit de shake.",
+            helpsWith: ["Brandend maagzuur / reflux", "Opgeblazen gevoel na maaltijden", "Trage spijsvertering / constipatie", "Slechte opname van voedingsstoffen"],
+            conditions: ["Prikkelbare darm (IBS)", "Gastritis", "Helicobacter-klachten (ondersteunend)", "Reflux bij ouderen"],
+            caution: "Niet tijdens zwangerschap/borstvoeding zonder overleg. Bij diabetesmedicatie of bloedverdunners: overleg met arts. Start met halve dosis bij gevoelige maag."
         },
-        "3138": { // Formula 1 Cookie Crunch
-            how: "Zelfde basis als klassieke F1, met koekjes-smaakbeleving. Ideaal voor mensen die 'iets zoets' missen tijdens een shake-dieet.",
-            helpsWith: ["Zin in zoet / snaaigedrag 's avonds", "Motivatie-dip rond dag 7-14", "Structuur in ontbijt houden"],
+        "0006": { // Herbal Aloë Drank Original 473ml
+            how: "Zelfde Aloë-formule als de 1,9L fles, compacte fles voor onderweg of om een product uit te proberen.",
+            helpsWith: ["Brandend maagzuur", "Opgeblazen buik", "Hydratatie met functioneel extra"],
+            conditions: ["Reflux", "Gevoelige darm"],
+            caution: "Zelfde voorzorgen als grote fles. Na openen binnen 2 weken opdrinken, koel bewaren."
+        },
+        "1065": { // Herbal Aloë Drank Mango 473ml
+            how: "Aloë-sap met natuurlijke mangosmaak. Zelfde spijsverteringsondersteuning maar fruitiger — meestal beter verdragen door wie de originele smaak niet lust.",
+            helpsWith: ["Reflux bij wie klassieke smaak vies vindt", "Opgeblazen buik", "Dagelijkse hydratatie"],
+            conditions: ["Prikkelbare darm", "Gastritis (mild)"],
+            caution: "Zelfde voorzorgen als Original. Bevat natuurlijk vruchtsuiker — minimaal, wel rekening houden bij strikte koolhydraatbeperking."
+        },
+        "1196": { // Herbal Aloë Max 473ml (97% puur)
+            how: "Geconcentreerde versie met 97% puur Aloë-sap (vs ~40% in Original). Sterker werkzaam; IASC-gecertificeerd voor zuiverheid.",
+            helpsWith: ["Hardnekkige reflux / gastritis", "Ernstig opgeblazen gevoel", "Klachten die niet reageren op Original"],
+            conditions: ["Chronische maagklachten", "IBS", "Na antibioticakuur (darmherstel)"],
+            caution: "Start laag (5 ml) en bouw op. Niet bij bloedverdunners/diabetesmedicatie zonder arts. Krachtig laxerend effect mogelijk bij overdosering."
+        },
+        "166K": { // Instant Theedrank Original 102g
+            how: "Zwarte-thee-extract met hibiscus, cardemom en natuurlijke cafeïne. Licht thermogeen — verhoogt energieverbruik in rust en ondersteunt alertheid.",
+            helpsWith: ["Water niet lekker vinden (hydratatie verhogen)", "Middagdip / concentratieverlies", "Lichte hongerdemping", "Vocht vasthouden"],
+            conditions: ["Bij wie moeite heeft met 2L water per dag", "Tijdens gewichtsverlies (extra thermogenese)"],
+            caution: "Bevat cafeïne (~85 mg per portie). Max 2-3 porties/dag. Niet na 17u. Niet bij hoge bloeddruk/hartkloppingen, zwangerschap, angststoornissen."
+        },
+        "165K": { // Instant Theedrank Original 51g
+            how: "Zelfde formule als 102g-pot, kleinere verpakking om uit te proberen of voor wie weinig gebruikt.",
+            helpsWith: ["Hydratatie verhogen", "Middagdip"],
+            conditions: ["Starters die smaak willen testen"],
+            caution: "Zelfde cafeïne-voorzorgen als 102g."
+        },
+        "167K": { // Instant Theedrank Citroen 51g
+            how: "Zelfde thee-basis, frisse citroensmaak — ideaal in warm weer of als ijsthee.",
+            helpsWith: ["Afwisseling in smaak voor wie Original beu is", "Hydratatie in de zomer"],
+            conditions: ["Langdurig theeverbruik (smaak-rotatie)"],
+            caution: "Zelfde cafeïne-voorzorgen."
+        },
+        "168K": { // Instant Theedrank Framboos 51g
+            how: "Zoete frambozensmaak met zelfde thermogene werking.",
+            helpsWith: ["Suikerzucht naar frisdrank", "Energie-boost zonder cola-kick"],
+            conditions: ["Emotie-eten met zoet verlangen"],
+            caution: "Zelfde cafeïne-voorzorgen."
+        },
+        "169K": { // Instant Theedrank Perzik 51g
+            how: "Zachte perziksmaak, populair bij wie bittere thee-smaken vermijdt. Zelfde thermogenese.",
+            helpsWith: ["Starters die moeite hebben met theesmaak", "Hydratatie-opbouw"],
+            conditions: ["Klanten die anders koffie of cola zouden drinken"],
+            caution: "Zelfde cafeïne-voorzorgen."
+        },
+
+        // ================= F1 SHAKES =================
+        "4462": { // F1 Shake Bananen Crème 550g
+            how: "Gebalanceerde maaltijdshake met hoogwaardige soja-eiwitten, trage koolhydraten, 25 vitaminen/mineralen, vezels. Stabiliseert bloedsuiker, geeft 3-4u verzadiging. Banaan-smaak bevat van nature extra kalium-aroma.",
+            helpsWith: ["Hongergevoelens / snaaibuien", "Ontbijt overslaan", "Lage voormiddag-energie", "Gewichtsverlies of onderhoud"],
+            conditions: ["Prediabetes / insulineresistentie", "Menopauze met gewichtstoename", "Stress-eten", "Onregelmatige eetpatronen"],
+            caution: "Bevat soja en melk. Bij ernstige nierinsufficiëntie eerst overleg met arts (eiwitbeperking)."
+        },
+        "4463": { // F1 Shake Frisse Aardbei 550g
+            how: "Zelfde F1-basis met natuurlijke aardbei-smaak. Minder zoet dan chocolade-varianten, populair in de zomer met ijs erin.",
+            helpsWith: ["Zin in fruitige smaak", "Variatie in shake-regime", "Afvallen zonder chocolade-triggers"],
+            conditions: ["Gewichtsverlies", "Menopauze"],
+            caution: "Bevat soja en melk."
+        },
+        "4465": { // F1 Shake Cafè Latte 550g
+            how: "F1-shake met koffie-aroma en lichte cafeïne-boost. Ideaal als ontbijt voor koffie-liefhebbers die daarnaast hun koffie willen vermijden.",
+            helpsWith: ["Koffie-verslaving ombouwen", "Extra ochtend-focus", "Afvallen zonder koffie-met-suiker"],
+            conditions: ["Mensen die 3+ koffies/dag drinken met koekjes"],
+            caution: "Bevat soja, melk en cafeïne. Niet bij hartkloppingen of tijdens zwangerschap overdoseren."
+        },
+        "4466": { // F1 Shake Romige Vanille 550g
+            how: "De klassieker — neutrale vanillesmaak, mixt goed met fruit, koffie, kaneel, pindakaas etc. Meest veelzijdig voor receptenvariatie.",
+            helpsWith: ["Hongergevoelens", "Ontbijt-structuur", "Receptenvariatie (base voor andere smaken)"],
+            conditions: ["Gewichtsverlies", "Menopauze", "Onregelmatig eetpatroon"],
+            caution: "Bevat soja en melk."
+        },
+        "4467": { // F1 Shake Cookie Crunch 550g
+            how: "F1-shake met koekjes-stukjes en vanille. Ideaal voor wie 'iets zoets' mist tijdens een shake-dieet, vermindert afhaken.",
+            helpsWith: ["Zin in zoet / snaaigedrag 's avonds", "Motivatie-dip rond dag 7-14", "Kids die gewone shake niet lusten"],
             conditions: ["Emotie-eten", "Suikerverslaving (als vervanger)"],
             caution: "Bevat soja en melk."
         },
-        "0143": { // PDM Vanille
-            how: "Eiwitpoeder op basis van wei + soja dat je mengt in je F1. Verhoogt eiwitgehalte van de shake tot ~24g en stimuleert spierbehoud.",
-            helpsWith: ["Verlies van spiermassa bij afvallen", "Hersteltijd na sport", "Vetverbranding ondersteunen (eiwit = thermogeen)", "Verzadigingsgevoel verlengen"],
-            conditions: ["Sarcopenie (spiermassaverlies bij 50+)", "Aankomen van spiermassa", "Herstel na ziekte / operatie"],
+        "4468": { // F1 Shake Zachte Chocolade 550g
+            how: "F1 met zachte cacao-smaak. Populair voor 's avonds als 'dessert-shake' met PDM voor extra eiwit.",
+            helpsWith: ["Chocolade-cravings", "Avondhonger / nachtelijke kast-raids", "Zoet-tand ombouwen"],
+            conditions: ["Emotie-eten", "Stress-eten 's avonds"],
+            caution: "Bevat soja en melk. Bevat spoortjes cafeïne uit cacao."
+        },
+        "4471": { // F1 Shake Munt Chocolade 550g
+            how: "Chocolade-F1 met frisse munt (After Eight-effect). Verfrissend en verzadigend tegelijk.",
+            helpsWith: ["Variatie voor chocolade-liefhebbers", "Zomer-shake", "Zin in dessert-achtige smaak"],
+            conditions: ["Gewichtsverlies met variatie nodig"],
+            caution: "Bevat soja en melk."
+        },
+        "4469": { // F1 Vrij Van Framboos & Witte Choc 500g
+            how: "Allergeenvrije F1: zonder soja, zonder zuivel, zonder gluten. Op basis van erwten- en rijsteiwit. Voor klanten met meerdere intoleranties.",
+            helpsWith: ["Koemelkallergie", "Soja-intolerantie", "Glutenintolerantie/coeliakie", "Meerdere voedsel-allergieën"],
+            conditions: ["Coeliakie", "Koemelk-eiwitallergie", "Soja-allergie", "Histamine-intolerantie (vaak beter verdragen)"],
+            caution: "Bevat nog steeds sporen van noten (productiefaciliteit)."
+        },
+        "048K": { // F1 Shake Romige Vanille 780g
+            how: "Grootverpakking vanille-F1 (30 porties). Goedkoper per portie voor dagelijkse gebruikers. Zelfde receptuur als 550g.",
+            helpsWith: ["Langdurig gebruik (3+ maanden)", "Gezinnen die samen shaken", "Kost per portie verlagen"],
+            conditions: ["Klanten op onderhoudsfase"],
+            caution: "Bevat soja en melk. Na openen binnen 60 dagen opgebruiken."
+        },
+        "053K": { // F1 Shake 7 zakjes (Vanille/Choco/Cookie)
+            how: "Handige single-serve zakjes voor op reis, op het werk of om een nieuwe klant te laten proeven zonder grote pot te kopen.",
+            helpsWith: ["Reizen / zakenlunches", "Starters die smaken willen proberen", "Op werk zonder meetschaal"],
+            conditions: ["Nieuwe klanten in intake-fase"],
+            caution: "Bevat soja en melk."
+        },
+        "8888": { // F1 Limited Edition
+            how: "Tijdelijke smaak-variant (seizoensgebonden, bv. speculaas, kokos, caramel). Zelfde F1-basis, extra motivatie door nieuwigheid.",
+            helpsWith: ["Motivatie-boost voor langlopende klanten", "Seizoensvariatie", "Smaak-rotatie"],
+            conditions: ["Klanten 3+ maand op shakes die afwisseling nodig hebben"],
+            caution: "Bevat soja en melk. Beperkt beschikbaar — bestel tijdig."
+        },
+        "4472": { // Express Maaltijdreep (7 stuks)
+            how: "Vervangt een F1-shake wanneer je geen tijd/mixer hebt. 15g eiwit, 203 kcal, 23 vitaminen/mineralen. Niet bedoeld als dagelijkse vervanging van shake, wel als noodoplossing.",
+            helpsWith: ["Onderweg / lunch zonder tijd", "Reizen met vliegtuig", "Vergaderingen / late thuiskomst"],
+            conditions: ["Klanten met drukke agenda's", "Sales/ onderweg-beroep"],
+            caution: "Bevat soja, melk, noten (spoortjes). Max 1× per dag als shake-vervanger — shake blijft voorkeur."
+        },
+
+        // ================= PROTEÏNE & SNACKS =================
+        "528K": { // Proteïne Bak Mix (PBM)
+            how: "Eiwitrijke bakmix voor pannenkoeken, wafels, cakes. Vervangt bloem grotendeels. 15g eiwit per portie, weinig koolhydraten.",
+            helpsWith: ["Zin in zoete snack zonder suikerpiek", "Kids-vriendelijk eiwitontbijt", "Cheatmeal die toch in plan past"],
+            conditions: ["Gewichtsverlies met behoud van 'plezier-eten'", "Diabetes type 2 (lage GI)"],
+            caution: "Bevat wei (melk) en soja. Bak niet te lang — eiwit kan rubberachtig worden."
+        },
+        "013K": { // Tri Blend Select Banaan 600g
+            how: "Plantaardige eiwitmix (erwt + quinoa + lijnzaad) met banaan-smaak, 20g eiwit, vegan, lactosevrij. Hogere vezel dan standaard PDM.",
+            helpsWith: ["Spieropbouw bij veganisten", "Lactose-intolerantie", "Mensen met gevoelige darm (plantaardig)"],
+            conditions: ["Vegetarisch/veganistisch dieet", "Koemelkallergie", "IBS bij wie zuivel triggert"],
+            caution: "Bevat soja-sporen in sommige lots."
+        },
+        "172K": { // Vegan Proteïnedrankmix Vanille 560g
+            how: "Plantaardig eiwitcomplex (erwt + rijst + quinoa), 15g eiwit. Meng in je F1 of in water. Gelijkwaardig aminozuurprofiel als whey voor veganisten.",
+            helpsWith: ["Spierherstel bij veganisten", "Lactose-intolerantie / koemelkallergie", "Verzadigingsgevoel verlengen"],
+            conditions: ["Veganistisch/vegetarisch dieet", "Lactose-intolerantie", "Koemelk-eiwitallergie"],
+            caution: "Check label voor sojagehalte (varieert per batch). Start met halve portie voor gevoelige darm."
+        },
+        "441K": { // Vegan PDM Vanille (7 zakjes)
+            how: "Handige single-serve versie van Vegan PDM. Ideaal voor op reis of als proefpakket voor nieuwe klanten.",
+            helpsWith: ["Reizen", "Starter-pakket vegan klanten", "Kantoor-gebruik"],
+            conditions: ["Vegan klanten in intake-fase"],
+            caution: "Zelfde als grote pot."
+        },
+        "012K": { // High Protein Iced Coffee 308g
+            how: "Instant ijskoffie met 15g plantaardige eiwit per portie. Caloriearm alternatief voor frappuccino/cappuccino met suiker.",
+            helpsWith: ["Koffie-liefhebbers die willen afvallen", "Snelle eiwitboost tussendoor", "Energie zonder suiker-crash"],
+            conditions: ["Suikerverslaving overdag", "Frappuccino-verslaving"],
+            caution: "Bevat cafeïne (~80 mg/portie). Niet na 16u. Niet tijdens zwangerschap overdoseren."
+        },
+        "141K": { // Proteïne Chips Barbecue
+            how: "Eiwitrijke chips (10g eiwit per zakje, ~125 kcal). Vervangt gewone chips voor wie 'knisperende' snack nodig heeft.",
+            helpsWith: ["Chips-cravings 's avonds", "Netflix-snack ombouwen", "Eiwitinname verhogen"],
+            conditions: ["Emotie-eten 's avonds", "Stress-eten"],
+            caution: "Bevat zuivel en soja. Geen vervanger voor maaltijd — blijft een snack."
+        },
+        "142K": { // Proteïne Chips Sour Cream
+            how: "Zelfde eiwit-chips-basis met sour cream & onion smaak. 10g eiwit, laag in koolhydraten.",
+            helpsWith: ["Variatie naast Barbecue", "Chips-cravings", "Eiwitrijke snack"],
+            conditions: ["Emotie-eten"],
+            caution: "Bevat zuivel en soja."
+        },
+        "2600": { // Proteïnedrankmix Vanille 588g (PDM whey)
+            how: "Eiwitpoeder op basis van wei + soja dat je mengt in je F1. Verhoogt eiwitgehalte van de shake tot ~24g en stimuleert spierbehoud tijdens afvallen.",
+            helpsWith: ["Spiermassa-verlies bij afvallen", "Hersteltijd na sport", "Vetverbranding ondersteunen (eiwit = thermogeen)", "Verzadiging verlengen"],
+            conditions: ["Sarcopenie (spiermassaverlies bij 50+)", "Spieropbouw", "Herstel na ziekte/operatie"],
             caution: "Bevat wei (melk) en soja."
         },
-        "3086": { // Vegan PDM Vanille
-            how: "Plantaardig eiwitcomplex (erwt + rijst + quinoa) zonder wei. Gelijkwaardig aminozuurprofiel voor veganisten of lactose-intolerante klanten.",
-            helpsWith: ["Spierherstel bij veganisten", "Lactose-intolerantie / koemelkallergie", "Verzadiging op plantaardig dieet"],
-            conditions: ["Lactose-intolerantie", "Koemelkeiwit-allergie", "Vegetarisch / veganistisch dieet"],
-            caution: "Bevat soja in sommige varianten — check label voor wie streng sojavrij moet zijn."
+        "0242": { // F3 Proteïnepoeder 240g
+            how: "Neutraal, smaakloos whey-eiwitpoeder. Voeg toe aan koffie, yoghurt, soep — verhoogt eiwit zonder smaak te veranderen.",
+            helpsWith: ["Eiwitboost in bestaande maaltijden", "Kids (smaakloos erbij)", "Ouderen die moeite hebben met voldoende eiwit"],
+            conditions: ["Sarcopenie", "Revalidatie na ziekte", "Hoge eiwitbehoefte-sporters"],
+            caution: "Bevat wei (melk)."
         },
-        "1188": { // Aloë 1.9L
-            how: "Bladgel-sap van de Aloë Barbadensis Miller plant. Bevat polysachariden die irritatie in het maag-darmstelsel kalmeren en de darmbarrière ondersteunen.",
-            helpsWith: ["Brandend maagzuur / reflux", "Opgeblazen gevoel na maaltijden", "Trage spijsvertering / constipatie", "Slechte opname van voedingsstoffen"],
-            conditions: ["Prikkelbare darm (IBS)", "Gastritis", "Helicobacter-klachten (ondersteunend)", "Ouderdoms-reflux"],
-            caution: "Niet tijdens zwangerschap/borstvoeding zonder overleg. Bij inname van diabetesmedicatie of bloedverdunners: overleg met arts."
+        "3968": { // Proteïnereep Vanille Amandel
+            how: "Eiwitreep met 10g eiwit en ~140 kcal. Compact alternatief voor een snack of light-lunch.",
+            helpsWith: ["Onderweg/school", "Lunch-vervanger bij tijdgebrek", "Pre-workout snack"],
+            conditions: ["Drukke klanten", "Studenten / tieners"],
+            caution: "Bevat melk, noten, soja. Niet elke dag als shake-vervanger — shake blijft voorkeur."
         },
-        "0006": { // Aloë 473ml
-            how: "Zelfde Aloë-formule als de 1,9L fles maar compacter voor onderweg.",
-            helpsWith: ["Brandend maagzuur", "Opgeblazen buik", "Hydratatie met functioneel extra"],
-            conditions: ["Reflux", "Gevoelige darm"],
-            caution: "Zelfde voorzorgen als de grote fles."
+        "3976": { // Proteïnereep Citroen
+            how: "Zelfde eiwit-reep-basis met frisse citroen-smaak, alternatief voor wie vanille-amandel beu is.",
+            helpsWith: ["Variatie in snack", "Zomerse frisse smaak"],
+            conditions: ["Klanten die afwisseling nodig hebben"],
+            caution: "Bevat melk en soja."
         },
-        "4360": { // Thermo Complete
-            how: "Groene-thee-extract + cafeïne + chroom. Verhoogt thermogenese (energie-verbruik in rust) en ondersteunt bloedsuikerbalans via chroom.",
-            helpsWith: ["Trage stofwisseling", "Middagdip", "Behoefte aan extra fat-burn-stimulans", "Vochtretentie"],
-            conditions: ["Hypothyreose in overleg", "Stagnatie tijdens afvallen (plateau)"],
-            caution: "Bevat cafeïne. Niet bij hoge bloeddruk, hartkloppingen, zwangerschap, angststoornissen, of in combinatie met andere stimulantia."
+
+        // ================= SUPPLEMENTEN =================
+        "376K": { // Herbalife Gels ViewVita
+            how: "Gellulecapsules met luteïne, zeaxanthine en visolie. Ondersteunt de netvlies-gezondheid en vermindert vermoeidheid door schermwerk.",
+            helpsWith: ["Vermoeide ogen na schermwerk", "Droge ogen", "Wazig zicht 's avonds", "Nachtblindheid (mild)"],
+            conditions: ["Maculaire degeneratie-preventie (50+)", "Intensief beeldschermwerk", "Ouderen met verminderd zicht"],
+            caution: "Bevat vis. Bij bloedverdunners overleg met arts."
         },
-        "0006C": { // Total Control
-            how: "Combinatie van groene thee, yerba maté, guarana, gember en Panax ginseng. Sterker vetverbranding-boostend dan Thermo Complete.",
-            helpsWith: ["Energietekort tijdens dieet", "Extra focus overdag", "Vetverbranding opkrikken"],
-            conditions: ["Plateau bij gewichtsverlies"],
-            caution: "Bevat cafeïne. Zelfde voorzorgen als Thermo Complete. Niet na 16u innemen."
+        "378K": { // Herbalife Gels CoQ10Vita
+            how: "Coenzym Q10 in gemakkelijk opneembare gel-vorm. CoQ10 ondersteunt energie-productie in de mitochondriën en hart-functie. Daalt van nature met de leeftijd.",
+            helpsWith: ["Vermoeidheid zonder duidelijke oorzaak", "Spierpijn bij statine-gebruikers", "Laag uithoudingsvermogen"],
+            conditions: ["Statine-medicatie (Q10 daalt)", "Hartgezondheid-preventie", "Chronische vermoeidheid"],
+            caution: "Bij bloedverdunners of chemotherapie: overleg met arts. Kan bloeddruk licht verlagen."
         },
-        "0067": { // Cell Activator
-            how: "Aloë + alfa-liponzuur + pompoen-extract + B-vitaminen. Ondersteunt de cellulaire opname van voedingsstoffen.",
-            helpsWith: ["Vermoeidheid ondanks goede voeding", "Slechte opname van supplementen", "Laag energieniveau"],
-            conditions: ["Chronische vermoeidheid (ondersteunend)", "Bij mensen die veel voedingssupplementen gebruiken"],
-            caution: "Combineert goed met Formula 2 Multivitamine."
+        "379K": { // Herbalife Gels MindVita Kids
+            how: "Kinder-gellulecapsule met omega-3 DHA, B-vitaminen en jodium. Ondersteunt hersenontwikkeling, concentratie en leerprestaties.",
+            helpsWith: ["Concentratieproblemen op school", "Vergeetachtigheid", "Vermoeide kinderen na school"],
+            conditions: ["Kinderen 4-12j met eenzijdig eetpatroon", "Weinig vis-eters", "ADHD-ondersteunend (niet-medisch)"],
+            caution: "Bevat vis. Volg doseringsadvies per leeftijd strikt."
         },
-        "0039": { // Formula 2 Multivitamine Vrouw
-            how: "25+ vitaminen en mineralen specifiek gedoseerd voor vrouwen: extra ijzer, foliumzuur, calcium.",
-            helpsWith: ["Vermoeidheid / bleekheid (ijzertekort)", "Haaruitval", "Menstruatieklachten", "Brozere nagels / haar"],
-            conditions: ["Bloedarmoede", "Zwangerschapswens (met foliumzuur)", "Menopauze"],
-            caution: "Bij zwangerschap: overleg met arts / vroedvrouw i.v.m. exact vitamine-regime."
+        "369K": { // Herbalife Gels NutrientVita Kids
+            how: "Kinder-multivitamine in gel-vorm met 12 vitaminen en mineralen. Vult gaten in het dieet van kieskeurige eters.",
+            helpsWith: ["Kieskeurige eters", "Veel ziek zijn op school", "Vermoeid of bleek kind"],
+            conditions: ["Kinderen met beperkt dieet", "Na ziekteperiodes", "Groeispurten"],
+            caution: "Volg doseringsadvies. Niet als vervanger van echte voeding."
         },
-        "0040": { // Formula 2 Multivitamine Man
-            how: "Volledige multivitamine voor mannen met extra zink en selenium. Geen ijzer (mannen hebben dat zelden nodig).",
-            helpsWith: ["Vermoeidheid", "Lage weerstand", "Testosteron-ondersteuning (zink)"],
-            conditions: ["Drukke job + weinig groenten", "Sporters met verhoogde behoefte"],
-            caution: "Niet combineren met andere ijzer-supplementen zonder overleg."
+        "282K": { // Night mode Kamille & Perzik
+            how: "Nachtdrankje met kamille, perzik-extract en melatonine-voorlopers (L-tryptofaan). Bereidt lichaam voor op slaap zonder verslaving of kater.",
+            helpsWith: ["Moeilijk inslapen", "Piekeren 's avonds", "Onrustige slaap"],
+            conditions: ["Milde slapeloosheid", "Stress-slaapproblemen", "Jetlag", "Menopauze-slaapproblemen"],
+            caution: "Niet combineren met slaappillen/antidepressiva zonder overleg. Niet tijdens zwangerschap. Drink 30-45 min voor bed."
         },
-        "1434": { // Herbalifeline Max (omega)
-            how: "Visolie met hoge dosering EPA + DHA (omega-3) en gember-extract. Ontstekingsremmend en hart/hersen-ondersteunend.",
-            helpsWith: ["Droge huid / droge ogen", "Stijve gewrichten", "Stemmings-dipjes", "Concentratieproblemen"],
-            conditions: ["Reumatische aandoeningen (ondersteunend)", "Hoge cholesterol/triglyceriden", "Menopauze-stemming"],
-            caution: "Bij bloedverdunners: overleg met arts. Bevat vis."
+        "236K": { // Phyto Complete 42,8g
+            how: "Geconcentreerd plantenextract met groene thee, granaatappel, broccoli, wortel en andere fytonutriënten. Antioxidant en anti-inflammatoire werking.",
+            helpsWith: ["Weinig groenten eten", "Veel buitenlucht/vervuiling", "Ouderen met oxidatieve stress"],
+            conditions: ["Chronische laaggradige ontsteking", "Preventie hart-vaatziekten", "Roken (ondersteunend)"],
+            caution: "Bevat licht cafeïne (groene thee). Bij bloedverdunners overleg (broccoli = vitamine K)."
         },
-        "0020": { // Herbal Tea Concentraat
-            how: "Zwarte thee-extract met hibiscus, cardamon en kruiden. Bevat natuurlijke cafeïne maar veel minder dan koffie; stimuleert licht de verbranding.",
-            helpsWith: ["Water niet lekker vinden (hydratatie verhogen)", "Lichte middagdip", "Vocht vasthouden"],
-            conditions: ["Bij wie moeite heeft met 2L water halen per dag"],
-            caution: "Bevat cafeïne. Max 2-3 porties per dag. Niet na 17u."
+        "243K": { // Active Mind Complex
+            how: "Brein-supplement met Cognivia™-salie-extract, ginkgo, B-vitaminen. Ondersteunt geheugen, alertheid en mentale helderheid.",
+            helpsWith: ["Vergeetachtigheid", "Mentale vermoeidheid", "Concentratieverlies 50+", "Brain-fog na menopauze"],
+            conditions: ["Beginnende geheugenklachten 50+", "Drukke kenniswerkers", "Hersenmist na COVID (ondersteunend)"],
+            caution: "Bij bloedverdunners of epilepsiemedicatie: overleg met arts. Niet tijdens zwangerschap."
         },
-        "1433": { // H3O Pro
-            how: "Sport-hydratatie met elektrolyten en B-vitaminen. Geen suiker, geen cafeïne. Vervangt verloren mineralen bij transpiratie.",
-            helpsWith: ["Kramp tijdens sport", "Dehydratatie in de zomer", "Hoofdpijn na training"],
-            conditions: ["Sporters met lange duurinspanning", "Bij hitte / koorts"],
-            caution: "Niet nodig bij sedentaire levensstijl (gewoon water volstaat)."
+        "173K": { // Microbiotic Max (20 zakjes)
+            how: "Probiotica (5 miljard CFU — LGG + Bifidus) + prebiotische vezels in poedervorm. Herstelt darmflora na antibiotica, stress of slecht dieet.",
+            helpsWith: ["Na antibioticakuur", "Diarree of constipatie-afwisseling (IBS)", "Reizigersdiarree-preventie", "Slechte weerstand", "Huidklachten (darm-huid-as)"],
+            conditions: ["IBS", "Na antibiotica", "Chronische vermoeidheid met darmklachten", "Candida (ondersteunend)"],
+            caution: "Bij ernstig verzwakt immuunsysteem: overleg arts. Niet tegelijk met hete dranken (doodt bacteriën)."
         },
-        "0113": { // Cr7 Drive
+        "233K": { // Immune Booster (21 zakjes)
+            how: "Dagelijks poedertje met vit C, vit D, zink, selenium, bètaglucanen (EpiCor®). Onderbouwd immuunsysteem, niet acuut genezend maar preventief.",
+            helpsWith: ["Vaak verkouden zijn", "Lage weerstand door stress", "Winter-moeheid", "Na ziekte herstel"],
+            conditions: ["Herhaalde luchtweginfecties", "Stress-gerelateerde lage weerstand", "Drukke coaches/ouders"],
+            caution: "Bevat vit A — niet overdoseren tijdens zwangerschap."
+        },
+        "0043": { // Herbalifeline Max
+            how: "Visolie met hoge dosering EPA + DHA (omega-3) en gember-extract. Ontstekingsremmend en hart/hersen-ondersteunend. Hogere concentratie dan standaard visolie.",
+            helpsWith: ["Droge huid / droge ogen", "Stijve gewrichten", "Stemmings-dipjes", "Concentratieproblemen", "Hoge triglyceriden"],
+            conditions: ["Reumatische aandoeningen (ondersteunend)", "Hoge cholesterol/triglyceriden", "Menopauze-stemming", "ADHD-ondersteunend"],
+            caution: "Bij bloedverdunners overleg met arts. Bevat vis (allergeen). Bewaar koel."
+        },
+        "2554": { // Multivezel Drank
+            how: "6 gecombineerde vezels (haver, appel, maïs, citrus, soja, cellulose). Voedt goede darmflora en verbetert stoelgang. Oplosbare + onoplosbare vezels.",
+            helpsWith: ["Constipatie", "Onregelmatige stoelgang", "Opgeblazen gevoel", "Hongergevoel tussen maaltijden"],
+            conditions: ["IBS met constipatie", "Lage vezelinname (<25g/dag)", "Divertikels (in rustige fase)", "Hoog cholesterol (oplosbare vezels binden gal)"],
+            caution: "Start met halve portie en bouw op — anders eerst meer winderigheid. Drink 500ml water erbij anders verstopping. Niet bij actieve diverticulitis."
+        },
+        "0267": { // Beta Heart Vanille 229g
+            how: "OatWell® beta-glucan (haver) + ijzer + vit C. Beta-glucan verlaagt LDL-cholesterol klinisch bewezen (3g/dag). Oplosbaar in water of shake.",
+            helpsWith: ["Hoog cholesterol", "Hartgezondheid-preventie", "Constipatie (vezelrijk)"],
+            conditions: ["Familiegeschiedenis hart-/vaatziekten", "Prediabetes", "Metabool syndroom", "Hoog LDL ondanks dieet"],
+            caution: "Bevat haver — mogelijke gluten-kruiscontaminatie. Bij statines overleg met arts i.v.m. mogelijke dosering-aanpassing."
+        },
+        "2039": { // F2 Vitaminen VROUWEN
+            how: "25+ vitaminen/mineralen specifiek gedoseerd voor vrouwen: extra ijzer (14 mg), foliumzuur, calcium. Dekt 100% RDA voor vrouwen 18-55.",
+            helpsWith: ["Vermoeidheid / bleekheid (ijzertekort)", "Haaruitval", "Menstruatieklachten", "Broze nagels/haar", "Weinig groenten/fruit eten"],
+            conditions: ["Bloedarmoede (licht)", "Zwangerschapswens (foliumzuur)", "Menopauze", "Vegetariërs (ijzer)"],
+            caution: "Bij zwangerschap: arts/vroedvrouw overleggen i.v.m. vitamine A-dosering. Niet met andere ijzersupplementen combineren."
+        },
+        "1746": { // F2 Vitaminen MANNEN
+            how: "Multivitamine voor mannen met extra zink en selenium, geen ijzer (mannen hebben dat zelden nodig). Ondersteunt energie, weerstand en testosteron-conversie.",
+            helpsWith: ["Vermoeidheid", "Lage weerstand", "Testosteron-ondersteuning (zink)", "Slechte wondheling"],
+            conditions: ["Drukke job + weinig groenten", "Sporters met verhoogde behoefte", "Vegetarische mannen"],
+            caution: "Niet combineren met andere zinksupplementen (overdosering)."
+        },
+        "0020": { // Xtra-Cal
+            how: "Calcium (800 mg) + vit D3 + magnesium + koper. Ondersteunt botten, tanden en spierfunctie.",
+            helpsWith: ["Krampen in kuiten 's nachts", "Zwakke nagels/haar", "Bot-densiteit bij vrouwen 50+"],
+            conditions: ["Osteoporose-preventie", "Menopauze", "Lactose-intolerantie (geen zuivel → calciumtekort)", "Tienermeisjes (bot-pieck op 25j)"],
+            caution: "Niet samen met ijzersupplement — 2u tussen houden. Bij nierstenen-historie overleg arts."
+        },
+        "3150": { // Niteworks
+            how: "L-Arginine + L-Citrulline die stikstofmonoxide (NO) in het lichaam verhogen. NO verwijdt bloedvaten en ondersteunt nachtelijk herstel + doorbloeding.",
+            helpsWith: ["Slecht doorbloede handen/voeten", "Vermoeidheid bij 50+", "Hart-vasculair welzijn", "Erectie-problemen (licht)"],
+            conditions: ["Hoge bloeddruk (ondersteunend, met arts)", "Claudicatio (etalage-benen)", "Metabool syndroom"],
+            caution: "Niet tegelijk met bloeddrukmedicatie zonder overleg. Niet tijdens zwangerschap. Innemen 30 min voor bed, op lege maag."
+        },
+        "3152": { // Lift Off Citroen (10 tab)
+            how: "Bruistablet met cafeïne (75 mg), B-vitaminen, taurine en L-carnitine. Snelle energie-boost, klaar in 30 sec opgelost.",
+            helpsWith: ["Middagdip zonder koffie in de buurt", "Pre-workout energie", "Lange autorit / jetlag"],
+            conditions: ["Drukke coaches tussen klanten", "Sporters pre-workout"],
+            caution: "Bevat cafeïne. Niet na 16u. Niet bij hartkloppingen, hoge bloeddruk, zwangerschap. Max 2/dag."
+        },
+        "076K": { // SKIN Collageen Booster
+            how: "Verisol®-hydrolyseerd collageen peptiden + biotine + zink + vit C. Klinisch getest voor huidelasticiteit en vermindering van rimpels na 8 weken.",
+            helpsWith: ["Rimpels / huidveroudering", "Brokkelige nagels", "Haaruitval", "Droge huid", "Cellulite (ondersteunend)"],
+            conditions: ["Vrouwen 35+ (collageenproductie daalt)", "Na grote gewichtsafname (huidherstel)", "Post-menopauze huid-veroudering"],
+            caution: "Bevat vis-collageen (allergeen)."
+        },
+
+        // ================= HERBALIFE 24 =================
+        "488K": { // H24 Creatine Plus
+            how: "Creatine-monohydraat + glutamine + BCAA. Verhoogt ATP-productie in spieren voor kracht-explosies en versnelt herstel.",
+            helpsWith: ["Kracht-plateau in gym", "Trage recuperatie", "Spieropbouw", "Uithoudingsvermogen in korte herhalingen"],
+            conditions: ["Krachtsporters", "Bodybuilding", "Sarcopenie (50+ spiermassabehoud)"],
+            caution: "Drink voldoende water (3L+). Niet bij nierproblemen. Laadfase optioneel, onderhoudsdosis 3-5g/dag."
+        },
+        "402K": { // ProLong Energy gel
+            how: "Koolhydraatgel met elektrolyten voor tijdens lange inspanningen (>90 min). Snelle suikers voor spieren, voorkomt 'hunger knock'.",
+            helpsWith: ["Energiedip tijdens lange cardio", "Duursport wedstrijden", "Wielertochten/marathons"],
+            conditions: ["Duur-atleten", "Triathlon", "Lange wielerritten"],
+            caution: "Bevat suikers — niet buiten training gebruiken. Drink water erbij."
+        },
+        "403K": { // H24 Rebuild Strength Choco
+            how: "Post-workout recuperatie-shake met 25g whey, casein-mix (trage eiwitten) en koolhydraten. Start herstel binnen 30 min na krachttraining.",
+            helpsWith: ["Spierpijn na training", "Trage recuperatie", "Kracht- en massaopbouw"],
+            conditions: ["Krachttraining 3-5×/week", "Bodybuilding", "Sporters in massafase"],
+            caution: "Bevat wei en melk."
+        },
+        "486K": { // H24 Rebuild Strength zakjes
+            how: "Single-serve versie van Rebuild Strength voor op de sportzak.",
+            helpsWith: ["Direct post-workout in de gym", "Reizen met sportclub", "Starters"],
+            conditions: ["Sporters onderweg"],
+            caution: "Bevat wei en melk."
+        },
+        "192K": { // H24 LiftOff Max Grapefruit
+            how: "Pre-workout energiedrank met cafeïne (100 mg), taurine, B-vitaminen en L-carnitine. Verhoogt alertheid, focus en vetverbranding tijdens training.",
+            helpsWith: ["Moeite om te starten met training", "Vroege ochtendtraining", "Vetverbrandings-training"],
+            conditions: ["Sporters met middagdip", "HIIT-trainers"],
+            caution: "Bevat cafeïne. Niet na 16u. Niet bij hartproblemen, zwangerschap, hoge bloeddruk."
+        },
+        "149K": { // H24 Achieve Repen Cookie Dough
+            how: "Eiwitreep (20g eiwit) met koekdeeg-smaak voor na de training of als eiwitsnack. Hoger eiwit dan gewone Proteïnereep.",
+            helpsWith: ["Post-workout eiwit", "Lunch-vervanger sporters", "Eiwitsnack 's avonds"],
+            conditions: ["Krachtsporters", "Spieropbouw"],
+            caution: "Bevat melk, soja, noten."
+        },
+        "150K": { // H24 Achieve Repen Pure Choco
+            how: "Zelfde H24-reep met pure chocolade-coating. 20g eiwit, minder zoet dan Cookie Dough.",
+            helpsWith: ["Post-workout eiwit", "Chocolade-liefhebbers"],
+            conditions: ["Krachtsporters"],
+            caution: "Bevat melk en soja."
+        },
+        "1466": { // CR7 Drive Açai Bessen 540g
             how: "Sport-drink met koolhydraten + elektrolyten voor tijdens of vlak vóór training. Ontworpen met Cristiano Ronaldo voor duursport.",
             helpsWith: ["Energie tijdens lange trainingen (>60 min)", "Recupereren tijdens wedstrijden"],
-            conditions: ["Duur-atleten", "Teamsport met lange wedstrijden"],
-            caution: "Bevat suikers — niet geschikt als afslankshake, wel als performance-drink."
+            conditions: ["Duur-atleten", "Teamsport met lange wedstrijden", "Voetbal / hockey"],
+            caution: "Bevat suikers — niet geschikt als afslankshake, wel als performance-drink tijdens inspanning."
         },
-        "0050": { // Iced Coffee
-            how: "Instant ijskoffie met 15g plantaardige eiwit per portie. Caloriearme alternatief voor frappuccino/cappuccino met suiker.",
-            helpsWith: ["Koffie-liefhebbers die willen afvallen", "Snelle eiwitboost tussendoor", "Energie zonder suiker-crash"],
-            conditions: ["Suikerverslaving overdag"],
-            caution: "Bevat cafeïne."
+        "1467": { // CR7 Drive zakjes
+            how: "Single-serve CR7 Drive voor in de sporttas.",
+            helpsWith: ["Wedstrijd-dagen", "Team-sporters onderweg"],
+            conditions: ["Teamsport"],
+            caution: "Zelfde als grote pot."
         },
-        "0068": { // Beta Heart
-            how: "Bevat OatWell beta-glucan (hartvriendelijk) + ijzer. Verlaagt LDL-cholesterol en draagt bij aan een gezonde bloedsomloop.",
-            helpsWith: ["Hoog cholesterol", "Hartgezondheid-preventie", "Constipatie (vezelrijk)"],
-            conditions: ["Familiegeschiedenis hart- en vaatziekten", "Prediabetes"],
-            caution: "Bevat haver (gluten-kruiscontaminatie mogelijk)."
+        "1433": { // H24 Hydrate Sinaasappel
+            how: "Sport-hydratatie met elektrolyten en B-vitaminen. Geen suiker, geen cafeïne. Vervangt verloren mineralen bij transpiratie.",
+            helpsWith: ["Kramp tijdens sport", "Dehydratatie in de zomer", "Hoofdpijn na training"],
+            conditions: ["Sporters met lange duurinspanning", "Bij hitte / koorts", "Sauna-gebruikers"],
+            caution: "Niet nodig bij sedentaire levensstijl (gewoon water volstaat)."
         },
-        "2633": { // Niteworks
-            how: "L-Arginine + L-Citrulline die stikstofmonoxide (NO) in het lichaam verhogen. NO verwijdt bloedvaten en ondersteunt nachtelijk herstel.",
-            helpsWith: ["Slecht doorbloede handen/voeten", "Vermoeidheid bij 50+", "Hart-vasculair welzijn"],
-            conditions: ["Hoge bloeddruk (ondersteunend, met arts)", "Erectieproblemen (licht ondersteunend)"],
-            caution: "Niet gelijktijdig met bloeddrukmedicatie zonder overleg. Innemen 30 min voor het slapengaan."
+
+        // ================= SKIN & BODY =================
+        "539K": { // HL/Skin Revitaliserende Nachtcrème
+            how: "Nachtcrème met peptides en vit B3 (niacinamide). Ondersteunt nachtelijk huidherstel, vermindert lijntjes bij langdurig gebruik.",
+            helpsWith: ["Eerste rimpels", "Vermoeide huid 's ochtends", "Droge huid"],
+            conditions: ["Huid-veroudering (35+)", "Menopauze-huid", "Na stressperiodes"],
+            caution: "Extern gebruik. Vermijd ogen. Combineer met SPF overdag."
         },
-        "1465": { // Xtra-cal
-            how: "Calcium + vitamine D + magnesium + koper. Ondersteunt botten, tanden en spierfunctie.",
-            helpsWith: ["Krampen in kuiten 's nachts", "Zwakke nagels/haar", "Bot-densiteit bij vrouwen 50+"],
-            conditions: ["Osteoporose-preventie", "Menopauze", "Lactose-intolerantie (geen zuivel → calciumtekort)"],
-            caution: "Niet samen met ijzer-supplement — 2u tussen houden voor optimale opname."
+        "508K": { // HL/Skin 10% Niacinamide Serum
+            how: "Geconcentreerd serum met 10% niacinamide. Verkleint poriën, reguleert talg, egaliseert huidtint en vermindert roodheid.",
+            helpsWith: ["Grove poriën", "Vette T-zone", "Roodheid / rosacea (mild)", "Pigmentvlekken"],
+            conditions: ["Vette huid / acne-gevoelig", "Rosacea (mild)", "Post-inflammatoire hyperpigmentatie"],
+            caution: "Niet tegelijk met vit C-serum (neutraliseert werking) — 's ochtends vit C, 's avonds niacinamide. Bij gevoelige huid: om de dag starten."
         },
-        "3296": { // Collagen Skin Booster
-            how: "Verisol® hydrolysed collageen peptiden met biotine, zink en vitamine C. Klinisch getest voor huidelasticiteit.",
-            helpsWith: ["Rimpels / huidveroudering", "Brokkelige nagels", "Haaruitval", "Droge huid"],
-            conditions: ["Vrouwen 35+ (natuurlijke collageenproductie daalt)", "Na lange periode van afvallen (huid herstel)"],
-            caution: "Bevat vis-collageen."
-        },
-        "0035": { // Fiber Complex
-            how: "6 gecombineerde vezels (haver, appel, maïs, citrus, soja, cellulose). Voedt goede darmflora en verbetert stoelgang.",
-            helpsWith: ["Constipatie", "Onregelmatige stoelgang", "Opgeblazen gevoel", "Hongergevoel tussen maaltijden"],
-            conditions: ["IBS met constipatie", "Lage vezelinname (<25g/dag)"],
-            caution: "Start met halve portie en bouw op — anders kan je eerst meer winderigheid ervaren. Drink voldoende water erbij."
-        },
-        "3146": { // Prelox
-            how: "Franse pijnschors-extract (Pycnogenol) + L-arginine. Ondersteunt vasculaire gezondheid en erectiele functie bij mannen.",
-            helpsWith: ["Erectiele dysfunctie (licht tot matig)", "Vermoeidheid 50+", "Bloedsomloop"],
-            conditions: ["Vasculaire stoornissen", "Mannen 40+"],
-            caution: "Niet combineren met bloedverdunners zonder overleg."
-        },
-        "0292": { // Skin Booster (drink)
-            how: "Drink met collageen + vit A/C/E + biotine + zink. Dubbele werking: hydrateert en stimuleert huideigen collageen.",
-            helpsWith: ["Doffe huid", "Eerste rimpels", "Verzwakte nagels"],
-            conditions: ["Vroegtijdige huidveroudering (zon / stress)"],
-            caution: "Bevat visgelatine."
-        },
-        "2561": { // Aloë Body Wash
-            how: "Milde zeep met 40% Aloë. Sulfaatvrij — beschadigt de huidbarrière niet.",
-            helpsWith: ["Droge huid na douchen", "Gevoelige huid"],
-            conditions: ["Eczeem / droge huid (onderhoud)"],
-            caution: "Extern gebruik — niet inslikken."
-        },
-        "2562": { // Aloë Soothing Gel
-            how: "Pure Aloë-gel zonder alcohol. Koelend effect op geïrriteerde huid.",
-            helpsWith: ["Zonnebrand", "Insectenbeten", "Irritatie na scheren", "Lichte huiduitslag"],
-            conditions: ["Lichte zonnebrand", "Geïrriteerde huid"],
-            caution: "Bij ernstige brandwonden: naar de arts."
-        },
-        "2564": { // Aloë Shampoo
-            how: "Reinigende shampoo met Aloë en tarwe-eiwit.",
-            helpsWith: ["Droge hoofdhuid", "Broos haar", "Haarbreuk"],
-            conditions: ["Na chemische haarbehandelingen (verven/ontkleuren)"],
+        "511K": { // HL/Skin Vernieuwende Gel Cleanser
+            how: "Zachte schuimende cleanser met aloë en vit E. Verwijdert make-up en vuil zonder de huidbarrière uit te drogen.",
+            helpsWith: ["Dagelijkse reiniging", "Make-up verwijdering", "Gevoelige huid"],
+            conditions: ["Alle huidtypes"],
             caution: "Vermijd ogen."
         },
-        "2565": { // Aloë Conditioner
-            how: "Voedende crèmespoeling voor beschadigd haar.",
-            helpsWith: ["Pluizig haar", "Droge punten", "Onhandelbaar haar"],
-            conditions: ["Gekleurd haar", "Zonbeschadigd haar"],
+        "513K": { // HL/Skin Versterkende Crème
+            how: "Dagcrème met peptiden en antioxidanten. Versterkt huidbarrière en beschermt tegen omgevingsschade.",
+            helpsWith: ["Dorre, droge huid", "Gevoeligheid voor weer/wind", "Eerste tekenen van veroudering"],
+            conditions: ["Gevoelige huid", "Menopauze-droogte"],
+            caution: "Extern. Combineer met SPF."
+        },
+        "514K": { // HL/Skin Hand/Bodylotion
+            how: "Hydraterende body-lotion met Aloë en shea-butter. Trekt snel in, plakt niet.",
+            helpsWith: ["Droge benen / armen na douchen", "Ruwe handen", "Winter-droogte"],
+            conditions: ["Droge huid", "Oudere huid"],
             caution: "Extern gebruik."
+        },
+        "515K": { // HL/Skin Voedende Oogcrème
+            how: "Specifieke formule voor de dunne huid rondom ogen. Met cafeïne en peptiden: vermindert wallen en donkere kringen.",
+            helpsWith: ["Wallen 's ochtends", "Donkere kringen", "Kraaienpootjes"],
+            conditions: ["Slecht slapen", "Vroegtijdige huid-veroudering rond ogen"],
+            caution: "Vermijd contact met oogbol. Dun laagje volstaat."
+        },
+        "0765": { // SKIN Verzachtende Aloë Cleanser
+            how: "Melkachtige cleanser met Aloë voor gevoelige of rijpe huid. Verwijdert make-up zonder te schuimen — minder uitdrogend.",
+            helpsWith: ["Gevoelige huid", "Rijpe huid", "Eczeem-neigende huid"],
+            conditions: ["Rosacea", "Menopauze-huid", "Droge huid"],
+            caution: "Extern. Volg op met toner."
+        },
+        "0767": { // SKIN Verfrissende Toner
+            how: "Alcoholvrije toner met kruidenextracten. Herstelt pH-balans van huid na reiniging en bereidt voor op serum.",
+            helpsWith: ["Strak gevoel na reiniging", "Ongelijke huidtint"],
+            conditions: ["Alle huidtypes"],
+            caution: "Vermijd ogen."
+        },
+        "0770": { // SKIN Verstevigende Ooggel
+            how: "Lichte gel (ipv crème) voor onder de ogen. Koelend effect, bevat peptiden tegen wallen.",
+            helpsWith: ["Wallen", "Vermoeide ogen", "Fijne lijntjes"],
+            conditions: ["Beeldschermwerk", "Slecht slapen"],
+            caution: "Bewaar in koelkast voor extra koelend effect."
+        },
+        "0773": { // SKIN Zuiverend Kleimasker
+            how: "Kaolin-kleimasker (1-2×/week). Trekt onzuiverheden uit poriën, reguleert talg.",
+            helpsWith: ["Grove poriën", "Vette T-zone", "Mee-eters", "Onzuiverheden"],
+            conditions: ["Vette huid / acne-neigend", "Tieners/jongvolwassenen"],
+            caution: "Max 2×/week. Niet bij ernstige rosacea of actieve acne-puisten."
+        },
+        "0827": { // SKIN Herstellende Nachtcrème
+            how: "Rijke nachtcrème met retinol-alternatief en peptiden. Werkt terwijl je slaapt aan celvernieuwing.",
+            helpsWith: ["Rimpels", "Ongelijke huidtint", "Doffe huid"],
+            conditions: ["Huid-veroudering 35+", "Na zonneschade"],
+            caution: "Extern. Start om de avond bij gevoelige huid. Altijd SPF overdag."
+        },
+        "0828": { // SKIN Beschermende Moisturiser SPF 30
+            how: "Dagcrème + SPF 30 breed-spectrum. 2-in-1: hydrateert én beschermt tegen UV-veroudering (#1 oorzaak rimpels).",
+            helpsWith: ["Dagelijkse UV-bescherming", "Rimpel-preventie", "Pigmentvlekken-preventie"],
+            conditions: ["Alle huidtypes vanaf 20j", "Mensen die buiten werken", "Huidkanker-preventie"],
+            caution: "Hernieuw elke 2u bij zonblootstelling. Niet vervangen door oogcrème (te dikke textuur rond ogen)."
+        },
+        "0829": { // SKIN Lijn Minimaliserend Serum
+            how: "Serum met peptidencomplex gericht op rimpel-reductie. Hogere concentratie werkzame stoffen dan een crème.",
+            helpsWith: ["Fronsrimpels", "Kraaienpootjes", "Nasolabiale plooien (licht)"],
+            conditions: ["Zichtbare rimpels 40+", "Na grote gewichtsafname"],
+            caution: "Pas aan voor SPF — maakt huid gevoeliger voor zon."
+        },
+        "0830": { // SKIN Dagelijkse Glow Moisturizer
+            how: "Lichte dagcrème met mica-partikels voor een subtiele glow. Ideaal onder make-up.",
+            helpsWith: ["Doffe huid", "Grauwe teint", "Snelle ochtendroutine"],
+            conditions: ["Vermoeide huid", "Drukke ochtenden"],
+            caution: "Geen SPF erin — apart toevoegen."
+        },
+        "2561": { // Herbal Aloë Hand & Body Wash
+            how: "Milde zeep met 40% Aloë. Sulfaatvrij — beschadigt de huidbarrière niet.",
+            helpsWith: ["Droge huid na douchen", "Gevoelige huid", "Dagelijkse handenwas"],
+            conditions: ["Eczeem / droge huid (onderhoud)", "Verpleegkundigen / zorg (veel handen wassen)"],
+            caution: "Extern gebruik — niet inslikken."
+        },
+        "2562": { // Herbal Aloë Soothing Gel
+            how: "Pure Aloë-gel zonder alcohol. Koelend effect op geïrriteerde huid. Veilig voor gezicht en lichaam.",
+            helpsWith: ["Zonnebrand", "Insectenbeten", "Irritatie na scheren", "Lichte huiduitslag", "Na wax"],
+            conditions: ["Lichte zonnebrand", "Geïrriteerde huid"],
+            caution: "Bij ernstige brandwonden: naar de arts. Niet in open wonden."
+        },
+        "2564": { // Herbal Aloë Shampoo
+            how: "Reinigende shampoo met Aloë en tarwe-eiwit. Sulfaatvrij — veilig voor gekleurd haar.",
+            helpsWith: ["Droge hoofdhuid", "Broos haar", "Haarbreuk"],
+            conditions: ["Na chemische haarbehandelingen (verven/ontkleuren)", "Gevoelige hoofdhuid"],
+            caution: "Vermijd ogen."
+        },
+        "2565": { // Herbal Aloë Conditioner
+            how: "Voedende crèmespoeling voor beschadigd haar. Bevat Aloë en tarwe-eiwit voor versteviging van de haarschacht.",
+            helpsWith: ["Pluizig haar", "Droge punten", "Onhandelbaar haar"],
+            conditions: ["Gekleurd haar", "Zonbeschadigd haar", "Na zwembad-gebruik"],
+            caution: "Extern gebruik. Spoel goed uit."
         }
     };
 
