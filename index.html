@@ -471,6 +471,10 @@
             </div>
             
             <button class="btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;" onclick="loginUser()">Veilig Inloggen</button>
+
+            <div style="text-align:center; margin-top:14px;">
+                <a href="javascript:void(0)" onclick="sendResetFromLogin()" style="font-size:0.85rem; color:#2563eb; text-decoration:none;">Wachtwoord vergeten / nieuw account activeren</a>
+            </div>
         </div>
     </div>
 
@@ -569,6 +573,7 @@
             <li><button class="nav-btn" onclick="switchView('view-catalog', this)"><span class="nav-icon">📗</span> Product Info</button></li>
             <li><button class="nav-btn" onclick="switchView('view-recepten', this)"><span class="nav-icon">🍳</span> Recepten</button></li>
             <li><button class="nav-btn" onclick="switchView('view-testimonials', this)"><span class="nav-icon">⭐</span> Testimonials</button></li>
+            <li id="nav-admin" style="display:none;"><button class="nav-btn" onclick="switchView('view-admin', this); renderAdmin();"><span class="nav-icon">🛡️</span> Beheer</button></li>
         </ul>
         <div class="nav-footer">
             <button class="nav-btn logout-btn" onclick="logoutUser()"><span class="nav-icon">🚪</span> Veilig Uitloggen</button>
@@ -1227,6 +1232,42 @@
             <div style="padding: 24px 28px 40px; overflow-y:auto;">
                 <p style="margin:0 0 20px 0; color:var(--text-muted); font-size:0.9rem;">Gebruik deze succesverhalen als inspiratie voor je nieuwe klanten. De resultaten spreken voor zich!</p>
                 <div class="testi-grid" id="testi-grid"></div>
+            </div>
+        </div>
+
+        <div id="view-admin" class="view">
+            <div class="page-header">
+                <div>
+                    <h1>🛡️ Beheer — Coaches &amp; Teams</h1>
+                    <div class="muted">Maak een nieuw team aan voor een externe coach. Alleen jij ziet deze pagina.</div>
+                </div>
+            </div>
+            <div style="padding: 24px 28px 40px; overflow-y:auto;">
+                <div class="card" style="padding:20px; max-width:560px;">
+                    <h3 style="margin-top:0;">➕ Nieuwe coach uitnodigen</h3>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 16px 0;">
+                        De coach krijgt een email om zijn/haar wachtwoord in te stellen. Daarna logt hij/zij in op deze app
+                        en ziet enkel het eigen team — geen toegang tot HBL-Connect data.
+                    </p>
+                    <div class="form-group" style="text-align:left;">
+                        <label>Team-naam (bv. <code>HBL Maria</code>)</label>
+                        <input type="text" id="admin-team-name" placeholder="HBL Maria" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label>Naam van de coach</label>
+                        <input type="text" id="admin-coach-name" placeholder="Maria" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label>Email van de coach</label>
+                        <input type="email" id="admin-coach-email" placeholder="maria@example.com" style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    </div>
+                    <div id="admin-error" style="display:none; color:var(--danger); background:var(--danger-soft); padding:10px 14px; border-radius:var(--radius-sm); font-size:0.85rem; margin-bottom:12px;"></div>
+                    <div id="admin-success" style="display:none; color:var(--success); background:#d1fae5; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.85rem; margin-bottom:12px;"></div>
+                    <button class="btn-success" style="width:100%; padding:12px;" onclick="adminCreateTeam()">📨 Account aanmaken &amp; uitnodiging sturen</button>
+                </div>
+
+                <h3 style="margin:32px 0 12px 0;">Bestaande teams</h3>
+                <div id="admin-teams-list" style="display:flex; flex-direction:column; gap:10px;"></div>
             </div>
         </div>
 
@@ -2047,14 +2088,272 @@
     let clients = {};
     let currentClientId = null;
     let lastLoadedClientId = null;
-    
+
     let myStock = {};
     let salesHistory = [];
     let personalUse = [];
     let collapsedCats = {};
     let currentCatFilter = "Alles";
-    
+
     let unsubClients, unsubStock;
+
+    // ---------- Multi-tenant: Team-state ----------
+    // Een Team bundelt 1 of meerdere coaches en de emails die toegang hebben.
+    // Bestaande data van Andreas/Thalyssa/Silvia leeft op coaches/{naam}/... .
+    // Externe coaches krijgen een unieke coach-id (slug van team-naam).
+    let currentTeam = null;
+    let currentTeamId = null;
+    const HOME_TEAM_ID = 'hbl-connect';
+    const OWNER_EMAIL = 'andreasphilips3@gmail.com';
+    const FOUNDER_COACHES = [
+        { id: 'Andreas',  displayName: 'Andreas',  email: 'andreasphilips3@gmail.com' },
+        { id: 'Thalyssa', displayName: 'Thalyssa', email: 'thalyssaberx@gmail.com' },
+        { id: 'Silvia',   displayName: 'Silvia',   email: 'consil.silvia@gmail.com' }
+    ];
+    const FOUNDER_EMAILS = FOUNDER_COACHES.map(c => c.email.toLowerCase());
+
+    async function loadOrBootstrapTeam(user) {
+        const email = (user.email || '').toLowerCase();
+        if(!email) return null;
+        try {
+            // Zoek team waar deze email in allowedEmails zit
+            const snap = await db.collection('teams')
+                .where('allowedEmails', 'array-contains', email)
+                .limit(1).get();
+            if(!snap.empty) {
+                const doc = snap.docs[0];
+                currentTeamId = doc.id;
+                currentTeam = doc.data();
+                return currentTeam;
+            }
+        } catch(e) {
+            console.warn('Team-lookup faalde', e);
+        }
+        // Bootstrap home-team als gebruiker een founder is
+        if(FOUNDER_EMAILS.includes(email)) {
+            const homeTeam = {
+                name: 'HBL-Connect',
+                allowedEmails: FOUNDER_EMAILS.slice(),
+                coaches: FOUNDER_COACHES.slice(),
+                ownerEmail: OWNER_EMAIL,
+                isHomeTeam: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            await db.collection('teams').doc(HOME_TEAM_ID).set(homeTeam, { merge: true });
+            currentTeamId = HOME_TEAM_ID;
+            currentTeam = homeTeam;
+            return currentTeam;
+        }
+        return null;
+    }
+
+    function populateCoachSelector() {
+        const sel = document.getElementById('coach-selector');
+        const box = document.querySelector('.coach-box');
+        if(!sel || !currentTeam || !currentTeam.coaches) return;
+        sel.innerHTML = '';
+        currentTeam.coaches.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.displayName || c.id;
+            sel.appendChild(opt);
+        });
+        // Verberg coach-keuze als team maar 1 coach heeft (externe solo-coaches)
+        if(currentTeam.coaches.length <= 1) {
+            if(box) box.style.display = 'none';
+        } else {
+            if(box) box.style.display = '';
+            // Selecteer automatisch de coach die hoort bij ingelogde email
+            const user = auth.currentUser;
+            const my = user && currentTeam.coaches.find(c => c.email && c.email.toLowerCase() === user.email.toLowerCase());
+            if(my) sel.value = my.id;
+        }
+    }
+
+    function isTeamOwner() {
+        const user = auth.currentUser;
+        return !!user && (user.email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
+    }
+    function updateAdminVisibility() {
+        const link = document.getElementById('nav-admin');
+        if(link) link.style.display = isTeamOwner() ? '' : 'none';
+    }
+
+    function slugify(s) {
+        return (s || '').toLowerCase().trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 40) || 'team';
+    }
+
+    async function uniqueTeamId(base) {
+        let id = base, n = 1;
+        while(true) {
+            const doc = await db.collection('teams').doc(id).get();
+            if(!doc.exists) return id;
+            n += 1;
+            id = `${base}-${n}`;
+            if(n > 50) throw new Error('Kon geen unieke team-id vinden');
+        }
+    }
+
+    async function createCoachFirebaseUser(email, password) {
+        // Tweede Firebase-app instance zodat we niet uitloggen als huidige admin
+        const appName = 'secondary_' + Date.now();
+        const secondary = firebase.initializeApp(firebaseConfig, appName);
+        try {
+            await secondary.auth().createUserWithEmailAndPassword(email, password);
+            await secondary.auth().signOut();
+        } finally {
+            await secondary.delete();
+        }
+    }
+
+    async function adminCreateTeam() {
+        if(!isTeamOwner()) return;
+        const errDiv = document.getElementById('admin-error');
+        const okDiv  = document.getElementById('admin-success');
+        errDiv.style.display = 'none';
+        okDiv.style.display = 'none';
+
+        const teamName  = (document.getElementById('admin-team-name').value || '').trim();
+        const coachName = (document.getElementById('admin-coach-name').value || '').trim();
+        const email     = (document.getElementById('admin-coach-email').value || '').trim().toLowerCase();
+
+        if(!teamName || !coachName || !email) {
+            errDiv.innerText = 'Vul alle 3 de velden in.';
+            errDiv.style.display = 'block';
+            return;
+        }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            errDiv.innerText = 'Ongeldig email-adres.';
+            errDiv.style.display = 'block';
+            return;
+        }
+
+        try {
+            // Check of email al in een team zit
+            const dup = await db.collection('teams')
+                .where('allowedEmails', 'array-contains', email)
+                .limit(1).get();
+            if(!dup.empty) {
+                errDiv.innerText = 'Deze email zit al in een ander team.';
+                errDiv.style.display = 'block';
+                return;
+            }
+
+            const baseId  = slugify(teamName);
+            const teamId  = await uniqueTeamId(baseId);
+            const coachId = teamId + '-coach';
+
+            // 1) Maak Firebase Auth-account met random tijdelijk wachtwoord (via secondary app)
+            const tempPwd = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + 'Aa1!';
+            await createCoachFirebaseUser(email, tempPwd);
+
+            // 2) Stuur reset-link zodat coach z'n eigen wachtwoord kiest
+            await auth.sendPasswordResetEmail(email);
+
+            // 3) Maak Team-doc
+            await db.collection('teams').doc(teamId).set({
+                name: teamName,
+                allowedEmails: [email],
+                coaches: [{ id: coachId, displayName: coachName, email }],
+                ownerEmail: OWNER_EMAIL,
+                isHomeTeam: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: (auth.currentUser && auth.currentUser.email) || ''
+            });
+
+            // 4) Maak lege coach-doc voor inventory-subcollectie
+            await db.collection('coaches').doc(coachId).set({
+                teamId, displayName: coachName, email, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+
+            okDiv.innerText = `Account aangemaakt voor ${coachName} (${email}). Er is een email gestuurd om het wachtwoord in te stellen.`;
+            okDiv.style.display = 'block';
+            document.getElementById('admin-team-name').value = '';
+            document.getElementById('admin-coach-name').value = '';
+            document.getElementById('admin-coach-email').value = '';
+            renderAdmin();
+        } catch(e) {
+            console.error('adminCreateTeam', e);
+            let msg = 'Aanmaken mislukt: ' + (e.message || e.code || 'onbekende fout');
+            if(e.code === 'auth/email-already-in-use') {
+                msg = 'Deze email heeft al een Firebase-account. Voeg de bestaande gebruiker toe aan een team via de database, of gebruik een ander email-adres.';
+            }
+            errDiv.innerText = msg;
+            errDiv.style.display = 'block';
+        }
+    }
+
+    async function renderAdmin() {
+        if(!isTeamOwner()) return;
+        const wrap = document.getElementById('admin-teams-list');
+        if(!wrap) return;
+        wrap.innerHTML = '<div class="muted">Laden…</div>';
+        try {
+            const snap = await db.collection('teams').orderBy('createdAt', 'desc').get();
+            if(snap.empty) {
+                wrap.innerHTML = '<div class="muted">Nog geen teams.</div>';
+                return;
+            }
+            const rows = [];
+            snap.forEach(doc => {
+                const t = doc.data();
+                const coaches = (t.coaches || []).map(c => c.displayName || c.id).join(', ');
+                const emails  = (t.allowedEmails || []).join(', ');
+                const home    = t.isHomeTeam ? ' <span style="background:var(--primary-soft); color:var(--primary); padding:2px 8px; border-radius:999px; font-size:0.7rem; font-weight:700;">HOME</span>' : '';
+                rows.push(`
+                    <div class="card" style="padding:14px 16px;">
+                        <div style="font-weight:700;">${escapeHtml(t.name || doc.id)}${home}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
+                            <strong>Coaches:</strong> ${escapeHtml(coaches) || '—'}<br>
+                            <strong>Emails:</strong> ${escapeHtml(emails) || '—'}
+                        </div>
+                        ${t.isHomeTeam ? '' : `<button class="btn-outline" style="margin-top:10px; font-size:0.8rem;" onclick="adminResendReset('${escapeHtml((t.allowedEmails||[])[0]||'')}')">Stuur opnieuw wachtwoord-reset email</button>`}
+                    </div>`);
+            });
+            wrap.innerHTML = rows.join('');
+        } catch(e) {
+            console.error(e);
+            wrap.innerHTML = '<div class="muted">Kon teams niet laden: ' + escapeHtml(e.message||'') + '</div>';
+        }
+    }
+
+    async function adminResendReset(email) {
+        if(!email) return;
+        try {
+            await auth.sendPasswordResetEmail(email);
+            showToast('Reset-email opnieuw gestuurd naar ' + email);
+        } catch(e) {
+            alert('Versturen mislukt: ' + (e.message || e.code));
+        }
+    }
+
+    async function sendResetFromLogin() {
+        const email = (document.getElementById('login-email').value || '').trim();
+        const errDiv = document.getElementById('login-error');
+        if(!email) {
+            errDiv.innerText = 'Vul eerst je email-adres in hierboven, klik dan opnieuw op deze link.';
+            errDiv.style.display = 'block';
+            return;
+        }
+        try {
+            await auth.sendPasswordResetEmail(email);
+            errDiv.style.color = 'var(--success)';
+            errDiv.style.background = '#d1fae5';
+            errDiv.style.borderColor = '#a7f3d0';
+            errDiv.innerText = 'Email verstuurd! Check je inbox (en spam-folder).';
+            errDiv.style.display = 'block';
+        } catch(e) {
+            errDiv.innerText = 'Kon email niet versturen: ' + (e.message || e.code);
+            errDiv.style.display = 'block';
+        }
+    }
+
+    function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
 
     const formatMoney = (amt) => "€ " + parseFloat(amt).toFixed(2).replace('.', ',');
 
@@ -2096,8 +2395,25 @@
     }
 
     // STATE LISTENER (Kijkt of je bent ingelogd)
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async user => {
         if (user) {
+            // Laad of bootstrap het team van deze gebruiker vóór we de app tonen
+            const team = await loadOrBootstrapTeam(user);
+            if(!team) {
+                // Geen team gevonden voor deze email
+                const errDiv = document.getElementById('login-error');
+                if(errDiv) {
+                    errDiv.innerText = "Je email is nog niet gekoppeld aan een team. Vraag de beheerder om je toegang te geven.";
+                    errDiv.style.display = 'block';
+                }
+                await auth.signOut();
+                return;
+            }
+            // Vul coach-keuze met team-coaches en zet currentCoach
+            populateCoachSelector();
+            const sel = document.getElementById('coach-selector');
+            if(sel && sel.value) currentCoach = sel.value;
+            updateAdminVisibility();
             // VERBERG LOGIN SCHERM
             document.getElementById('login-overlay').style.display = 'none';
             // Start de app pas als we ingelogd zijn
