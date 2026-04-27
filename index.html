@@ -2312,8 +2312,8 @@
                         </div>
                         ${t.isHomeTeam ? '' : `
                             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-                                <button class="btn-outline" style="font-size:0.8rem;" onclick="adminResendReset('${escapeHtml((t.allowedEmails||[])[0]||'')}')">📧 Reset-mail opnieuw</button>
-                                <button class="btn-outline" style="font-size:0.8rem; color:var(--danger); border-color:var(--danger);" onclick="adminDeleteTeam('${escapeHtml(doc.id)}', '${escapeHtml(t.name||doc.id)}')">🗑 Team verwijderen</button>
+                                <button class="btn-outline" style="font-size:0.8rem;" onclick="adminResendReset('${escapeJsAttr((t.allowedEmails||[])[0]||'')}')">📧 Reset-mail opnieuw</button>
+                                <button class="btn-outline" style="font-size:0.8rem; color:var(--danger); border-color:var(--danger);" onclick="adminDeleteTeam('${escapeJsAttr(doc.id)}', '${escapeJsAttr(t.name||doc.id)}')">🗑 Team verwijderen</button>
                             </div>
                         `}
                     </div>`);
@@ -2418,6 +2418,17 @@
 
     function escapeHtml(s) {
         return String(s || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    // Voor strings die binnen een single-quoted JS-string in een onclick="..."
+    // attribuut staan: backslashes/quotes/newlines escapen én < neutraliseren
+    // zodat de HTML-parser de string niet voortijdig sluit.
+    function escapeJsAttr(s) {
+        return String(s == null ? '' : s)
+            .replace(/\\/g, '\\\\')
+            .replace(/'/g,  "\\'")
+            .replace(/\r/g, '\\r')
+            .replace(/\n/g, '\\n')
+            .replace(/</g,  '\\x3c');
     }
 
     const formatMoney = (amt) => "€ " + parseFloat(amt).toFixed(2).replace('.', ',');
