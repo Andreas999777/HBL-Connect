@@ -58,10 +58,28 @@ service cloud.firestore {
     // Reads moeten direct verifieerbaar zijn op `resource.data.allowedEmails`
     // voor `list`-queries (rule-expansion check). Owner/admin krijgen extra
     // pad om alle teams te kunnen listen voor de Beheer-pagina.
+    //
+    // Schrijven: alle admins mogen teams aanmaken en bewerken, MAAR `adminEmails`
+    // wijzigen mag alleen de owner (anders kan een gepromote admin zichzelf en
+    // anderen verder promoten en zo de hele admin-rol-lijst overschrijven).
+    // Verwijderen van het home-team `hbl-connect` is altijd geweigerd zodat
+    // niemand per ongeluk of kwaadwillig de fundamentele admin-config wist.
     match /teams/{teamId} {
       allow read: if isAdmin()
         || (isSignedIn() && userEmail() in resource.data.allowedEmails);
-      allow create, update, delete: if isAdmin();
+
+      allow create: if isAdmin()
+        // Alleen owner mag bij create al admins aanduiden
+        && (isOwner() || !('adminEmails' in request.resource.data));
+
+      allow update: if isAdmin()
+        && (
+          isOwner()
+          // Niet-owner admins mogen alles wijzigen behalve adminEmails
+          || resource.data.get('adminEmails', []) == request.resource.data.get('adminEmails', [])
+        );
+
+      allow delete: if isAdmin() && teamId != 'hbl-connect';
     }
 
     // ---- /coaches/{coachId}/** ----
