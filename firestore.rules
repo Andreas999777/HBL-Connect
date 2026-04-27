@@ -1,0 +1,88 @@
+rules_version = '2';
+
+// =========================================================================
+// HBL-Connect — Firestore Security Rules (multi-tenant)
+//
+// Doel: elke coach kan ALLEEN data zien/wijzigen van het team waar zijn
+// email in /teams/{teamId}.allowedEmails staat.
+//
+// Hoe deployen (1x via Firebase Console):
+//   1. https://console.firebase.google.com/project/follow-up-coaches/firestore/rules
+//   2. Vervang de inhoud met dit bestand
+//   3. Klik "Publish"
+// =========================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    function isOwner() {
+      return isSignedIn() && userEmail() == 'andreasphilips3@gmail.com';
+    }
+
+    // Geeft het team-document terug waar de huidige user lid van is.
+    function teamOf(teamId) {
+      return get(/databases/$(database)/documents/teams/$(teamId)).data;
+    }
+
+    function isMemberOfTeam(teamId) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/teams/$(teamId))
+        && userEmail() in teamOf(teamId).allowedEmails;
+    }
+
+    // Geeft true als de coachId hoort bij een team waarvan de user lid is.
+    function isMemberOfCoachTeam(coachId) {
+      return isSignedIn() && (
+        // Founder coaches → home-team
+        (coachId in ['Andreas','Thalyssa','Silvia']
+          && isMemberOfTeam('hbl-connect'))
+        ||
+        // Externe coaches: coach-doc bevat teamId
+        (exists(/databases/$(database)/documents/coaches/$(coachId))
+          && isMemberOfTeam(get(/databases/$(database)/documents/coaches/$(coachId)).data.teamId))
+      );
+    }
+
+    // ---- /teams ----
+    // Iedereen die ingelogd is mag teams lezen waar hij/zij in zit.
+    // Aanmaken/wijzigen mag alleen de owner (Andreas).
+    match /teams/{teamId} {
+      allow read: if isMemberOfTeam(teamId) || isOwner();
+      allow create, update, delete: if isOwner();
+    }
+
+    // ---- /coaches/{coachId}/** ----
+    // Alle subcollecties (clients, inventory, appointments, ...) zijn enkel
+    // toegankelijk voor leden van het team waar deze coach bij hoort.
+    match /coaches/{coachId} {
+      allow read: if isMemberOfCoachTeam(coachId);
+      allow write: if isMemberOfCoachTeam(coachId) || isOwner();
+    }
+
+    match /coaches/{coachId}/{subcoll}/{docId} {
+      allow read, write: if isMemberOfCoachTeam(coachId);
+    }
+
+    match /coaches/{coachId}/{subcoll}/{docId}/{rest=**} {
+      allow read, write: if isMemberOfCoachTeam(coachId);
+    }
+
+    // ---- Klant-portaal: één klant via portalToken ----
+    // Het bestaande klant-portaal werkt zonder login. Klanten zien hun eigen
+    // gegevens via clientId + portalToken in de URL. Die check gebeurt nu
+    // client-side; voor échte beveiliging moet die naar een Cloud Function.
+    // Tot dan: laat ongeauthenticeerde reads van een individueel klantdoc
+    // toe (geen list), zodat het portaal blijft werken.
+    match /coaches/{coachId}/clients/{clientId} {
+      allow get: if true;
+    }
+  }
+}
