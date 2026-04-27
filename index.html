@@ -515,7 +515,7 @@
                 </div>
 
                 <div class="modal-section" id="modal-helps-wrap" style="display:none;">
-                    <h4 style="color:var(--warn);">🎯 Helpt bij klachten</h4>
+                    <h4 style="color:var(--warning);">🎯 Helpt bij klachten</h4>
                     <ul id="modal-helps"></ul>
                 </div>
 
@@ -3754,7 +3754,7 @@
         const provLabel = prov === 'openai' ? 'OpenAI' : 'Gemini';
         st.innerHTML = has
             ? `<span style="color:var(--success); font-weight:600;">✓ ${provLabel} is actief</span>`
-            : `<span style="color:var(--warn); font-weight:600;">⚠ Nog geen ${provLabel}-key — AI werkt nu niet</span>`;
+            : `<span style="color:var(--warning); font-weight:600;">⚠ Nog geen ${provLabel}-key — AI werkt nu niet</span>`;
     }
 
     async function callGemini(messages, maxTokens) {
@@ -4413,7 +4413,7 @@
         list.innerHTML = entries.map((e, idx) => {
             const dt = e.date ? new Date(e.date + 'T00:00').toLocaleDateString('nl-BE', { day:'2-digit', month:'short', year:'numeric' }) : '—';
             const lbl = TL_TYPE_LABEL[e.type] || '📝 Notitie';
-            return `<div style="display:grid; grid-template-columns:auto auto minmax(0,1fr) auto; gap:10px; align-items:center; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-soft);">
+            return `<div style="display:grid; grid-template-columns:auto auto minmax(0,1fr) auto; gap:10px; align-items:center; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-light);">
                 <span style="font-weight:700; font-size:0.78rem; color:var(--text-muted); white-space:nowrap;">${escapeHtml(dt)}</span>
                 <span style="font-size:0.78rem; white-space:nowrap;">${escapeHtml(lbl)}</span>
                 <span style="white-space:pre-wrap; word-break:break-word;">${escapeHtml(e.text || '')}</span>
@@ -4525,7 +4525,7 @@
             const why = c.why || (c.fiche && c.fiche.why) || '';
             const tone = info.when === 'overdue' ? 'danger' : 'warn';
             const lbl = info.when === 'overdue' ? `${info.label} · ${info.daysLate}d laat` : `${info.label} vandaag`;
-            return `<div class="bulk-fu-row${isDone ? ' done' : ''}" style="display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; gap:10px; align-items:center; padding:12px; border:1px solid var(--border); border-radius:10px; background:${isDone ? 'var(--success-soft, #ecfdf5)' : 'var(--bg-soft)'};">
+            return `<div class="bulk-fu-row${isDone ? ' done' : ''}" style="display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; gap:10px; align-items:center; padding:12px; border:1px solid var(--border); border-radius:10px; background:${isDone ? 'var(--success-soft, #ecfdf5)' : 'var(--bg-light)'};">
                 <input type="checkbox" ${isDone ? 'checked' : ''} onchange="bulkFuToggleDone('${c.id}')" style="width:20px; height:20px; cursor:pointer;">
                 <div style="min-width:0;">
                     <div style="font-weight:700; ${isDone ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${escapeHtml(nm)}</div>
