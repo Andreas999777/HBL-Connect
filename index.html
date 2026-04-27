@@ -2426,6 +2426,7 @@
         return String(s == null ? '' : s)
             .replace(/\\/g, '\\\\')
             .replace(/'/g,  "\\'")
+            .replace(/"/g,  '\\x22')
             .replace(/\r/g, '\\r')
             .replace(/\n/g, '\\n')
             .replace(/</g,  '\\x3c');
